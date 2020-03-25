@@ -14,7 +14,7 @@
 #         "FWL_FattyAcids_Length_3.1.R" in directory fattyAcids_saturation_analysis.
 #         This script is derived from Laura's project
 #####################################################################################
-transformed_dt <- filtered_lipidomics %>% mutate_at(vars(sample_raw_list), list(~ifelse(.>= 0, ., NA_real_)))
+transformed_dt <- filtered_lipidomics %>% mutate_at(vars(all_of(sample_raw_list)), list(~ifelse(.>= 0, ., NA_real_)))
 split_dt <- transformed_dt %>% 
   # mutate(patterns = str_remove_all(LipidMolec, ".*\\(") %>% 
   #                                  str_remove_all(., "\\)")) %>% 
@@ -56,7 +56,7 @@ fas_separate <- fas_merged %>%
   select(-TYPE, Class, FA, contains("MainArea")) %>% 
   separate(FA, c("FA", "percentage"), sep = ", ") %>% 
   mutate(percentage = as.numeric(percentage)) %>% 
-  mutate_at(vars(sample_raw_list), list(~.*percentage)) %>% 
+  mutate_at(vars(all_of(sample_raw_list)), list(~.*percentage)) %>% 
   filter(!str_detect(FA, "NA")) %>% 
   group_by(Class, FA)
 
@@ -65,7 +65,7 @@ write_csv(fas_separate, "data/Length/fa_chains_AUC.csv")
 # count observations of lipid molecules
 fas_count <- fas_separate  %>% count(FA) 
 
-fas_class <- fas_separate %>% summarise_at(vars(sample_raw_list), list(~sum(., na.rm = TRUE))) %>% left_join(fas_count, .)
+fas_class <- fas_separate %>% summarise_at(vars(all_of(sample_raw_list)), list(~sum(., na.rm = TRUE))) %>% left_join(fas_count, .)
 write_csv(fas_class, "data/Length/class_chain_auc.csv")
 
 # get pattern
@@ -128,8 +128,8 @@ p1 <- plot_all(data = length_long, c("SAMPLES", "value", "length_type")) +
   scale_fill_jama() 
 
 print(p1)
-ggsave("plot/Length/fa_length.png", device = "png")
-ggsave("plot/Length/fa_length.svg", device = "svg")
+ggsave("plot/Length/fa_length.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length.svg", device = "svg", width = 20, height = 20)
 
 p2 <- plot_all(data = length_long, length_pars1) +
   geom_bar(stat = "identity", position = "fill") +
@@ -141,8 +141,8 @@ p2 <- plot_all(data = length_long, length_pars1) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 print(p2)
-ggsave("plot/Length/fa_length_percentage.png", device = "png")
-ggsave("plot/Length/fa_length_percentage.svg", device = "svg")
+ggsave("plot/Length/fa_length_percentage.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length_percentage.svg", device = "svg", width = 20, height = 20)
 
 
 length_groups <- length_long %>% 
@@ -166,8 +166,8 @@ p3 <- plot_all(data = length_groups, length_pars2) +
        title = "Fatty acids length of lipid class for each group", fill = "") +
   scale_fill_nejm() 
 print(p3)
-ggsave("plot/Length/fa_length_group.png", device = "png")
-ggsave("plot/Length/fa_length_group.svg", device = "svg")
+ggsave("plot/Length/fa_length_group.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length_group.svg", device = "svg", width = 20, height = 20)
 
 p4 <- plot_all(data = length_groups, length_pars2) +
   geom_bar(stat = "identity", position = "fill") + 
@@ -179,8 +179,8 @@ p4 <- plot_all(data = length_groups, length_pars2) +
   scale_fill_jama() + 
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format())
 print(p4)  
-ggsave("plot/Length/fa_length_gr_percentage.png", device = "png")
-ggsave("plot/Length/fa_length_gr_percentage.svg", device = "svg")
+ggsave("plot/Length/fa_length_gr_percentage.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length_gr_percentage.svg", device = "svg", width = 20, height = 20)
 
 
 length_pars3 <- c("GROUPS", "mean", "length_type", "sd")
@@ -196,8 +196,8 @@ p5 <- plot_all(length_groups, length_pars3, se = TRUE)  +
         axis.line = element_line(size = .2)) + 
   scale_fill_nejm()
 print(p5)  
-ggsave("plot/Length/fa_length_gr.png", device = "png")
-ggsave("plot/Length/fa_length_gr.svg", device = "svg")
+ggsave("plot/Length/fa_length_gr.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length_gr.svg", device = "svg", width = 20, height = 20)
 
 
 control <- check_group(group_names, "control")
@@ -237,8 +237,8 @@ p6 <- plot_all(length_info_long, length_pars4, se = TRUE)  +
   theme(axis.text.x  = element_text(angle = 30, hjust = 1, size = 6)) + 
   scale_fill_nejm()
 print(p6)
-ggsave("plot/Length/fa_length_normalized.png", device = "png")
-ggsave("plot/Length/fa_length_normalized.svg", device = "svg")
+ggsave("plot/Length/fa_length_normalized.png", device = "png", width = 20, height = 20)
+ggsave("plot/Length/fa_length_normalized.svg", device = "svg", width = 20, height = 20)
 
 
 # for individuale chains
@@ -251,7 +251,6 @@ fas_ctr <- cal_lipid_statistics(fas_class, group_info, method, par_group)
 fas_ctr_gr <- fas_ctr[[1]] %>% select(all_of(par_group), all_of(control_nm))
 fas_all <- left_join(fas_class, fas_ctr_gr)
 fas_nm <- norm_by_mean2(fas_all, par_group, sample_raw_list, control_nm, "n")
-
 
 fas_class_long <- fas_nm %>% 
   ungroup() %>% 
@@ -287,8 +286,8 @@ if(method == "mean"){
       guides(fill = guide_legend(reverse=TRUE)) +
       coord_flip()
     print(p)
-    ggsave(file1, device = "png")
-    ggsave(file2, device = "svg")
+    ggsave(file1, device = "png", width = 20, height = 20)
+    ggsave(file2, device = "svg", width = 20, height = 20)
   }
 }else{
   for(i in classes){
@@ -310,8 +309,8 @@ if(method == "mean"){
       guides(fill = guide_legend(reverse=TRUE)) +
       coord_flip()
     print(p)
-    ggsave(file1, device = "png")
-    ggsave(file2, device = "svg")
+    ggsave(file1, device = "png", width = 20, height = 20)
+    ggsave(file2, device = "svg", width = 20, height = 20)
   }
 }
 

@@ -15,7 +15,11 @@
 rm(list=ls())  ##### empty the environment first. If you need to keep former variables in workspace, just comment this part
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 # source function from FWL_lipidomics.**.functions.R script
-source("FWL_lipidomics_3.2.2.FUNCTIONS.R")
+source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = FALSE)
+
+# options(warn=-1)
+
+
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
 dirs <- c("plot", "data", "plot/classes/fc", "plot/QC", "plot/Quantification", "plot/Saturation", "plot/Ether", "plot/Length",
@@ -46,7 +50,7 @@ lipidomics <- read_csv(target_file, col_types = cols())
 ##########################################################################################
 # QC part I
 ##########################################################################################
-source("FWL_lipidomics_QC_3.2.2.R")
+source("FWL_lipidomics_QC_3.2.2.R", echo = FALSE)
 
 
 
@@ -172,7 +176,7 @@ write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
 ###########################################################################################
 # Quantification of lipid class and individual lipid molecules
 ###########################################################################################
-source("FWL_lipidomics_QUANTIFICATION_3.2.2.R")
+source("FWL_lipidomics_QUANTIFICATION_3.2.2.R", echo = FALSE)
 
 
 
@@ -184,14 +188,14 @@ source("FWL_lipidomics_QUANTIFICATION_3.2.2.R")
 ##########################################################################################
 # calculate the saturation for different lipid class
 message("\nThe filtered data will be used for saturation analysis.")
-source("FWL_FattyAcids_Saturation_3.3.3.R")
+source("FWL_FattyAcids_Saturation_3.3.3.R", echo = FALSE)
 
 message("\nThe SFA, MUFA, PUFA information will be stored in the count_lipid.csv and aggregated.csv")
 
 ##########################################################################################
 # fatty acids length analysis
 ##########################################################################################
-source("FWL_FattyAcids_Length_3.2.2.R")
+source("FWL_FattyAcids_Length_3.2.2.R", echo = FALSE)
 
 
 
@@ -200,7 +204,8 @@ source("FWL_FattyAcids_Length_3.2.2.R")
 # ether lipid analysis
 ##########################################################################################
 message("\nThe filtered data will be used for ether lipid analysis.\n")
-source("FWL_EtherLipids_3.2.2.R")
+message("Please note that you need to run Saturation Analysis before going to Ether lipid Analysis!!!")
+source("FWL_EtherLipids_3.2.2.R", echo = FALSE)
 
 
 

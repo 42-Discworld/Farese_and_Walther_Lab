@@ -591,7 +591,7 @@ IndividuleRetentionPlot <- function(lipid_data, sample){
   print(retention.plot)
   message("Please input the name you want to store for the graph. e.g. retention.pdf")
   plot_name <- readline("QC plot name: ")
-  ggsave(filename = plot_name, path = 'plot/', device = "pdf", dpi=300)
+  ggsave(filename = plot_name, path = 'plot/', device = "pdf", dpi=300, width = 20, height = 20)
 }
 
 
@@ -1775,7 +1775,6 @@ detect_invalid <- function(data, group_information){
 
 
 plot_fc <- function(data, parameters, se){
-  print("abc")
   paras <- syms(parameters)
   if(length(parameters) == 3){
     ranges <- data %>% 
@@ -1785,17 +1784,6 @@ plot_fc <- function(data, parameters, se){
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
       theme_bw() +
       set_theme()
-      # theme(axis.line = element_line(colour = "black", 
-      #                                size = .15),
-      #       plot.title = element_text(hjust = 0.5),
-      #       axis.text.y = element_text(angle = 30, hjust=1, size = 6),
-      #       axis.text.x = element_text(size = 6),
-      #       axis.ticks = element_line(size = .8),
-      #       axis.ticks.length = unit(1, "mm")) +
-      # scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
-      # ylim(limits) +
-      #scale_fill_manual(values = clPalette1)
-  
   }else{
     ranges <- data %>% 
       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
@@ -1806,12 +1794,9 @@ plot_fc <- function(data, parameters, se){
         set_theme() +
        # scale_fill_manual(values = clPalette1) +
         geom_se(parameters, se)
-    
-    
   } 
   axis_st <-  data %>% ungroup() %>% filter(eval(paras[[2]]) < 0) %>% nrow()
   print(axis_st)
-  print("check")
   if(axis_st > 0){
       p <- p +
         scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) +
@@ -1896,7 +1881,6 @@ EachClassPlot <- function(long_data, paras, computer){
     observations <- subset(counts, Class == classes[i], n) %>% unlist()
     class_data <- subset(long_data, Class == classes[i]) %>% arrange(., !!molec)
     if(observations <= n_bar){
-     print("1")
       axis_st <- class_data %>% filter(eval(symbols[[2]])<0) %>% nrow()
      # p1 <- plot_func(class_data, pars, se = FALSE) 
       #p1 <- plot_func(class_data, pars, se = TRUE) 
@@ -1931,11 +1915,10 @@ EachClassPlot <- function(long_data, paras, computer){
         #              size=.2) +
         scale_fill_npg() +
         coord_flip() 
-     print("llll")
       print(p1)
       #ggsave(filename = paste(pick_class, ".png", sep=""), path = 'plot/classes', device = "png", width=15, height=15, dpi=300)
-      ggsave(filename = paste(post_name, pick_class, ".", ".png", sep=""), path = 'plot/classes', device = "png")
-      ggsave(filename = paste(post_name, pick_class, ".", ".pdf", sep=""), path = 'plot/classes', device = "pdf")
+      ggsave(filename = paste(post_name, pick_class, ".", ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
+      ggsave(filename = paste(post_name, pick_class, ".", ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
       
     }else{
      # print("3")
@@ -1948,7 +1931,6 @@ EachClassPlot <- function(long_data, paras, computer){
        #   print("4")
           # bar ranges
           ranges <- (n_bar*k+1):(n_bar*(k+1))
-          print(ranges)
 
           data <- class_data %>% slice(ranges)
           axis_st  <- data %>% filter(eval(symbols[[2]])<0) %>% nrow()
@@ -1975,13 +1957,12 @@ EachClassPlot <- function(long_data, paras, computer){
             coord_flip() 
         
           print(p2)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png")
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf")
+          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
+          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
           
         }else{
         #  print("6")
           ranges <- (n_bar*k+1):observations
-          print(ranges)
           data <- class_data %>% slice(ranges)
           axis_st <- data %>% filter(eval(symbols[[2]])<0) %>% nrow()
           #p2 <- plot_func(data, pars, se = FALSE)
@@ -2021,8 +2002,8 @@ EachClassPlot <- function(long_data, paras, computer){
             scale_fill_npg() +
             coord_flip() 
           print(p2)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png")
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf")
+          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
+          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
         }
       }
     } 
@@ -2264,9 +2245,9 @@ fit$design)", sep = '"')
   print(volc1)
   name3 <- paste(option[1], "vs.", option[2], ".png", sep = "")
   # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name3, path = 'plot/Volc/', device = "png")
+  ggsave(filename = name3, path = 'plot/Volc/', device = "png", width = 20, height = 20)
   name33 <- paste(option[1], "vs.", option[2], ".pdf", sep = "")
-  ggsave(filename = name33, path = 'plot/Volc/', device = "pdf")
+  ggsave(filename = name33, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
   
   # build mutated data frame
   class_names <- rownames(input) %>% str_extract_all(., "(.+)\\(") %>% str_remove_all(., "\\(")
@@ -2312,9 +2293,9 @@ fit$design)", sep = '"')
   print(volc2)
   #plot_name <- readline("Please input the volcano plot name: ")
   name4 <- paste(option[1], "vs.", option[2], ".color.png", sep = "")
-  ggsave(filename = name4, path = 'plot/Volc/', device = "png") #  width=15, height=15, dpi=300
+  ggsave(filename = name4, path = 'plot/Volc/', device = "png", width = 20, height = 20) #  width=15, height=15, dpi=300
   name44 <- paste(option[1], "vs.", option[2], ".color.pdf", sep = "")
-  ggsave(filename = name44, path = 'plot/Volc/', device = "pdf")
+  ggsave(filename = name44, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
   
   lipid_class <- rownames(input_lipids) %>% 
     str_remove_all(., "\\(.*\\)") %>%
@@ -2357,9 +2338,9 @@ fit$design)", sep = '"')
   print(volc3)
   name5 <- paste(option[1], "vs.", option[2], ".customized.png", sep = "")
   # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name5, path = 'plot/Volc/', device = "png")
+  ggsave(filename = name5, path = 'plot/Volc/', device = "png", width = 20, height = 20)
   name5 <- paste(option[1], "vs.", option[2], ".customized.pdf", sep = "")
-  ggsave(filename = name5, path = 'plot/Volc/', device = "pdf")
+  ggsave(filename = name5, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
   
   ether <- input_lipids 
   ether <- ether %>% 
@@ -2402,10 +2383,10 @@ fit$design)", sep = '"')
   
   name6 <- paste(option[1], "vs.", option[2], ".ether.png", sep = "")
   # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name6, path = 'plot/Volc/', device = "png")
+  ggsave(filename = name6, path = 'plot/Volc/', device = "png", width = 20, height = 20)
   name6 <- paste(option[1], "vs.", option[2], ".ether.pdf", sep = "")
   # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name6, path = 'plot/Volc/', device = "pdf")
+  ggsave(filename = name6, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
   
 }
 
@@ -2463,8 +2444,8 @@ PlotVolc <- function(input, points, fold_change){
                     size = 6,
                     direction    = "both",
                     hjust        = 0,
-                    nudge_x = 0.2,
-                    nudge_y = 0.2,
+                    nudge_x = ifelse(points$logFC < 0, 0.1, -0.1),
+                    #nudge_y = 0.1,
                     segment.size = 0.2,
                     box.padding = unit(0.35, "lines"),
                     point.padding = unit(0.3, "lines"),
@@ -2652,11 +2633,11 @@ impute_not <- function(condition, data, sample_list){
     message("\n\nWarnings!!!!!!\nYou are now using imputated data for analysis.\n\n")
     log2_lipids <- data %>% mutate_at(sample_list, log2trans) 
     replace_inf_lipids <- log2_lipids %>% mutate_at(sample_list, ReplaceInf)
-    preImputated_lipids <- replace_inf_lipids %>% select(sample_list) 
+    preImputated_lipids <- replace_inf_lipids %>% select(all_of(sample_list)) 
     imputated_lipids <- ImputeMinProb(preImputated_lipids, 0.01, 1)
     imputated_lipids$LipidMolec <- log2_lipids$LipidMolec
     imputated_lipids$Class <- log2_lipids$Class
-    imputated_lipids <- imputated_lipids %>% select(LipidMolec, Class, sample_list)
+    imputated_lipids <- imputated_lipids %>% select(LipidMolec, Class, all_of(sample_list))
     write_csv(imputated_lipids, "data/Volc/imputeMolec.csv")
     message("\nLog 2 transformed data are stored under log.molec.csv")
     message("Imputed data are stored under imputeMolec.csv")
@@ -2670,7 +2651,7 @@ impute_not <- function(condition, data, sample_list){
     return(list(condition, imputated_lipids))
   }else if(condition == "n"){
     # return data with selected columns
-    data2 <- data %>% select(Class, LipidMolec, sample_list)
+    data2 <- data %>% select(Class, LipidMolec, all_of(sample_list))
     write_csv(data2, "data/Volc/non_impute_molecs.csv")
     return(list(condition, data2))
   } else{

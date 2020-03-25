@@ -124,7 +124,7 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
   options(warn=-1)
   # stack plots based on mean
   pars1 <- c("Groups", "mean", "TYPE")
-  p1 <-  plot_all(dtFA_mean, pars1) +
+  p1 <-  plot_all(dtFA, pars1) +
     geom_bar(stat = "identity") + 
     facet_wrap(~Class, scales = "free") +
     scale_y_continuous(labels = label_scientific(digits = 2), expand = c(0, 0, 0.2, 0)) +
@@ -137,8 +137,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
       axis.line = element_line(size = 0.2)
     )
   print(p1)    
-  ggsave(filename = "meanBased.stackplots.png", path="plot/Saturation/", device="png")
-  ggsave(filename = "meanBased.stackplots.svg", path="plot/Saturation/", device = "svg")
+  ggsave(filename = "meanBased.stackplots.png", path="plot/Saturation/", device="png", width = 20, height = 20)
+  ggsave(filename = "meanBased.stackplots.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
   
   # stack plots based on median
   pars2 <- c("Groups", "median", "TYPE")
@@ -155,8 +155,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
       axis.line = element_line(size = 0.2)
     )
   print(p2)
-  ggsave(filename = "medianBased.stackplots.png", path="plot/Saturation/", device="png")
-  ggsave(filename = "medianBased.stackplots.svg", path="plot/Saturation/", device = "svg")
+  ggsave(filename = "medianBased.stackplots.png", path="plot/Saturation/", device="png", width = 20, height = 20)
+  ggsave(filename = "medianBased.stackplots.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
   
   # bar plots split by lipid class
   pars3 <- c("Groups", "mean", "TYPE", "se")
@@ -175,8 +175,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     ) 
   
   print(p3)
-  ggsave(filename = "meanBased.fattyAcids.png", path="plot/Saturation/", device="png")
-  ggsave(filename = "meanBased.fattyAcids.svg", path="plot/Saturation/", device = "svg")
+  ggsave(filename = "meanBased.fattyAcids.png", path="plot/Saturation/", device="png", width = 20, height = 20)
+  ggsave(filename = "meanBased.fattyAcids.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
   
   # fold change for mean based data
   p4 <- plot_all(dtFA_long, pars3, se = TRUE)  +  
@@ -192,8 +192,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
       axis.line = element_line(size = 0.2)
     )
   print(p4)
-  ggsave(filename = "meanBased.fc.png", path="plot/Saturation/", device="png")
-  ggsave(filename = "meanBased.fc.svg", path="plot/Saturation/", device = "svg")
+  ggsave(filename = "meanBased.fc.png", path="plot/Saturation/", device="png", width = 20, height = 20)
+  ggsave(filename = "meanBased.fc.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
   
   # percentage plots
   p5 <- plot_all(dtFA, pars1) +
@@ -211,8 +211,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     )
   # scale_fill_simpsons()
   print(p5)
-  ggsave(filename = "percentage.png", path="plot/Saturation/", device = "png")
-  ggsave(filename = "percentage.svg", path="plot/Saturation/", device = "svg")
+  ggsave(filename = "percentage.png", path="plot/Saturation/", device = "png", width = 20, height = 20)
+  ggsave(filename = "percentage.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
   
 }
 

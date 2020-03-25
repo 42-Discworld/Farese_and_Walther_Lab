@@ -35,7 +35,7 @@ total_plot <- plot_all(total_data, paras1, se=TRUE) +
 
 print(total_plot)
 # save filtered total class lipid abundance in plot total.class.png
-ggsave(filename="total.class.png", path = 'plot/Quantification/', device = "png")
+ggsave(filename="total.class.png", path = 'plot/Quantification/', device = "png", width = 20, height = 20)
 
 
 ##########################################################################################
@@ -68,6 +68,7 @@ nbar <- 70    # estimation of threshold which can be modified and at least bigge
 post_name <- ""
 pars <- list(nbar, ngroups, par_eachclass, plot_all, post_name, labs1)
 message("\nEach plot is split no more than ", nbar, " bars for display")
+each_class$Groups <- factor(each_class$Groups, levels = rev(group_names))
 EachClassPlot(each_class, pars, robot)
 
 # # overview of each class plot 
@@ -95,8 +96,8 @@ will be deleted for fold change analysis since the data below is not imputed, ")
 # visualize for samples
 # visualization repliates distribution among all lipid classes
 vs_dt <- filtered_lipidomics %>% 
-  select(LipidMolec, Class, sample_raw_list) 
-vs_sumdt <- vs_dt %>% group_by(Class) %>% summarise_at(vars(sample_raw_list), list(~sum(.)))
+  select(LipidMolec, Class, all_of(sample_raw_list))
+vs_sumdt <- vs_dt %>% group_by(Class) %>% summarise_at(vars(all_of(sample_raw_list)), list(~sum(.)))
 sum_dt <- cal_lipid_statistics(vs_sumdt, group_info, "median", "Class")
 sum_dt_wide <- sum_dt[[1]]
 # remove lipid classes which contains negative values
@@ -148,13 +149,13 @@ pd <- plot_all(class_long, paras2) +
         axis.line = element_line(size = 0.2)) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
   expand_limits(y = 0) +
-  geom_text_repel(aes(label = SAMPLES), size = 2) +
+  geom_text_repel(aes(label = SAMPLES), size = 2) + 
   #scale_y_continuous(labels = function(x) format(x, scientific = TRUE)) +
   labs(title = "Normalized by median", caption = "each dot represent the replicate of one lipid class", 
        x = "Experiment Groups", y = "Relative Fold Change", fill="Experiment Groups")
 print(pd)
-ggsave(filename = "class_median_dot.png", path="plot/Quantification", device = "png")
-ggsave(filename = "class_median_dot.svg", path="plot/Quantification", device = "svg")
+ggsave(filename = "class_median_dot.png", path="plot/Quantification", device = "png", width = 20, height = 20)
+ggsave(filename = "class_median_dot.svg", path="plot/Quantification", device = "svg", width = 20, height = 20)
 
 # plot relative fold change of lipid class (normalized by median), boxplot
 pb <- plot_all(class_long, paras2) +
@@ -169,18 +170,18 @@ pb <- plot_all(class_long, paras2) +
   #scale_fill_d3()
   scale_fill_manual(values = wes_palette("GrandBudapest2"))
 print(pb)
-ggsave(filename = "class_median_box.png", path="plot/Quantification", device = "png")
+ggsave(filename = "class_median_box.png", path="plot/Quantification", device = "png", width = 20, height = 20)
 
 
 
 ##########################################################################################
 # visualization of lipid molecule data, normalized by mean/median value
 ##########################################################################################
-message("\nFold change analysis for lipid molecules.")
+message("\nFold change analysis for lipid molecules.\n")
 # mutate negative value into NA 
 filtered_dt <- filtered_lipidomics %>% mutate_at(sample_raw_list, list(~ifelse(.>= 0, ., NA)))
 group_bar <- c("LipidMolec", "Class")
-message("\nPlease choose a normalization method from Mean or Median.")
+message("Please choose a normalization method from Mean or Median.\n")
 method <- retype_choice("mean/median")
 molec_group_mean <- filtered_dt  %>%  cal_lipid_statistics(., group_info, "mean", group_bar)
 molec_group_median <- filtered_dt  %>%  cal_lipid_statistics(., group_info, "median", group_bar)
@@ -189,7 +190,7 @@ molec_all <- left_join(selected_lipid, molec_group_mean[[1]]) %>%
   left_join(., molec_group_median[[1]])
 write_csv(molec_all, "data/Quantification/molecules_group_statistics.csv")
 # customize times of comparison  
-message("\nHow many times of fold change analysis for groups you want to do?")
+message("\nHow many times of fold change analysis for groups you want to do?\n")
 fc_times <- readline("Please input the number: ")
 for(i in 1:fc_times){
   message("\nPlease type the name of the control group.")
@@ -231,6 +232,7 @@ for(i in 1:fc_times){
  # nbar <- selected_molec %>% group_by(Class) %>% tally() %>% select(n) %>% unlist() %>% max()
   nbar <- 80
   pars <- list(nbar, n, par_eachclass, plot_fc, post_name, labs)
+  selected_molec$Groups <- factor(selected_molec$Groups, levels = rev(group_names))
   EachClassPlot(selected_molec, pars, robot)
  }
   
@@ -293,8 +295,8 @@ pv <- ggplot(molecules, aes(GROUPS, VALs, label=Molecule)) +
   scale_fill_manual(values = wes_palette("GrandBudapest2")) 
   
 print(pv)
-ggsave(filename = "molec_violin.png", path="plot/Quantification", device = "png")
-ggsave(filename = "molec_violin.svg", path="plot/Quantification", device = "svg")
+ggsave(filename = "molec_violin.png", path="plot/Quantification", device = "png", width = 20, height = 20)
+ggsave(filename = "molec_violin.svg", path="plot/Quantification", device = "svg", width = 20, height = 20)
 
 # set path
 dir_path <- paste0(getwd(),"/plot/Quantification") 
