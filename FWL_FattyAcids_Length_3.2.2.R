@@ -26,7 +26,7 @@ split_dt <- transformed_dt %>%
 filtered_dt <- split_dt %>% filter(str_detect(patterns, "\\:"))
 if(nrow(split_dt) != nrow(filtered_dt)){
   deleted_dt <- setdiff(split_dt$LipidMolec, filtered_dt$LipidMolec)
-  message("Lipid Molecules: ", paste(deleted_dt, sep = ", ", collapse = ", "), " are deleted for analysis.")
+  message("Lipid Molecules: ", paste(deleted_dt, sep = ", ", collapse = ", "), " are deleted for analysis.\n")
 }
 
 # get percentage for fatty acids length types for each lipid molecules
@@ -201,7 +201,7 @@ ggsave("plot/Length/fa_length_gr.svg", device = "svg", width = 20, height = 20)
 
 
 control <- check_group(group_names, "control")
-message("Please choose normalization method from mean or median for experiment group.")
+message("Please choose normalization method from mean or median for experiment group.\n")
 method <- retype_choice("MEAN/MEDIAN")
 control_names <- paste0(control, "_", method)
 by_group <- c("Class", "length_type")
@@ -242,7 +242,7 @@ ggsave("plot/Length/fa_length_normalized.svg", device = "svg", width = 20, heigh
 
 
 # for individuale chains
-message("Please choose normalization method from mean/median for chains in individule lipid molecules.") 
+message("Please choose normalization method from mean/median for chains in individule lipid molecules.\n") 
 method <- retype_choice("MEAN/MEDIAN")
 control <- check_group(group_names, "control")
 control_nm <- paste0(control, "_", method)
