@@ -1,8 +1,8 @@
 # Script: FWL_lipidomics_QC_3.2.2.R
-# Author: Wenting 
+# Author: Wenting, Niklas
 # Notes:  To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
 #         or press the source butthon. 
-#         Please make sure Mac users installed XQuartz.
+#         Please make sure Mac users installed XQuartz and gfortran.
 #         This script is designed as a reference for lipidomics experiment. 
 #         It is based on Niklas and Kenny's previous work (Their work files can be found in folders 
 #         quality_control and statistics_quantification). Acknowledge to Weng's technical 
@@ -130,8 +130,6 @@ ggsave(filename = "background.png", path="plot/QC/", device = "png", width = 20,
 # lipid class summary
 ##########################################################################################
 message("\nThe info below and summary plot will show the summary information of classes after filtering the data")
-# two methods check how many lipids passed filtering
-print(describe(filtered_lipidomics2$Class))
 filtered_lipidomics2 %>% group_by(Class) %>% summarise(lipid_class_num = n()) %>% select(Class, lipid_class_num) %>% arrange(lipid_class_num)  %>% formattable(.)
 
 # get lipid class proportion information

@@ -1,3 +1,18 @@
+# Script: FWL_lipidomics_QUANTIFICATION_3.2.2.R
+# Author: Wenting
+# Notes:  This script will analyze and visualize the lipid class and lipid molecules abudndance
+#         and relative fold changes for experiment groups.
+#         To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
+#         or press the source butthon. 
+#         Please make sure Mac users installed XQuartz and gfortran.
+#         This script is designed as a reference for lipidomics experiment. 
+#         It is based on Niklas and Kenny's previous work (Their work files can be found in folders 
+#         quality_control and statistics_quantification). Acknowledge to Weng's technical 
+#         guidance, Laura's fatty acid saturation analysis project and Sebstian's shadow experiment
+###########################################################################################
+
+
+
 ##########################################################################################
 # Quantification of total lipid classes (mean, sd)
 ##########################################################################################

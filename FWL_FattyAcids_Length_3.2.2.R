@@ -1,17 +1,15 @@
 ####################################################################################
 # Script: FWL_FattyAcids_Length_3.1.R
 # Author: Wenting Lyu
-# Notes: This script assist executing for main script FWL_lipidomics_3.1.R which
-#         helps generating the graph and data for the workflow of lipidomics.
-#         it also calculate the SFA, MUFA, PUFA and the aggregated main area 
-#         for each sample.
+# Notes: This script will analyze SCFA, MCFA, LCFA, VLCFA of fatty acids for all samples 
+#        and group.
 #         First, Make sure that your R and Rstudio are newly enough for installing the 
 #         packages needed in the script. Otherwise the script will pop out warnings 
 #         for packages and won't run.
 #         Second, typing command in the console-----> source("FWL_lipidomics_3.1.R")
 #         or press the source button.
 #         Third, users can independently implement this analysis by running 
-#         "FWL_FattyAcids_Length_3.1.R" in directory fattyAcids_saturation_analysis.
+#         "fattyAcidsSaturation_analysis.3.2.3.R" in directory fattyAcids_saturation_analysis.
 #         This script is derived from Laura's project
 #####################################################################################
 transformed_dt <- filtered_lipidomics %>% mutate_at(vars(all_of(sample_raw_list)), list(~ifelse(.>= 0, ., NA_real_)))

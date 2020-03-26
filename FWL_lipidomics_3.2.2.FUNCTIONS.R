@@ -1,15 +1,14 @@
-
 ####################################################################################
-# Script: FWL_lipidomics_3.2.0.FUNCTIONS.R
+# Script: FWL_lipidomics_3.2.2.FUNCTIONS.R
 # Author: Wenting, Niklas, Kenny
-# Notes:  This script assist executing for main script FWL_lipidomics_3.2.0.R which
+# Notes:  This script assist executing for main script FWL_lipidomics_3.2.2.R which
 #         helps generating the graph and data for the workflow of lipidomics.
-#         To start, typing command in the console-----> source("FWL_lipidomics_3.2.0.R")
+#         To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R")
 #         or press the source button.
 #         This pipeline is based on Niklas's and Kenny's previous work. Their original 
 #         source scripts are in the quality_control and statistics_quantification directories
 #
-# Warning: For mac users, please make sure XQuartz is installed. Otherwise the pipeline 
+# Warning: For mac users, please make sure XQuartz and gfortran installed. Otherwise the pipeline 
 #           might crash when generating summary plots for each class
 #####################################################################################
 
@@ -21,7 +20,7 @@ if(length(need.package) > 0) install.packages(need.package)
 
 
 list.of.packages <- c( "FactoMineR", "factoextra", "scales", "magrittr", "ggrepel", "reshape2",
-                       "stargazer", "Hmisc", "limma", "factoextra", "scales", "RColorBrewer",
+                       "stargazer", "limma", "factoextra", "scales", "RColorBrewer",
                        "stringr", "readxl", "RCy3", "igraph", "tidyverse", "dplyr","viridis", 
                        "igraph", "network", "visNetwork", "extrafont", "ggforce", "kableExtra", 
                        "ggpubr", "wesanderson", "formattable", "ggsci", "plotly", "htmlwidgets", 
@@ -407,7 +406,7 @@ plot_all <- function(data, parameters, se){
     ranges <- data %>% 
       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
       summarise(max(bounds), min(bounds))
-    limits <- sapply(ranges, function(x)sign(x)*10^(ceil(log10(abs(x)), 0)))
+    limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
     # limits[[2]] <- limits[[2]] - 10^5
     axis_st <- data  %>% filter(eval(paras[[2]]) < 0) %>% nrow()
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
@@ -441,77 +440,6 @@ plot_all <- function(data, parameters, se){
 
 
 
-# plot_all <- function(data, parameters, se, order_ax){
-#   #paras <- syms(parameters)
-#   if(length(parameters) == 1){
-#     paras <- syms(parameters)
-#     
-#     p <- ggplot(data, aes(eval(paras[[1]]))) +
-#       theme_bw() +
-#       set_theme() 
-#     return(p)
-#   } else if(length(parameters) == 2){
-#     paras <- syms(parameters)
-#     
-#     print(head(data))
-#     p <- ggplot(data, aes(x = reorder(eval(paras[[1]]), eval(paras[[2]])), y = eval(paras[[2]]))) +
-#       theme_bw() + 
-#       set_theme() 
-#     # add_scales()
-#     return(p) 
-#   } else if(length(parameters) == 3){
-#     paras <- syms(parameters)
-#     
-#     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
-#       theme_bw() +
-#       set_theme() 
-#     return(p)
-#   } else{
-#     
-#     paras <- syms(parameters[1:4])
-#     # scale_info <- parameters[[5]]
-#     ranges <- data %>% 
-#       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
-#       summarise(max(bounds), min(bounds))
-#     limits <- sapply(ranges, function(x)sign(x)*10^(ceil(log10(abs(x)), 0)))
-#     # limits[[2]] <- limits[[2]] - 10^5
-#     axis_st <- data %>% filter_at(vars(!!paras[[2]]), any_vars(.<0)) %>% nrow()
-#     
-#     if(order_ax){
-#       p <- ggplot(data, aes(x = reorder(eval(paras[[1]]), eval(paras[[2]])), 
-#                             y = eval(paras[[2]]), fill = eval(paras[[3]])))
-#     }else{
-#       p <- ggplot(data, aes(x = eval(paras[[1]]), 
-#                        y = eval(paras[[2]]), fill = eval(paras[[3]])))
-#     }
-#     p <- p +
-#       #   expand_limits(y = limits) +
-#       theme_bw() +
-#       set_theme() +
-#       theme(plot.title = element_text(hjust = 0.5),
-#             axis.text.y = element_text(angle = 30, hjust=1)) + 
-#       # scale_y_continuous(trans = tn,
-#       #                    breaks = c(-10^3, 0, 10^3, 10^6, 10^9, 10^12, 10^15),
-#       #                    labels = c(bquote(-10^3), 0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12), bquote(10^15)),
-#       #                    expand = c(0, 0, 0.1, 0)) +
-#       #add_scales(scale.params = scale_info)+ 
-#       #add_scales() +
-#       # ylim(limits) +
-#       scale_fill_manual(values = clPalette1) +
-#       geom_se(parameters[1:4], se)  
-#     
-#     if(axis_st >0){
-#       p <- p + 
-#         add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
-#         geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") +
-#         scale_fill_d3()
-#     }else{
-#       p <-  p + add_scales()
-#     }
-#     return(p)
-#   }
-# }
-# 
 
 
 
@@ -1529,7 +1457,7 @@ ClassPlot <- function(data, parameters){
   ranges <- data %>% 
     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
     summarise(max(limits), min(limits))
-  limits <- sapply(ranges, function(x)sign(x)*10^(ceil(log10(abs(x)), 0)))
+  limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
   classplot <- ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
     geom_errorbar(aes(ymin=sign(eval(p2))*abs(eval(p2)), ymax=sign(eval(p2))* (abs(eval(p2))+eval(p4))),
                   position=position_dodge(width = .9, preserve = "single"), 
@@ -1598,7 +1526,7 @@ ClassPlot2 <- function(data, parameters, se){
   ranges <- data %>% 
     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
     summarise(max(limits), min(limits))
-  limits <- sapply(ranges, function(x)sign(x)*10^(ceil(log10(abs(x)), 0)))
+  limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
   classplot <-  ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
     theme_bw() +
     set_theme()+
@@ -1796,7 +1724,6 @@ plot_fc <- function(data, parameters, se){
         geom_se(parameters, se)
   } 
   axis_st <-  data %>% ungroup() %>% filter(eval(paras[[2]]) < 0) %>% nrow()
-  print(axis_st)
   if(axis_st > 0){
       p <- p +
         scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) +

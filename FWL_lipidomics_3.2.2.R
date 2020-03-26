@@ -1,24 +1,24 @@
-# Script: FWL_lipidomics_3.1.R
-# Author: Wenting 
-# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_3.1.R") 
+# Script: FWL_lipidomics_3.2.2.R
+# Author: Wenting, Niklas, Kenny
+# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
 #         or press the source butthon. 
-#         Please make sure Mac users installed XQuartz.
+#         Please make sure Mac users installed XQuartz and gfortrans.
+#         R version 3.6.2 , Rstudio 1.2.1335 for current work.
 #         It is based on Niklas and Kenny's previous work (Their work files can be found in folders 
 #         quality_control and statistics_quantification). Acknowledge to Weng's technical 
-#         guidance, Laura's fatty acid saturation analysis project and Sebstian's shadow experiment
-#
-# Usage:  
+#         guidance, Laura's fatty acid saturation analysis project, Sebstian's shadow experiment.
+#         This is the main script for running lipid data analysis.
+#         
+# Usage:  source("FWL_lipidomics_3.2.2.R") 
 #      
-# Status:  In progress             
-
+# Versions:  LipidSearch 4.1.        
 #####################################################################################
 rm(list=ls())  ##### empty the environment first. If you need to keep former variables in workspace, just comment this part
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 # source function from FWL_lipidomics.**.functions.R script
-source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = FALSE)
+source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
 
 # options(warn=-1)
-
 
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
@@ -29,11 +29,10 @@ mkdirs(dirs)
 message("Are you using PC or MAC?")
 robot <- retype_choice("PC/MAC")
 if(robot == "mac"){
-  message("\n\nPlease make sure you installed Quartz before running pipeline.
+  message("\n\nPlease make sure you installed Quartz and gfortran before running pipeline.
           \nDo you want to continue?\n")
   process <- retype_choice("Y/N")
 }
-
 
 # read the file from csv directory
 csv_files <- list.files(path = "converted", pattern = "\\.csv$")
@@ -63,10 +62,6 @@ source("FWL_lipidomics_QC_3.2.2.R", echo = FALSE)
 samples <- Input(filtered_lipidomics2)
 # sample info
 sample_info <- samples[[1]]
-# # group name info
-# group_names <- samples[[2]]
-# # group number info
-# ngroups <- samples[[3]]
 
 
 ##########################################################################################                                   
@@ -75,10 +70,6 @@ sample_info <- samples[[1]]
 # pca and correlation plots
 label <- "initial"
 info_list <- PCA_pairs_Plot(sample_info, filtered_lipidomics2, label)
-# check if deleting samples needed and plot new PCA
-message("\nPlots can visualized under 'plot' directory or r studio plots panel.\nDo you want to edit sample information for subsequent analyses?")
-pca_check <- retype_choice("Y/N")
-info_list <- PCAcheck(pca_check, filtered_lipidomics2)
 
 # making group repeats according to its position for making groups of later PCA
 sample_raw_list <- info_list[[1]]
@@ -91,17 +82,6 @@ group_info <- data.frame(samples=sample_raw_list,
 write_csv(group_info, "data/group_information.csv")
 group_names <- unique(group_repeats)
 ngroups <- length(group_names)
-# # delete unchoosed samples from sample list
-# total_samples <- filtered_lipidomics %>% select(contains("MainArea[s")) %>% colnames()
-# deleted_samples <- total_samples %>% subset(!total_samples %in% sample_raw_list) 
-# filtered_lipidomics <- filtered_lipidomics %>% select(-all_of(deleted_samples))
-# deleted <- deleted_samples %>% str_remove_all(., "MainArea\\[") %>% str_remove_all(., "\\]") %>% paste0(., sep = ",", collapse = "") %>% remove(.,  pos = -1)
-# if(length(deleted)>0){
-#   message("Samples ", deleted, " will be removed from analysis")
-# }
-
-
-
 
 
 ###########################################################################################
@@ -127,30 +107,30 @@ if(background_option == "y"){
   filtered_lipidomics <- filtered_lipidomics2
 }
 
-# 
-# all_samples <- filtered_lipidomics %>%
-#   as.data.frame() %>% 
-#   select(Class, contains("MainArea"), -"MainArea[c]") %>%
-#   group_by(Class)%>%
-#   summarise_at(vars(sample_raw_list), list(~sum(., na.rm = TRUE))) %>%
-#   gather(SAMPLES, all_AUC, -Class) %>%
-#   ungroup() %>%
-#   rowwise() %>% 
-#   mutate(GROUPS = ifelse(SAMPLES %in% group_info$samples,
-#                          unlist(group_info[group_info$samples==SAMPLES, 2]), "NA")) %>%
-#   mutate(SAMPLES = str_remove_all(SAMPLES, "MainArea\\[") %>% str_remove_all(., "\\]")) %>%
-#   gather(type, value, -c("Class", "SAMPLES", "GROUPS")) 
-# 
-# params <- c("SAMPLES", "value", "type")
-# p1 <- plot_all(data = all_samples, params) +
-#   geom_bar(stat = "identity") +
-#   facet_wrap(~Class, scales = "free") +
-#   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
-#         axis.line = element_line(size = 0.2)) +
-#   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
-#   labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "")
-# print(p1)
-# ggsave("plot/QC/raw_all_samples.pdf", device = "pdf")
+# visualize AUC of each sample in different lipid classes.
+all_samples <- filtered_lipidomics %>%
+  as.data.frame() %>%
+  select(Class, contains("MainArea"), -"MainArea[c]") %>%
+  group_by(Class)%>%
+  summarise_at(vars(all_of(sample_raw_list)), list(~sum(., na.rm = TRUE))) %>%
+  gather(SAMPLES, all_AUC, -Class) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(GROUPS = ifelse(SAMPLES %in% group_info$samples,
+                         unlist(group_info[group_info$samples==SAMPLES, 2]), "NA")) %>%
+  mutate(SAMPLES = str_remove_all(SAMPLES, "MainArea\\[") %>% str_remove_all(., "\\]")) %>%
+  gather(type, value, -c("Class", "SAMPLES", "GROUPS"))
+
+params <- c("SAMPLES", "value", "type")
+p1 <- plot_all(data = all_samples, params) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~Class, scales = "free") +
+  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
+        axis.line = element_line(size = 0.2)) +
+  scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
+  labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "")
+print(p1)
+ggsave("plot/QC/raw_all_samples.pdf", device = "pdf", width=20, height = 20)
 
 # filter negative value
 # filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
@@ -164,12 +144,25 @@ if(background_option == "y"){
 #   labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "") 
 # print(p2)
 
-
-
-
+# check if deleting samples needed and plot new PCA
+message("\nPlots can visualized under 'plot' directory or r studio plots panel.\nDo you want to edit sample information for subsequent analyses?")
+pca_check <- retype_choice("Y/N")
+if(pca_check == "y"){
+  info_list <- PCAcheck(pca_check, filtered_lipidomics2)
+  # making group repeats according to its position for making groups of later PCA
+  sample_raw_list <- info_list[[1]]
+  group_repeats <- info_list[[2]]
+  # make a data frame contains sample information and group information
+  group_info <- data.frame(samples=sample_raw_list, 
+                           groups=group_repeats, 
+                           stringsAsFactors = FALSE) %>% 
+    group_by(groups) 
+  write_csv(group_info, "data/group_information.csv")
+  group_names <- unique(group_repeats)
+  ngroups <- length(group_names)
+}
 
 write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
-
 
 
 
@@ -179,18 +172,14 @@ write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
 source("FWL_lipidomics_QUANTIFICATION_3.2.2.R", echo = FALSE)
 
 
-
-
-
-
 ##########################################################################################
 # saturation analysis
 ##########################################################################################
 # calculate the saturation for different lipid class
-message("\nThe filtered data will be used for saturation analysis.")
+message("The filtered data will be used for saturation analysis.\n")
 source("FWL_FattyAcids_Saturation_3.3.3.R", echo = FALSE)
+message("The SFA, MUFA, PUFA information will be stored in the count_lipid.csv and aggregated.csv\n")
 
-message("\nThe SFA, MUFA, PUFA information will be stored in the count_lipid.csv and aggregated.csv")
 
 ##########################################################################################
 # fatty acids length analysis
@@ -198,26 +187,16 @@ message("\nThe SFA, MUFA, PUFA information will be stored in the count_lipid.csv
 source("FWL_FattyAcids_Length_3.2.2.R", echo = FALSE)
 
 
-
-
 ##########################################################################################
 # ether lipid analysis
 ##########################################################################################
 message("\nThe filtered data will be used for ether lipid analysis.\n")
-message("Please note that you need to run Saturation Analysis before going to Ether lipid Analysis!!!")
+message("Please note that you need to run Saturation Analysis before going to Ether lipid Analysis!!!\n\n")
 source("FWL_EtherLipids_3.2.2.R", echo = FALSE)
 
 
-
-
-
-
-
-
-
-
 ##########################################################################################
-# test random sample distribution
+# Visualize random sample distribution
 ##########################################################################################
 # test sample distribution
 # log transformation and visualize approximately normal distribution of the transformed data
@@ -238,20 +217,13 @@ plot_all(log2_lipids, sample_raw_list[i]) +
 write.csv(log2_lipids, "data/log.molec.csv")
 
 
-
-
-
-
 ##########################################################################################
 # volcano plot
 ##########################################################################################
-
 # Create a design matrix 
 samples <- factor(group_repeats)
 design <- model.matrix(~0+samples)
 colnames(design) <- levels(samples)
-# message("Begin to plot volcano \nPlease note that you NEED make contrast groups manually to Compare the difference between/among groups.\ne.g. compare B+C against A: A-(B+C)/2; A against B:  A-B; A-B against C-D: (A-B)-(C-D), etc.")
-
 ncomparisons <- readline("How many volcano plots to generate: \n") %>% as.numeric()
 impute_dt <- impute_not("y", filtered_lipidomics, sample_raw_list)
 imputated_lipids <- impute_dt[[2]]

@@ -1,31 +1,32 @@
 ####################################################################################
-# Script: FWL_EtherLipids_3.2.0.R
+# Script: FWL_EtherLipids_3.2.2.R
 # Author: Wenting Lyu
-# Notes: This script assist executing for main script FWL_lipidomics_3.1.R which
+# Notes: This script assist executing for main script FWL_lipidomics_3.2.2.R which
 #         helps generating the graph and data for the workflow of lipidomics.
 #         it also calculate help visualize the ether saturation information
 #         First, Make sure that your R and Rstudio are newly enough for installing the 
 #         packages needed in the script. Otherwise the script will pop out warnings 
 #         for packages and won't run.
-#         Second, typing command in the console-----> source("FWL_lipidomics_3.1.R")
+#         Second, typing command in the console-----> source("FWL_lipidomics_3.2.2.R")
 #         or press the source button.
 #         Third, users can independently implement this analysis by running 
-#         "fattyAcidsaturation_analysis2.1.r" in directory fattyAcids_saturation_analysis.
+#         "fattyAcidsSaturation_analysis.3.2.3.R" in directory fattyAcids_saturation_analysis.
 #         This script is derived from Laura's project
 #####################################################################################
-ether_detection <- filtered_lipidomics %>% rowwise() %>% mutate(ether = ifelse(str_detect(LipidMolec, "\\(.*[ep]"), "YES", "NO"))
 
+# detect lipid molecules
+ether_detection <- filtered_lipidomics %>% rowwise() %>% mutate(ether = ifelse(str_detect(LipidMolec, "\\(.*[ep]"), "YES", "NO"))
 # transform negative to NA
 ether_detection <- ether_detection %>% mutate_at(vars(all_of(sample_raw_list)), list(~ifelse(.<0, NA, .))) %>% ungroup()
-
+# filter ether lipid
 ether_yes <- ether_detection %>% filter(ether == "YES")
+# aggregate all ether lipid AUC for all lipid class
 ether_all <- ether_yes %>% 
   select(Class, contains("MainArea"), -"MainArea[c]") %>% 
   group_by(Class)%>% 
   summarise_at(vars(all_of(sample_raw_list)), list(~sum(., na.rm = TRUE)))%>% 
   gather(SAMPLES, ether_AUC, -Class) 
-  
-
+# aggregate AUC for Lipid class which contain ether lipids  
 all_lipids <- ether_detection %>% 
   filter(Class %in% unique(ether_all$Class)) %>% 
   select(Class, contains("MainArea"), -"MainArea[c]") %>% 
@@ -33,19 +34,18 @@ all_lipids <- ether_detection %>%
   summarise_at(vars(all_of(sample_raw_list)), list(~sum(., na.rm = TRUE))) %>% 
   gather(SAMPLES, all_AUC, -Class)
 
-
+# merge and calculate ether lipid percentage in each lipid class
 ether_percent <- left_join(all_lipids, ether_all)
- 
+# reformat and gain the rest AUC for lipid class which contain ether lipids
 ether_percent <- ether_percent %>% 
   rowwise() %>%
    mutate(rest_AUC = all_AUC - ether_AUC) %>% 
    select(-all_AUC) %>% 
   mutate(GROUPS = ifelse(SAMPLES %in% group_info$samples, 
                          unlist(group_info[group_info$samples==SAMPLES, 2]), "NA")) %>% 
-
   mutate(SAMPLES = str_remove_all(SAMPLES, "MainArea\\[") %>% str_remove_all(., "\\]")) %>% 
   gather(type, value, -c("Class", "SAMPLES", "GROUPS"))
-
+# calculate ether lipid percentage
 ether_percent <- ether_percent %>% mutate_if(is.character, as.factor)
 ordered_samples<- unique(ether_percent$SAMPLES) %>% 
   str_remove_all(., "s") %>% 
@@ -55,13 +55,7 @@ ordered_samples<- unique(ether_percent$SAMPLES) %>%
 ether_percent$SAMPLES <- factor(ether_percent$SAMPLES, levels = ordered_samples)
 ether_percent$GROUPS <- factor(ether_percent$GROUPS, levels = group_names)
 
-
-
-
-
-
-
-
+# Visualize ether lipid in each sample
 params1 <- c("SAMPLES", "value", "type")
 p1 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity") +
@@ -75,6 +69,7 @@ print(p1)
 ggsave("plot/Ether/ether.png", device = "png", width = 20, height = 20)
 ggsave("plot/Ether/ether.svg", device = "svg", width = 20, height = 20)
 
+# visualize ether lipid in each sample in percentage
 p2 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity", position = "fill") +
   scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
@@ -87,10 +82,7 @@ ggsave("plot/Ether/ether_percentage.png", device = "png", width = 20, height = 2
 ggsave("plot/Ether/ther_percentage.svg", device = "svg", width = 20, height = 20)
 
 
-
-
-
-
+# calculate and visualize mean value for ether lipid in each group in stack
 ether_percent_group <- ether_percent %>% group_by(Class, GROUPS, type)  %>% summarise_at(vars(value), list(~mean(., na.rm = TRUE)))
 params2 <- c("GROUPS", "value", "type")
 p3 <- plot_all(data = ether_percent_group, params2) +
@@ -104,6 +96,7 @@ print(p3)
 ggsave("plot/Ether/ether_group.png", device = "png", width = 20, height = 20)
 ggsave("plot/Ether/ether_group.svg", device = "svg", width = 20, height = 20)
 
+# visualize mean value for ether lipid in each group for pencentage display
 p4 <- plot_all(data = ether_percent_group, params2) +
   geom_bar(stat = "identity", position = "fill") +
   scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
