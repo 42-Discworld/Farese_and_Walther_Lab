@@ -204,33 +204,7 @@ Minimum number of identified molecules (Grade A+B) required in all samples, n>=3
 
 Minumum number of significantly identified lipids p<=0.001 in all samples, n>=3: 
 ```
-
-**(2) Check background information**
-
-  - Illustration: Plot the back ground information (sample blank)
-    abundance in each detected lipid class. The plot will be saved as
-    `background.png` in `plot` directory.
-
-  - Output
-example:
-
-<img src="display/background.png" width="40%" style="display: block; margin: auto;" />
-
-**(3) Lipid Class Summary**
-
-  - Illustration: there will be a table and plot for showing detected
-    lipid class summary information. The plot and data will be saved as
-    `prop_summary.png` and `proportion_classes.csv`.  
-  - Output
-example:
-
-<center>
-
-<img align="middle" src="display/prop_summary.png"  width="50%" height="50%"/>
-
-</center>
-
-**(4) Rention time analysis**
+**(2) Rention time analysis**
 
   - Illustration: The AUC value of all samples for each lipid class are
     log transformed. And the plot is saved as `all_retention.png`.  
@@ -239,35 +213,7 @@ example:
 
 <img src="display/all.retention.png" width="100%" style="display: block; margin: auto;" />
 
-**(5) Mark odd chanins and test standard TG(17:1/17:1/17:1) abundance in
-all samples**
-
-  - Illustration:
-      - Console will display the number of lipid molecules containing
-        odd chains and its percentage. The odd chain lipid molecules are
-        stored in `odd_chains.csv`.  
-      - And for standard TG(17:171:17:1), if it is used, pipeline could
-        detect its abundance in all samples and make a plot
-        `TG17_all.png`. The standard could be replaced with other future
-        standard.  
-      - Please note that the bars are ordered by AUC value for each
-        sample.
-  - Example display:
-
-<!-- end list -->
-
-``` 
-
-There are 157 lipid molecules contain odd chains. 
-          
-The odd chain of fatty acids percent is 24.04% in total.
-
-The odd chain information is stored in odd_chains.csv.
-```
-
-<img src="display/TG17_all.png" width="40%" style="display: block; margin: auto;" />
-
-**(6) Fix duplicated lipid molecules**
+**(3) Fix duplicated lipid molecules**
 
   - Illustration: Pipeline will dectect same lipid molecules with
     different retention time. And it will filter the duplicates based on
@@ -300,6 +246,61 @@ Filtered lipid molecules sans duplicates are stored under removeduplicates.csv
 Enter 'A' or 'B': A
 Filterted lipid molecules sans duplicates are stored under removeduplicates.csv
 ```
+
+**(4) Check background information**
+
+  - Illustration: Plot the back ground information (sample blank)
+    abundance in each detected lipid class. The plot will be saved as
+    `background.png` in `plot` directory.
+
+  - Output
+example:
+
+<img src="display/background.png" width="40%" style="display: block; margin: auto;" />
+
+**(5) Lipid Class Summary**
+
+  - Illustration: there will be a table and plot for showing detected
+    lipid class summary information. The plot and data will be saved as
+    `prop_summary.png` and `proportion_classes.csv`.  
+  - Output
+example:
+
+<center>
+
+<img align="middle" src="display/prop_summary.png"  width="50%" height="50%"/>
+
+</center>
+
+
+**(6) Mark odd chanins and test standard TG(17:1/17:1/17:1) abundance in
+all samples**
+
+  - Illustration:
+      - Console will display the number of lipid molecules containing
+        odd chains and its percentage. The odd chain lipid molecules are
+        stored in `odd_chains.csv`.  
+      - And for standard TG(17:171:17:1), if it is used, pipeline could
+        detect its abundance in all samples and make a plot
+        `TG17_all.png`. The standard could be replaced with other future
+        standard.  
+      - Please note that the bars are ordered by AUC value for each
+        sample.
+  - Example display:
+
+<!-- end list -->
+
+``` 
+
+There are 157 lipid molecules contain odd chains. 
+          
+The odd chain of fatty acids percent is 24.04% in total.
+
+The odd chain information is stored in odd_chains.csv.
+```
+
+<img src="display/TG17_all.png" width="40%" style="display: block; margin: auto;" />
+
 
 **(7) Input group information**
 
