@@ -24,7 +24,7 @@ list.of.packages <- c( "FactoMineR", "factoextra", "scales", "magrittr", "ggrepe
                        "stringr", "readxl", "RCy3", "igraph", "tidyverse", "dplyr","viridis", 
                        "igraph", "network", "visNetwork", "extrafont", "ggforce", "kableExtra", 
                        "ggpubr", "wesanderson", "formattable", "ggsci", "plotly", "htmlwidgets", 
-                       "gridExtra", "grid", "DT", "readr")
+                       "gridExtra", "grid",  "readr")
 need.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
 if(length(need.packages) > 0) BiocManager::install(need.packages)
 
@@ -39,7 +39,7 @@ lapply(list.of.packages, function(x)
 # color which are kind for color blinded people, source from Internet
 clPalette1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 clPalette2 <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-clPalette3 <- rep("#bababa", 30)
+
 
 
 ##########################################################################################
@@ -61,9 +61,8 @@ set_theme <- function(..., theme_params = list()){
          ),
          axis.ticks.length = unit(1.5, "mm"),
          axis.ticks = element_line(size = 1.2),
-         axis.text = element_text(size = 10,  colour = "black"),
+         axis.text = element_text(size = 12,  colour = "black"),
          axis.title =  element_text(size = 14),
-         # axis.text = element_text(size = 10),
          #axis.ticks = element_line(size = .2),
          #axis.ticks.length = unit(.5, "mm"),
          strip.text = element_text(size = 10),
@@ -162,7 +161,13 @@ reverse_addlists <- function(x, y){
 
 
 
-
+#########################################################################################
+# function name: retype_choice
+# parameters: parameter1/parameter2/parameter3/...
+# utility: Passing the choice options which separated by "/". The function will check if 
+#         your typing option is right or wrong.
+#         e.g. retype_choice(Y/N)     
+#########################################################################################
 retype_choice <- function(choices){
   choice <- choices %>% str_to_lower() %>% str_split(., "/") %>% unlist
   command <- paste0("Please type ", choices, ": ")
@@ -187,17 +192,12 @@ select_expr_out <- function(options){
 
 
 
-
-
-
 #########################################################################################
 # function name: delete_samples
 # parameter: options (y/n)
-# utility: This function will check if there are option control samples exist. 
-#          It will delete the option controls for QC and later PCA and correlations analysis. 
-#         It will also make new columns which store the information of sums of Grade A, B, 
-#         C and D, plus the p values which are less or equal than 0.001 for each row. It will return the 
-#         the extra information
+# utility: This function will check if there are extra samples you need to delete for this 
+#           time analysis. Otherwise, the extra samples will effect your filtering process 
+#           and final output.
 #########################################################################################
 delete_samples <- function(options, lipid){
   if(options=="y"){
@@ -240,28 +240,12 @@ delete_samples <- function(options, lipid){
 
 
 
-# #########################################################################################
-# function name: geom_se
-# parameters: ..., se.params
-# utility: add error bar for plots. Parameters ... are 2 lists. Its first list is made of 4 
-#         parameters while the last one element is standard deviation.
-#         The second list is logical element, e.g. se=FALSE or se=TRUE.
-#         parameter se.params are the list user can pass into function for modification.
-# #########################################################################################
-# geom_se <- function(...){
-#   parameters <- syms(...)
-#   p2 <- parameters[[2]]
-#   p4 <- parameters[[4]]
-#   se_condition <- paste0(syms(...)[[5]]) %>% as.logical()
-#   if(se_condition){
-#     se <- geom_errorbar(aes(ymin=sign(eval(p2))*abs(eval(p2)), 
-#                       ymax=sign(eval(p2))* (abs(eval(p2)) + abs(eval(p4)))),
-#                   position=position_dodge(0.9),
-#                   width = 0.1,
-#                   size=.2)
-#     return(se)
-#   }
-# }
+#########################################################################################
+# function name: 
+# parameters: 
+# utility: 
+#         
+#########################################################################################
 geom_se <- function(parameters, se){
   parameters <- syms(parameters)
   p2 <- parameters[[2]]
@@ -278,19 +262,30 @@ geom_se <- function(parameters, se){
 
 
 
+#########################################################################################
+# function name: 
+# parameters: 
+# utility: 
+#         
+#########################################################################################
+# se_position <- function(..., position.params = list()){
+#   params <- list(...)
+#   position.params <- modifyList(params, bar.params)
+#   se.position <- do.call("geom_errobar", modifyList(
+#     list(position = position_dodge(width = 0.6), stat="identity", width = 0.4),
+#     position.params
+#   ))
+#   se.position
+# }
+# 
 
-se_position <- function(..., position.params = list()){
-  params <- list(...)
-  position.params <- modifyList(params, bar.params)
-  se.position <- do.call("geom_errobar", modifyList(
-    list(position = position_dodge(width = 0.6), stat="identity", width = 0.4),
-    position.params
-  ))
-  se.position
-}
-
-
-
+#########################################################################################
+# function name: plot_bars
+# parameters: ..., bar.params (position, stat, width)
+# utility:  This function will apply geom_bar function and user can pass customized parameters
+#           for position, stat, width.
+#         
+#########################################################################################
 plot_bars <- function(..., bar.params = list()){
   params <- list(...)
   bar.params <- modifyList(params, bar.params)
@@ -301,36 +296,6 @@ plot_bars <- function(..., bar.params = list()){
   bar
 }
 
-
-
-# add_scales <- function(..., scale.params = list()){
-#   params <- list(...)
-#   scale.params <- modifyList(params, scale.params)
-#   scale_fun <- do.call("scale_y_continuous", modifyList(
-#     list(trans = tn,
-#          breaks = c( -10^3, 0, 10^3, 10^6, 10^9, 10^12, 10^15),
-#          labels = c( bquote(-10^3), 0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12), bquote(10^15)),
-#          expand = c(0, 0, 0.1, 0)),
-#     scale.params
-#   ))
-#   list(scale_fun)
-# }
-
-
-
-# scale_params <- list(trans = tn,
-#                      breaks = c(-10^3, 0, 10^3, 10^6, 10^9, 10^12, 10^15, 10^18),
-#                      # labels = c(bquote(-10^3), 0, bquote(10^3), bquote(10^6),
-#                      #            bquote(10^9), bquote(10^12), bquote(10^15), bquote(10^18)),
-#                      labels = c(expression(paste("10"^"-3")), 0, expression(paste("10"^"3")),
-#                                 expression(paste("10"^"6")),expression(paste("10"^"9")),
-#                                 expression(paste("10"^"-3")),expression(paste("10"^"-3")),
-#                                 expression(paste("10"^"-3"))),
-#                      expand = c(0, 0, 0.1, 0))
-# 
-# 
-# 
-# 
 
 
 
@@ -370,23 +335,18 @@ add_scales <- function(..., scale.params = list()){
 # utility: passing data and a list of parameters for plotting
 ########################################################################
 plot_all <- function(data, parameters, se){
-  #paras <- syms(parameters)
+  paras <- syms(parameters)
   if(length(parameters) == 1){
-    paras <- syms(parameters)
     p <- ggplot(data, aes(eval(paras[[1]]))) +
       theme_bw() +
       set_theme() 
     return(p)
   } else if(length(parameters) == 2){
-    paras <- syms(parameters)
     p <- ggplot(data, aes(x = reorder(eval(paras[[1]]), eval(paras[[2]])), y = eval(paras[[2]]))) +
-      # p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]))) +
       theme_bw() + 
       set_theme() 
-    # add_scales()
     return(p) 
   } else if(length(parameters) == 3){
-    paras <- syms(parameters)
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
       theme_bw() +
       set_theme() 
@@ -401,27 +361,16 @@ plot_all <- function(data, parameters, se){
     }
     return(p)
   } else{
-    paras <- syms(parameters)
-    # scale_info <- parameters[[5]]
     ranges <- data %>% 
       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
       summarise(max(bounds), min(bounds))
     limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
-    # limits[[2]] <- limits[[2]] - 10^5
     axis_st <- data  %>% filter(eval(paras[[2]]) < 0) %>% nrow()
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
-      #   expand_limits(y = limits) +
       theme_bw() +
       set_theme() +
       theme(plot.title = element_text(hjust = 0.5),
             axis.text.y = element_text(angle = 30, hjust=1)) + 
-      # scale_y_continuous(trans = tn,
-      #                    breaks = c(-10^3, 0, 10^3, 10^6, 10^9, 10^12, 10^15),
-      #                    labels = c(bquote(-10^3), 0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12), bquote(10^15)),
-      #                    expand = c(0, 0, 0.1, 0)) +
-      #add_scales(scale.params = scale_info)+ 
-      #add_scales() +
-      # ylim(limits) +
       #scale_fill_manual(values = clPalette1) +
       scale_fill_d3() +
       geom_se(parameters, se)  
@@ -436,35 +385,6 @@ plot_all <- function(data, parameters, se){
     return(p)
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-subtract_background <- function(data, sample_list, subtraction){
-  # total class lipids of raw data by subtracting background (blank sample c) from all samples
-  data <- data %>% 
-    mutate_at(vars(all_of(sample_list)), list(~.-eval(sym(!!subtraction)))) %>%  
-    mutate_at(vars(!!subtraction), list(~ifelse(.==0, ., 0)))
-  return(data)
-}
-
-
 
 
 ########################################################################
@@ -551,9 +471,11 @@ detect_duplicates <- function(lipid_data){
 }
 
 
-# detect same lipid molecules with different retention time
-# Filter the lipid molecule contains same name but different retention time based on your criteria  
-# all the dupliated molecules will be stored in dupliates.csv
+#########################################################################################
+# function name: filter_duplicate
+# parameters: duplicate_molecs, data, selections
+# utility: process the duplicated molecules of different retention time
+#########################################################################################
 filter_duplicate <- function(duplicate_molecs, data, selections){
   Class <- syms(selections)[[1]]
   LipidMolec <- syms(selections)[[2]]
@@ -586,14 +508,16 @@ filter_duplicate <- function(duplicate_molecs, data, selections){
     message("There is no duplicate molecules in your data")
   }
 }
-########################################################################
+
+
+#########################################################################################
 # function name: fix_duplicate
-# parameter: fix_method, prelipids
-# utility: fixing the same lipid molecule with different retention time
-#           1) pick the lipid molecule which summation of main area is the 
-#             biggest one;
-#           2) aggregate the two different retention time lipid molecules
-########################################################################
+# parameters: filtered_lipids, duplicates, fixmethod, selections
+# utility: specific funtion offer 2 methods for fixing the duplicated molecules
+#         1) pick the lipid molecule which summation of main area is the biggest one;
+#         2) aggregate the two different retention time lipid molecules
+#         
+#########################################################################################
 fix_duplicate <- function(filtered_lipids, duplicates, fixmethod, selections){
   Class <- syms(selections)[[1]]
   LipidMolec <- syms(selections)[[2]]
@@ -642,14 +566,12 @@ fix_duplicate <- function(filtered_lipids, duplicates, fixmethod, selections){
   return(list(sum_dt, dt))
 }
 
-
-
-########################################################################
+#########################################################################################
 # function name: Input
-# parameter: data (filtered_lipids)
-# utility: input group information of samples from the console and reterieve 
-#           corresponding sample information from the csv file
-########################################################################
+# parameters: data (filtered lipidomics data)
+# utility: input group information of samples from the console and reterieve corresponding 
+#         sample information from the csv file
+#########################################################################################
 Input <- function(data){
   ###  making group
   message("\nProvide infomation of experimental groups")
@@ -664,17 +586,16 @@ Input <- function(data){
   glimpse(info)
   # retrieve the group names
   group_names <- dimnames(info)[[2]]
-  
   return(list(info, group_names, ngroups))
 }
 
 
-########################################################################
-# function name: check_group
-# parameter: x (ngroups from Input function/group number)
-# utility: check if the group number is numeric and store the correct form
-#         of group number information
-########################################################################
+#########################################################################################
+# function name: check_group_number
+# parameters: x (standard input for group number)
+# utility: check if the group number from standard input is numeric and store the correct 
+#           form of group number information
+#########################################################################################
 check_group_number <- function(x){
   if((x%%1 != 0) | (is.na(x))){
     print("Group number must be numeric!")
@@ -692,14 +613,11 @@ check_group_number <- function(x){
 }
 
 
-
-
-########################################################################
+#########################################################################################
 # function name: InputGroups
-# parameter: n (ngroups from input function/group number)
-# utility: read standard input from console and check if it's correct and
-#           store group info into list
-########################################################################
+# parameters: n 
+# utility: input group information and check if needed edditing
+#########################################################################################
 InputGroups <- function(n){
   group_info  <- c()
   info <- c()
@@ -727,10 +645,12 @@ InputGroups <- function(n){
 }
 
 
-
-
-# Preparation for pair-wise correlations
-# source from stackoverflow 
+#########################################################################################
+# function name: inf2NA, panel.cor, panel.hist, pairs2...
+# parameters: ...
+# utility: A series of function for plotting pairwise correlation plots.
+# source: stackoverflow
+#########################################################################################
 inf2NA      <- function(x) { x[is.infinite(x)] <-  NA; x }
 
 panel.cor   <- function(x, y, digits = 2, cex.cor, ...)
@@ -896,14 +816,11 @@ pairs2 <- function (x, labels, panel = points, ...,
 
 
 
-
-######################################################################
-
-########################################################################
+#########################################################################################
 # function name: GrepIndex
-# parameter: sample, data
-# utility: get sample names and its column position information from filtered data csv file
-########################################################################
+# parameters: sample, data
+# utility: get sample names and its column position information from csv file
+#########################################################################################
 GrepIndex <- function(sample, data){
   sample.names  <- list()
   group_names   <- c()
@@ -921,15 +838,14 @@ GrepIndex <- function(sample, data){
   return(info)
 }
 
-
-########################################################################
+#########################################################################################
 # function name: PCA_pairs_Plot
 # parameter: info, group_names, filtered_lipids, mark
 # utility: this function will plot PCA and pair-wise correlations among the samples.
 #           This will also produce two kinds of correlation plots based on different
 #           axis display style. 
 #           Please notice that this function is really long format. 
-########################################################################
+#########################################################################################
 PCA_pairs_Plot <- function(info, filtered_lipids, mark){
   # retrieve the sample info position 
   index         <- 1:length(info)
@@ -971,8 +887,6 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
   sample_list <- information[[2]]
   sample_index <- information[[3]]
   
-  
-  
   # Formatting the table for PCA
   filtered_lipids_PCA <-  filtered_lipids %>% 
     select(all_of(sample_list)) %>% 
@@ -985,27 +899,23 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
   rownames(filtered_lipids_PCA) <- filtered_lipids_PCA %>% 
     rownames(.) %>% 
     str_remove_all(., "MainArea\\[") %>% str_remove_all(., "\\]")
-  
   log2_filtered_lipids_PCA      <- log((filtered_lipids_PCA+1), 2)
-  
   # making group info for PCA 
   filtered_lipids_PCA$Group       <- group_repeat
   log2_filtered_lipids_PCA$Group  <- group_repeat
-  
   # Perform PCA 
   res.pca         <-  PCA(log2_filtered_lipids_PCA, scale.unit=TRUE, 
                           quali.sup=ncol(filtered_lipids_PCA), graph=FALSE)
-  
   var <- get_pca_var(res.pca)
   pvar <- fviz_pca_var(res.pca, col.var = "contrib",
                        gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                        geom.var = c("point", "text"))
   print(pvar)
-  
   p1 <- fviz_screeplot(res.pca, ncp=10)
   concat          <-  cbind.data.frame(log2_filtered_lipids_PCA[, ncol(log2_filtered_lipids_PCA)], res.pca$ind$coord)
   ellipse.coord   <-  coord.ellipse(concat, bary=TRUE)
   print(p1)
+  dev.copy(png, "plot/QC/component_proportion.png")
   
   p2 <- plot.PCA(res.pca, habillage=ncol(log2_filtered_lipids_PCA), 
                  ellipse=ellipse.coord, cex=0.8, label="all")
@@ -1018,12 +928,11 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
 }
 
 
-
-########################################################################
+#########################################################################################
 # function name: PCAcheck
-# parameter: pca_check
-# utility: check if deleting samples needed and replot PCA
-########################################################################
+# parameters: pca_check, data
+# utility: check if need to redo PCA analysis
+#########################################################################################
 PCAcheck <- function(pca_check, data){
   if(str_to_lower(pca_check)!="n"){
     if(str_to_lower(pca_check)=="y"){
@@ -1043,11 +952,11 @@ PCAcheck <- function(pca_check, data){
 }  
 
 
-########################################################################
+#########################################################################################
 # function name: retrieve_info
-# parameter: info
+# parameters: info
 # utility: retrieve group and its sample information
-########################################################################
+#########################################################################################
 retrieve_info <- function(info){
   # retrieve the sample info position 
   index         <- 1:length(info)
@@ -1071,11 +980,11 @@ retrieve_info <- function(info){
 }
 
 
-#########################################################################
+#########################################################################################
 # function name: count_pathway
-# parameter: x (a list or vector of lipid molecules)
-# utility: find the saturation pattern and its counts
-########################################################################
+# parameters: x (a list or vector of lipid molecules)
+# utility: find saturation pattern and its counts
+#########################################################################################
 count_pathway <- function(x){
   pattern_name <- i <- j <- k <- c()
   i <- str_count(x, ":0")
@@ -1090,30 +999,29 @@ count_pathway <- function(x){
 }
 
 
-###############################################################
+#########################################################################################
 # transform data attributes to numeric type
 ###############################################################
 transform_to_numeric <- function(x){class(x) <- as.numeric(x)}
+#########################################################################################
 
 
-########################################################################
+#########################################################################################
 # function name: calc_group
 # parameter: fa_percent, groups
 # utility: find mean or median of samples in each group,
 #         return saturantion percentage information, mean and median in each group
-########################################################################
+#########################################################################################
 calc_group <- function(percent_info, groups){
   #  group_list <- unique(groups[, 2]) %>% unlist()
   all_samples <- unique(groups[, 1]) %>% unlist()
   names(all_samples) <- all_samples
   dt <- percent_info %>%
     mutate_at(all_samples, list(SFA = ~.*`%SFA`, MUFA = ~.*`%MUFA`, PUFA = ~.*`%PUFA`))
-  
   dd <- dt %>%
     select(Class, contains("MainArea"), -ends_with("]")) %>%
     group_by(Class) %>%
     summarise_all(sum)
-  
   dd_mean <- cal_class(dd, groups, mean, "mean")
   dd_median <- cal_class(dd, groups, median, "median")
   dd_sd <- cal_class(dd, groups, sd, "sd")
@@ -1123,13 +1031,13 @@ calc_group <- function(percent_info, groups){
 }
 
 
-########################################################################
+#########################################################################################
 # function name: calc_class
 # parameter: data, info, fun, pick
 # utility: auxiliary function for calc_group, which passing percentage pattern 
 #         informaion, group information, methods (fun, pick) into the function to 
 #         get corresponding statistics for methods
-########################################################################
+########################################################################################
 cal_class <- function(data, info, fun, pick){  
   group_list <- unique(info[, 2]) %>% unlist()
   dt1 <- data.frame(row.names = rownames(data))
@@ -1149,35 +1057,11 @@ cal_class <- function(data, info, fun, pick){
 }
 
 
-########################################################################
+#########################################################################################
 # function name: Fun_statisitcs
 # parameter: data, names, fun, samples
 # utility: independent or auxiliary function for calculation for selected samples by row
-# ########################################################################
-# Fun_statistics <- function(data, names, fun, samples){
-#   dts <- data.frame(row.names = rownames(data))
-#   # get median, mean and sd for samples in each group 
-#   for(i in seq_along(names)){
-#     dt <-  data %>% 
-#       rowwise() %>% 
-#       transmute(!!(names[i]) := !!fun(c(!!!syms(samples[[i]])), na.rm = TRUE))
-#     dts <- cbind(dts, dt)
-#   }
-#   return(dts)
-# }
-
-
-
-
-
-
-
-
-########################################################################
-# function name: Fun_statisitcs
-# parameter: data, names, fun, samples
-# utility: independent or auxiliary function for calculation for selected samples by row
-#########################################################################
+#########################################################################################
 Fun_statistics <- function(data, names, fun, samples){
   dts <- data.frame(row.names = rownames(data))
   # get median, mean and sd for samples in each group 
@@ -1185,26 +1069,25 @@ Fun_statistics <- function(data, names, fun, samples){
     dt <-  data %>% 
       rowwise() %>% 
       transmute(!!(names[i]) := eval(expr((!!fun)(c(!!!syms(samples[[i]])), na.rm = TRUE))))
-    
     dts <- cbind(dts, dt)
   }
   return(dts)
 }
 
-########################################################################
+
+#########################################################################################
 # function name: cal_lipid_statisitics
 # parameter: data, group_information, method, type
 # utility: independent or auxiliary function for calculation for selected samples by row
 #         return the output and its formated style
-#########################################################################
-cal_lipid_statistics <- function(data, group_information, method,  type){
+#########################################################################################
+cal_lipid_statistics <- function(data, group_information, method, type){
   selections <- syms(type)
   type.name <- data %>% select(!!!selections) %>% ungroup()
  # type.name <- data %>% select(!!type)
   group_names <- group_information$groups %>% unique() %>% unlist()
   group_samples <- list()
   post_name <- addquotes("_", !!method)
-  
   # get group information for samples
   for(i in group_names) group_samples[[i]] <- subset(group_information, groups == i) %>% ungroup() %>% select(samples) %>% unlist()
   # calculate the mean for each group of each class
@@ -1222,14 +1105,11 @@ cal_lipid_statistics <- function(data, group_information, method,  type){
 }
 
 
-
-
-
-########################################################################
+#########################################################################################
 # function name: pick_control
 # parameter: data, pick, info, control
 # utility: get control group information for later calculation
-########################################################################
+#########################################################################################
 pick_control <- function(data, pick, info, control){
   groups <- unique(info[, 2]) %>% unlist()
   control_info <- addquotes(!!control, "_", !!pick)
@@ -1239,20 +1119,12 @@ pick_control <- function(data, pick, info, control){
 }
 
 
-
-# se <- function(x)sd(x,na.rm=TRUE)/sqrt(length(x[complete.cases(x)]))
-
-
-
-
-
-
-
-#######################################################################
+#########################################################################################
 # function name: norm_by_mean
 # parameter: data, pattern, sample_list, control_names
-# utility: get mean/median of the control group, and normalized every sample by selected value
-########################################################################
+# utility: get mean/median of the control group, and normalized every sample by selected 
+#         value
+#########################################################################################
 norm_by_mean <- function(data, pattern, sample_list, control_names){
   dt <- data %>% 
     select(Class, contains(!!pattern)) %>% 
@@ -1262,37 +1134,34 @@ norm_by_mean <- function(data, pattern, sample_list, control_names){
   return(dt)
 } 
 
-#######################################################################
+
+########################################################################################
 # function name: norm_by_mean2
 # parameter: data, ll, sample_list, control_names, data_type
 # utility: ll is the group variable, e.g Class, LipidMolec.
 #         get mean/median of the control group, and normalized every sample by 
 #         the selected value. The normalization method depends on if the data 
 #         type is log transformed or not.
-########################################################################
+########################################################################################
 norm_by_mean2 <- function(data, ll, sample_list, control_names, data_type){
   if(data_type != "y"){
     dt <- data %>% 
       group_by(!!!syms(ll)) %>% 
       transmute_at(sample_list , list(~./!!sym(control_names)))
-    return(dt)
   }else{
     dt <- data %>% 
       group_by(!!!syms(ll)) %>% 
       transmute_at(sample_list , list(~.-!!sym(control_names)))
-    return(dt)
   }
-  
+  return(dt)
 } 
 
 
-
-
-#######################################################################
+########################################################################################
 # function name: FC_fun
 # parameter: group_info, pick, norm_samples, method
 # utility: calculate the fold change for each normalized group
-########################################################################
+########################################################################################
 FC_fun <- function(group_info, pick, norm_samples){
   dt <- data.frame(row.names = rownames(norm_samples))
   groups <- unique(group_info$groups)
@@ -1311,11 +1180,11 @@ FC_fun <- function(group_info, pick, norm_samples){
 } 
 
 
-########################################################################
+########################################################################################
 # function name: check_group
 # parameter: groups
 # utility: check if the user type correct group name
-########################################################################
+########################################################################################
 check_group <- function(groups, name){
   gr <- ifelse(name =="", 
                readline(paste("Enter the name of group: ")), 
@@ -1334,11 +1203,11 @@ check_group <- function(groups, name){
 }
 
 
-########################################################################
+########################################################################################
 # function name: FormatData
 # parameter: data, pick
 # utility: reformat the data to long formats for plotting
-########################################################################
+########################################################################################
 FormatData <- function(data, pick, fixed_cols){
   dt <- data %>% select(!!!syms(fixed_cols), contains(pick))
   pattern <- addquotes("_", !!pick)
@@ -1348,15 +1217,11 @@ FormatData <- function(data, pick, fixed_cols){
 }
 
 
-
-
-
-
-########################################################################
+########################################################################################
 # function name: FormatData2
 # parameter: data, pick
 # utility: reformat the data to long formats for plotting
-########################################################################
+########################################################################################
 FormatData2 <- function(data, pick){
   dt <- data %>% select(Class, contains(pick))
   pattern1 <- addquotes("_", !!pick, "_.*")
@@ -1366,34 +1231,35 @@ FormatData2 <- function(data, pick){
   dt$TYPE <- str_replace_all(dt$TYPE, pattern2, "")
   return(dt)
 }
-##
-########################################################################
-# function name: PlotTypes
-# parameter: data, m (x, y and color parameters for plots)
-# utility: passing data and 3 plot parameters for plot
-########################################################################
-PlotTypes <- function(data, m){
-  m <- syms(m)
-  p1 <- m[[1]]
-  p2 <- m[[2]]
-  p3 <- m[[3]]
-  min_y <- data %>% select(addquotes(!!p2)) %>% min()
-  max_y <- data %>% select(addquotes(!!p2)) %>% max()
-  plot_types <-   ggplot(data, aes(x=eval(p1), y=eval(p2), fill = eval(p3))) +
-    # facet_wrap(~Class, scales = "free") +
-    scale_fill_manual(values = clPalette1) +
-    theme_bw()+
-    set_theme()
-  return(plot_types) 
-} 
 
 
-########################################################################
+# ########################################################################################
+# # function name: PlotTypes
+# # parameter: data, m (x, y and color parameters for plots)
+# # utility: passing data and 3 plot parameters for plot
+# ########################################################################################
+# PlotTypes <- function(data, m){
+#   m <- syms(m)
+#   p1 <- m[[1]]
+#   p2 <- m[[2]]
+#   p3 <- m[[3]]
+#   min_y <- data %>% select(addquotes(!!p2)) %>% min()
+#   max_y <- data %>% select(addquotes(!!p2)) %>% max()
+#   plot_types <-   ggplot(data, aes(x=eval(p1), y=eval(p2), fill = eval(p3))) +
+#     # facet_wrap(~Class, scales = "free") +
+#     scale_fill_manual(values = clPalette1) +
+#     theme_bw()+
+#     set_theme()
+#   return(plot_types) 
+# } 
+
+
+########################################################################################
 # function name: subtract_background
 # parameter: data (filtered_lipidomics)
-# utility: total class lipids of raw data by subtracting background (blank sample c) from all samples,
-#         return subtracted information and its mean and sd statistics data
-########################################################################
+# utility: total class lipids of raw data by subtracting background (blank sample c) from 
+#         all samples, return subtracted information and its mean and sd statistics data
+########################################################################################
 subtract_background <- function(data, sample_list, subtraction){
   # total class lipids of raw data by subtracting background (blank sample c) from all samples
   data <- data %>% 
@@ -1403,31 +1269,82 @@ subtract_background <- function(data, sample_list, subtraction){
 }
 
 
-########################################################################
-# function name: cal_lipid_statistics
-# parameter: data, group_information, method, pick, type
-# utility: calculate picked method (e.g. mean, sd, median, sum..) of each group for each class type.
-#           The type could be lipid Class or lipid molecule colname name
-########################################################################
-# cal_lipid_statistics <- function(data, group_information, method, pick, type){
-#   type.name <- data %>% select(!!type)
-#   group_names <- group_information$groups %>% unique() %>% unlist()
-#   group_samples <- list()
-#   post_name <- addquotes("_", !!pick)
-#   
-#   # get group information for samples
-#   for(i in group_names) group_samples[[i]] <- subset(group_information, groups == i) %>% ungroup() %>% select(samples) %>% unlist()
-#   # calculate the mean for each group of each class
-#   lipid_group <- Fun_statistics(data, group_names, method, group_samples) %>% 
-#     cbind(Class = type.name, .)
-#   colnames(lipid_group)[1] <- "Class"
-#   # add post name, e.g. _mean
-#   colnames(lipid_group)[-1] <- colnames(lipid_group)[-1] %>% addlists(., post_name)
-#   # reformat the data
-#   data_group <- FormatData(lipid_group, pick)
-#   # remove the post name, e.g. _mean
-#   data_group <- data_group %>% mutate_at(vars(TYPE, Groups), list(~str_remove_all(., post_name)))
-#   return(list(lipid_group, data_group))
+# ########################################################################
+# # function name: ClassPlot
+# # parameter: data, list of parameters (e.g. x, y, color)
+# # utility: make color bar plots for the data
+# ########################################################################
+# ClassPlot <- function(data, parameters){
+#   parameters <- syms(parameters)
+#   p1 <- parameters[[1]]
+#   p2 <- parameters[[2]]
+#   p3 <- parameters[[3]]
+#   p4 <- parameters[[4]]
+#   ranges <- data %>% 
+#     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
+#     summarise(max(limits), min(limits))
+#   limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
+#   classplot <- ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
+#     geom_errorbar(aes(ymin=sign(eval(p2))*abs(eval(p2)), ymax=sign(eval(p2))* (abs(eval(p2))+eval(p4))),
+#                   position=position_dodge(width = .9, preserve = "single"), 
+#                   width = 0.1,
+#                   size=.2) +
+#     theme_bw() +
+#     set_theme()+
+#     theme(plot.title = element_text(hjust = 0.5),
+#           axis.text.y = element_text(angle = 30, hjust=1)
+#     ) + 
+#     scale_y_continuous(trans = tn,
+#                        breaks = c(0, 10^3, 10^6, 10^9, 10^12),
+#                        labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
+#                        expand = c(0, 0, 0.1, 0)
+#     ) +
+#     expand_limits(y = limits) +
+#     scale_fill_manual(values = clPalette1) 
+#   return(classplot)
+# }
+
+
+
+# 
+# 
+# 
+# geom_mean <- function(){
+#   list(
+#     stat_summary(fun = "mean", geom = "bar", fill = "grey70"),
+#     stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4)
+#   )
+# }
+# 
+# 
+
+
+
+
+# ClassPlot2 <- function(data, parameters, se){
+#   parameters <- syms(parameters)
+#   p1 <- parameters[[1]]
+#   p2 <- parameters[[2]]
+#   p3 <- parameters[[3]]
+#   p4 <- parameters[[4]]
+#   ranges <- data %>% 
+#     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
+#     summarise(max(limits), min(limits))
+#   limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
+#   classplot <-  ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
+#     theme_bw() +
+#     set_theme()+
+#     theme(plot.title = element_text(hjust = 0.5),
+#           axis.text.y = element_text(angle = 30, hjust=1)) + 
+#     
+#     scale_y_continuous(trans = tn,
+#                        breaks = c(0, 10^3, 10^6, 10^9, 10^12),
+#                        labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
+#                        expand = c(0, 0, 0.1, 0)) +
+#     expand_limits(y = limits) +
+#     scale_fill_manual(values = clPalette1) +
+#     geom_se(parameters, se)
+#   return(classplot)
 # }
 
 
@@ -1441,125 +1358,12 @@ subtract_background <- function(data, sample_list, subtraction){
 
 
 
-
-
-########################################################################
-# function name: ClassPlot
-# parameter: data, list of parameters (e.g. x, y, color)
-# utility: make color bar plots for the data
-########################################################################
-ClassPlot <- function(data, parameters){
-  parameters <- syms(parameters)
-  p1 <- parameters[[1]]
-  p2 <- parameters[[2]]
-  p3 <- parameters[[3]]
-  p4 <- parameters[[4]]
-  ranges <- data %>% 
-    mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
-    summarise(max(limits), min(limits))
-  limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
-  classplot <- ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
-    geom_errorbar(aes(ymin=sign(eval(p2))*abs(eval(p2)), ymax=sign(eval(p2))* (abs(eval(p2))+eval(p4))),
-                  position=position_dodge(width = .9, preserve = "single"), 
-                  width = 0.1,
-                  size=.2) +
-    theme_bw() +
-    set_theme()+
-    theme(plot.title = element_text(hjust = 0.5),
-          axis.text.y = element_text(angle = 30, hjust=1)
-    ) + 
-    # scale_y_log10(
-    #    breaks = scales::trans_breaks("log10", function(x) 10^(x)),
-    #    labels = scales::trans_format("log10", scales::math_format(10^.x)),
-    #   ) +
-    # scale_y_continuous(trans = 'log10',
-    #                    breaks = trans_breaks('log10', function(x) 10^x),
-    #                    labels = trans_format('log10', math_format(10^.x))) +
-    
-    scale_y_continuous(trans = tn,
-                       breaks = c(0, 10^3, 10^6, 10^9, 10^12),
-                       labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
-                       expand = c(0, 0, 0.1, 0)
-    ) +
-    expand_limits(y = limits) +
-    scale_fill_manual(values = clPalette1) 
-  return(classplot)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-geom_mean <- function(){
-  list(
-    stat_summary(fun = "mean", geom = "bar", fill = "grey70"),
-    stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4)
-  )
-}
-
-
-
-
-
-
-ClassPlot2 <- function(data, parameters, se){
-  parameters <- syms(parameters)
-  p1 <- parameters[[1]]
-  p2 <- parameters[[2]]
-  p3 <- parameters[[3]]
-  p4 <- parameters[[4]]
-  ranges <- data %>% 
-    mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
-    summarise(max(limits), min(limits))
-  limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
-  classplot <-  ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
-    theme_bw() +
-    set_theme()+
-    theme(plot.title = element_text(hjust = 0.5),
-          axis.text.y = element_text(angle = 30, hjust=1)) + 
-    
-    scale_y_continuous(trans = tn,
-                       breaks = c(0, 10^3, 10^6, 10^9, 10^12),
-                       labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
-                       expand = c(0, 0, 0.1, 0)) +
-    expand_limits(y = limits) +
-    scale_fill_manual(values = clPalette1) +
-    geom_se(parameters, se)
-  return(classplot)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-#########################################################################
+########################################################################################
 # function name: detect_invalid
-# parameter: data, group information
-# This function will count 0 and negative values and their percentage in each 
+# parameter:  data, group information
+# Utility:  This function will count 0 and negative values and their percentage in each 
 # group based on he group information
-#########################################################################
+########################################################################################
 detect_invalid <- function(data, group_information){
   data <- as.data.frame(data)
   sample_list <- group_info$samples %>% unique() %>% unlist()
@@ -1577,7 +1381,6 @@ detect_invalid <- function(data, group_information){
       mutate(!!names[2] := eval(sym(!!names[1]))/length(samples),
              !!names[4] := eval(sym(!!names[3]))/length(samples)) %>% 
       select(colnames(data), all_of(names))
-    
     # transform all values in a groun into NA if the negative percentage is over 50%
     # transform all negative values into NA
     dt2 <- data %>% transmute_at(vars(all_of(samples)), list(~ifelse(eval(sym(!!names[4])) > 0.5 | . < 0 , NA, .)))
@@ -1588,7 +1391,6 @@ detect_invalid <- function(data, group_information){
     rowwise()%>%
     mutate_at(vars(all_of(samples)), list(~ifelse(. < 0, NA, .))) %>%
     mutate_at(vars(contains("percent")), list(~scales::percent(.)))
-  
   # get information for all values into NA in a group
   dt4 <- data %>% select(-all_of(sample_list)) %>% cbind(., dt1) %>% select(colnames(data))
   return(list(data, dt3, dt4))
@@ -1701,7 +1503,12 @@ detect_invalid <- function(data, group_information){
 
 
 
-
+########################################################################################
+# function name:  plot_fc
+# parameters: data, parameters, se
+# Utility: plot function for relative fold change and other bar plots which passing 3 or 4
+#         parameters. The scale is different from plot_all function.
+########################################################################################
 plot_fc <- function(data, parameters, se){
   paras <- syms(parameters)
   if(length(parameters) == 3){
@@ -1741,26 +1548,14 @@ plot_fc <- function(data, parameters, se){
 
 
 
-
-
-
-
-############## migrate the part here or not?
-
-
-
-
-
-
-
-#########################################################################
+########################################################################################
 # function name: fix_invalid_by_choice
-# parameter: data, invalid_data
+# parameter: data, filtered_data, invalid_data
 # utility: open the csv (e.g. checkInvalid_raw.csv or checkInvalid.csv) which 
 #         already mannually deleted the suspcious invalid lipid molecules. This 
 #         function will deleted same invalid lipid molecules in the 
 #         original big data filtered_lipidomics based on your standards.
-#########################################################################
+########################################################################################
 fix_invalid_by_choice <- function(data, filtered_data, invalid_data){
   deleted_molecules <- setdiff(invalid_data$LipidMolec, filtered_data$LipidMolec)
   data <- data %>% filter(!LipidMolec %in% deleted_molecules)
@@ -1768,12 +1563,12 @@ fix_invalid_by_choice <- function(data, filtered_data, invalid_data){
 }
 
 
-########################################################################
+########################################################################################
 # function name: EachClassPlot
 # parameter: data, n_control
-# utility: calculate the fold changes among median samples in groups
+# utility: Plot median or mean value for each lipid molecule in each group
 #         if you are a mac user, please install quartz via 
-########################################################################
+########################################################################################
 EachClassPlot <- function(long_data, paras, computer){
   #quartz(type = "png")
   if(computer == "mac"){
@@ -1792,15 +1587,10 @@ EachClassPlot <- function(long_data, paras, computer){
   pars <- paras[[3]]
   post_name <- paras[[5]]
   labs_info <- paras[[6]]
-  
-  #list1 <- paras[[3]][[5]]
-  #list2 <- list1
-  #list2$expand <- as.call(quote(c(0.02, 0, 0.2, 0)))
   # select lipid class
   classes <- long_data %>% select(Class) %>% unlist() %>% unique()
   counts <- long_data %>% group_by(Class) %>% tally()
   long_data <- long_data %>% ungroup()
-  #print("\n\n")
   for(i in 1:length(classes)){
     options(warn=-1)
     pick_class <- classes[i]
@@ -1809,8 +1599,6 @@ EachClassPlot <- function(long_data, paras, computer){
     class_data <- subset(long_data, Class == classes[i]) %>% arrange(., !!molec)
     if(observations <= n_bar){
       axis_st <- class_data %>% filter(eval(symbols[[2]])<0) %>% nrow()
-     # p1 <- plot_func(class_data, pars, se = FALSE) 
-      #p1 <- plot_func(class_data, pars, se = TRUE) 
       if(length(symbols) < 4){
         p1 <- plot_func(class_data, pars) +
           plot_bars(bar.params = list(position=position_dodge(width = 0.6, preserve = "single"), width = 0.6)) 
@@ -1824,94 +1612,52 @@ EachClassPlot <- function(long_data, paras, computer){
                         size=.2)
       }
       p1 <- p1 +
-        # plot_bars(bar.params = list(position=position_dodge(width = 0.6, preserve = "single"), width = 0.7)) +
-        
-        # plot_bars() +
         labs_info +
-        #   add_scales(scale.params = list1) +
         ggtitle(pick_class) +
         theme(plot.title = element_text(hjust = 0.5),
               axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
         guides(fill = guide_legend(reverse=TRUE)) +
-        # geom_se(se.params = list(position=position_dodge(width = .6, preserve = "single"),
-        #                          width = 0.1,
-        #                          size=.2)) +
-        # geom_errorbar(aes(ymin=sign(eval(symbols[[2]]))*abs(eval(symbols[[2]])), ymax=sign(eval(symbols[[2]]))* (abs(eval(symbols[[2]]))+abs(eval(symbols[[4]])))),
-        #             position=position_dodge(width = .6, preserve = "single"),
-        #             width = 0.1,
-        #              size=.2) +
         scale_fill_npg() +
         coord_flip() 
       print(p1)
-      #ggsave(filename = paste(pick_class, ".png", sep=""), path = 'plot/classes', device = "png", width=15, height=15, dpi=300)
       ggsave(filename = paste(post_name, pick_class, ".", ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
       ggsave(filename = paste(post_name, pick_class, ".", ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
-      
     }else{
-     # print("3")
       if(n_bar %% n_groups != 0){
         n_bar <- (n_bar%/% n_groups)*n_groups
       }
       nfacet <- observations %/% n_bar 
       for(k in 0:nfacet){
         if(k < nfacet){
-       #   print("4")
           # bar ranges
           ranges <- (n_bar*k+1):(n_bar*(k+1))
-
           data <- class_data %>% slice(ranges)
           axis_st  <- data %>% filter(eval(symbols[[2]])<0) %>% nrow()
-          #p2 <- plot_func(data, pars, se=TRUE)
           if(length(symbols) < 4){
             p2 <- plot_func(data, pars) +
               plot_bars(bar.params = list(position=position_dodge(width = 0.9, preserve = "single"), width = 0.9)) 
-              
-            
           }else{
             p2 <- plot_func(data, pars, se = TRUE) +
               plot_bars(bar.params = list(position=position_dodge(width = 0.9, preserve = "single"), width = 0.9)) 
-            
           }
           p2 <- p2 + 
-            # plot_bars(bar.params = list(position=position_dodge(width = 0.9, preserve = "single"), width = 0.9)) +
             labs_info +
-            # add_scales(scale.params = list1) +
             guides(fill = guide_legend(reverse=TRUE)) +
             ggtitle(pick_class) +
             theme(plot.title = element_text(hjust = 0.5),
                   axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
             scale_fill_npg() +
             coord_flip() 
-        
           print(p2)
           ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
           ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
-          
         }else{
-        #  print("6")
           ranges <- (n_bar*k+1):observations
           data <- class_data %>% slice(ranges)
           axis_st <- data %>% filter(eval(symbols[[2]])<0) %>% nrow()
-          #p2 <- plot_func(data, pars, se = FALSE)
-          #p2 <- plot_func(data, pars, se = TRUE)
-          #p2 <- #p2 + 
-            # plot_bars(bar.params = list(position=position_dodge(width = 0.6, preserve = "single"), width = 0.4)) +
-            # geom_se(se.params = list(position=position_dodge(width = .6, preserve = "single"),
-            #                          width = 0.1,
-            #                          size=.2)) +
-            # plot_bars() +
-            #  add_scales(scale.params = list1) +
-            # geom_errorbar(aes(ymin=sign(eval(symbols[[2]]))*abs(eval(symbols[[2]])), ymax=sign(eval(symbols[[2]]))* (abs(eval(symbols[[2]]))+abs(eval(symbols[[4]])))),
-            #               position=position_dodge(width = .6, preserve = "single"),
-            #               width = 0.1,
-            #               size=.2) +
-          
           if(length(symbols) < 4){
             p2 <- plot_func(data, pars) +
               plot_bars(bar.params = list(position=position_dodge(width = 0.6, preserve = "single"), width = 0.6)) 
-            
-         
-            
           }else{
             p2 <- plot_func(data, pars, se = FALSE) +
               plot_bars(bar.params = list(position=position_dodge(width = 0.6, preserve = "single"), width = 0.6)) +
@@ -1940,27 +1686,12 @@ EachClassPlot <- function(long_data, paras, computer){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########################################################################
+########################################################################################
 # function name: cal_foldchange
 # parameter: data, control, pick
 # utility: calculate fold change for each class as auxiliary or independent function
 # Please note that the lipid which value is 0, negative or NA for control group is deleted for analysis
-########################################################################
+########################################################################################
 cal_foldchange <-function(data, control, pick, data_type){
   # filter the control group which value is 0, negative, or NA
   ko_class <- data %>% filter(eval(sym(control)) <= 0 | is.na(eval(sym(control)))) %>% select(Class) %>% unlist() %>% addlists(., ", ")
@@ -2016,24 +1747,31 @@ cal_foldchange <-function(data, control, pick, data_type){
 
 
 
-########################################################################
+########################################################################################
 # function name: log2trans
 # parameter: x
 # utility: take log transformation of the data
-########################################################################
+########################################################################################
 log2trans <-  function(x, na.rm=FALSE){log(x)}
 
-########################################################################
+
+########################################################################################
 # function name: ReplaceInf
 # parameter: x
 # utility: replace all the zero values to negative values, such that the 
 #         log transformed data of zero value will produce NaN other than -Inf
-########################################################################
+########################################################################################
 ReplaceInf <- function(x, na.rm=FALSE){x=replace(x, x == -Inf, NaN)}
-ReplaceNa <- function(x, na.rm=FALSE){x=replace(x, is.na(x), 1)}
+
+
+########################################################################################
+# function name: se
+# utility: define se function
+########################################################################################
 se <- function(x, na.rm = TRUE) sqrt(var(x)/length(x))
 
-########################################################################
+
+########################################################################################
 # function name: ImputeMinProb
 # parameter: data, q, tune.sigma
 # utility: this function applys the imputation of left-censored missing data 
@@ -2047,7 +1785,7 @@ se <- function(x, na.rm = TRUE) sqrt(var(x)/length(x))
 #           distribution used for random draws. If the sd is overestimated, 
 #           than 0 < sigma.coef < 1. The default value is tune.sigma = 1.
 #           The function is obtained from imputeLCMD package
-########################################################################
+########################################################################################
 ImputeMinProb <- function (data, q = 0.01, tune.sigma = 1) 
 {
   n_samples <-  dim(data)[2]
@@ -2070,18 +1808,23 @@ ImputeMinProb <- function (data, q = 0.01, tune.sigma = 1)
 }
 
 
-########################################################################
+########################################################################################
 # function name: VolPlot
 # parameter: n_comparisons, fit, filtered_data
 # utility: passing parameters to BuildContrast function to plot volcano graph
 #         for number of n_comparisons
-########################################################################
+########################################################################################
 VolPlot <- function(n_comparisons, fit, filtered_data){
   replicate( n_comparisons, BuildContrast(fit, filtered_data))
 }
 
 
-
+########################################################################################
+# function name: check_lipid
+# parameters: lipid
+# utility: check if standard input lipid is in right format which is conform to the name 
+#         from lipidSearch 
+########################################################################################
 check_lipid <- function(lipid){
   customized_lipid <- readline("Input the name of lipid class(es), e.g. Cer TG: ") %>% 
     str_split(., "\\s+") %>% 
@@ -2093,30 +1836,26 @@ check_lipid <- function(lipid){
     return(customized_lipid)
   }
 }
-########################################################################
+
+
+########################################################################################
 # function name: BuildContrast
 # parameter: fit, filtered_data
 # utility: Build contrast matrix for limma 
-########################################################################
+########################################################################################
 BuildContrast <- function(fit, filtered_data){
-  # contmatrix <- makeContrasts(readline("Enter groups names for comparison, spaced by 'vs', e.g. KOvsWT: "),
-  #                             levels = design
-  # )
   option <- readline("Enter groups names for comparison, spaced by 'vs', e.g. KO vs WT: ") %>% 
     strsplit(., paste0("(?i) ", "vs", "( |[!\",.:;?})\\]])"),perl=TRUE) %>% 
     unlist()
-  
   if(!all(option  %in% group_names)){
     message("You typed wrong.")
     option <- readline("Enter groups names for comparison, spaced by 'vs', e.g. KO vs WT: ") %>% 
       strsplit(., paste0("(?i) ", "vs", "( |[!\",.:;?})\\]])"),perl=TRUE) %>% 
       unlist()
   }
-  
   contrast_group <- paste(option[1], "-", option[2], sep="") 
   cmd <- paste("tmp <- makeContrasts(", contrast_group, ", levels =
 fit$design)", sep = '"')
-  
   # contmatrix <- makeContrasts(eval(parse(text = cmd)), levels = fit$design)
   #eval(parse(text = cmd))
   fit2 <- contrasts.fit(fit, eval(parse(text = cmd)))
@@ -2126,15 +1865,11 @@ fit$design)", sep = '"')
   comparison <- output1 <- topTable(fit2, coef=1, adjust.method = 'fdr',
                                     lfc= 0, number=nrow(filtered_data)) %>% as.data.frame()
   # store the result into csv
-  
-  #name1 <- readline("Enter file name to export fold change values (csv): ")
   name1 <- paste(option[1], "vs.", option[2], ".csv", sep = "")
   write_csv(comparison, file.path("data/", name1))
   # store significant result into csv
   output2 <- topTable(fit2, coef=1, adjust.method = 'fdr',
                       p.value =0.05, lfc=log2(1), number=nrow(filtered_data)) %>% as.data.frame()
-  #name2 <- readline("Enter file name to export significant fold change values (p<0.05) (csv): ")
-  
   name2 <- paste(option[1], "vs.", option[2], ".sig.csv", sep = "")
   write_csv(x=output2, file.path("data/Volc/", name2))
   # volcano plot
@@ -2144,9 +1879,7 @@ fit$design)", sep = '"')
   input$sig <- factor(input$adj.P.Val< 0.05 & abs(input$logFC) > fold_change)
   # size of significant data
   significant_lipids <- sum(input$adj.P.Val< 0.05 & abs(input$logFC) > fold_change)
-  message("When the tests' q value treshold is 0.05 and the fold change threshold is ",fold_change,". The number of lipids which are statistically significant are: ", significant_lipids)
-  
-  
+  message("When the tests' q value treshold is 0.05 and the fold change threshold is ", fold_change, ". The number of lipids which are statistically significant are: ", significant_lipids)
   # Define significant data for volcano plot graphing
   points <- input %>%
     rownames_to_column('lipid') %>%
@@ -2157,7 +1890,6 @@ fit$design)", sep = '"')
     rownames_to_column('lipid') %>% 
     filter(abs(logFC) > 1 & adj.P.Val>= 0.05 ) %>% 
     column_to_rownames('lipid')
- 
   
   # making volcano plot
   volc1 <- PlotVolc(input, points, fold_change) 
@@ -2233,15 +1965,7 @@ fit$design)", sep = '"')
   
   message("\nPlease input the lipid name from the list below for displaying.\n", lipids, 
           "\nPlease note that the input is caps sensitive!")
-  
-  # customized_class <- readline("Input the name of lipid class(es), e.g. Cer TG: ") %>% 
-  #   str_split(., "\\s+") %>% 
-  #   unlist()
-  # 
-    
     customized_class <- check_lipid(lipid_class)
-
-  
   if(length(customized_class)>1){
     customized_class <- paste(customized_class, collapse = "\\(|")
   }
@@ -2426,7 +2150,11 @@ build_igraph <- function(data, group){
 
 
 
-
+########################################################################################
+# function name: cal_sample_saturation
+# parameters: data_fa, group_info
+# utility: calculate the data saturation of SFA, MUFA, PUFA
+########################################################################################
 cal_sample_saturation <- function(data_fa, group_info){
   data_name <- deparse(substitute(data_fa))
   sample_raw_list <- group_info$samples
@@ -2451,13 +2179,10 @@ cal_sample_saturation <- function(data_fa, group_info){
   count_lipid <- count_lipid %>% cbind(., data_fa[5:ncol(data_fa)]) 
   rownames(count_lipid) <- NULL
   
-  
-  
   # write the count of pattern into count_lipid.csv file. 
   message("\nClassification of SFA, MUFA and PUFA are stored under count_lipid.csv and aggregated.csv")
   file_name1 <- paste("data/Saturation/count_lipid_", data_name, ".csv", sep = "")
   write.csv(count_lipid, file_name1)
-  
   
   # delete lipid which can't do saturation analysis
   dis_lipid <- count_lipid %>% filter(FA_types=="None") %>% select(LipidMolec) %>% unlist()
@@ -2467,14 +2192,10 @@ cal_sample_saturation <- function(data_fa, group_info){
   }
   
   count_lipid <- count_lipid %>% filter(!LipidMolec %in% dis_lipid)
-  
-  
   # select columns of information for calculating the aggregation of MainArea of samples
   selected_lipids <- count_lipid %>% select(LipidMolec, Class, FA_types, SFA, MUFA, PUFA, contains("MainArea"))
-  
   # transform attributes of SFA, MUFA, PUFA for calculations
   names <- c("SFA", "MUFA", "PUFA")
-  
   # transformed_lipid <- selected_lipids %>% mutate_at(names, transform_to_numeric)
   transformed_lipid <-  selected_lipids %>% mutate_at(names, as.numeric) 
   
@@ -2512,7 +2233,6 @@ cal_sample_saturation <- function(data_fa, group_info){
   # select three variables Class, n, FA_types for analysis
   group_lipids <- aggregate_lipids %>% select(Class, n, FA_types)
   
-  
   # calculate the SFA, MUFA and PUFA's percentages 
   fa_percent <- group_lipids %>% rowwise() %>% 
     # calculate how many SFA, MUFA and PUFA by row (by different SFA, MUFA and PUFA combination patterns)
@@ -2537,7 +2257,6 @@ cal_sample_saturation <- function(data_fa, group_info){
   
   dt <- dt %>% mutate_if(is.numeric, list(~formatC(., format = "f", digits = 3)))
   
-  
   file_name4 <- paste("data/Saturation/individual_saturations_", data_name, ".csv", sep = "")
   file_name5 <- paste("data/Saturation/class_saturations_", data_name, ".csv", sep = "")
   file_name6 <- paste("data/Saturation/mean_median_", data_name, ".csv", sep = "")
@@ -2548,13 +2267,11 @@ cal_sample_saturation <- function(data_fa, group_info){
 }
 
 
-
-
-########################################################################
+########################################################################################
 # function name: impute_not
 # parameter: condition, data, sample_list
 # utility: impute 0 or negative value for log transformed data
-########################################################################
+########################################################################################
 impute_not <- function(condition, data, sample_list){
   if(condition == "y"){
     message("\n\nWarnings!!!!!!\nYou are now using imputated data for analysis.\n\n")
@@ -2588,6 +2305,11 @@ impute_not <- function(condition, data, sample_list){
 }
 
 
+########################################################################################
+# function name: filter_invalid
+# parameters: data, group_info, invalid_data
+# utility: filter the potential invalid lipids
+########################################################################################
 filter_invalid <- function(data, group_info, invalid_data){
   if(nrow(invalid_data) != 0){
     sample_list <- group_info[, 1] %>% unlist
@@ -2653,89 +2375,4 @@ filter_invalid <- function(data, group_info, invalid_data){
   return(data)
   }
 }
-
-
-# 
-# filter_invalid <- function(data, data_copy, group_info, invalid_data){
-#   if(nrow(invalid_data) != 0){
-#     sample_list <- group_info$samples
-#     # data negative and empty value percent information 
-#     neg_percent_info <- detect_invalid(invalid_data, group_info) 
-#     neg_percent <- neg_percent_info[[1]]
-#     # transform all negative value with NA
-#     neg_info <- neg_percent_info[[2]] %>% 
-#       select(-contains("APValue"), -contains("ARatio"),
-#              -contains("Grade"), -c(A, B, C, D, FA))
-#     # replace all values for a group into NA if the negative percentage is over 50%
-#     negs_all <- neg_percent_info[[3]] %>% 
-#       select(-contains("APValue"), -contains("ARatio"),
-#              -contains("Grade"), -c(A, B, C, D, FA))
-#     # the invalid data after background subtraction.
-#     message("\n
-#   For lipid molecules that contain zero values or negative values (background subtracted), 
-#   These values are subsequently replaced as non-valid values (NA). 
-#   Fold change analyses is performed using only samples containing valid values")
-#     # write negative and 0 percentage inforamtion
-#     write_csv(neg_percent, "data/neg.percent.csv")
-#     # write potential invalid lipid molecules information
-#     write_csv(neg_info, "data/checkInvalid.csv")
-#     # write copy of potential lipid molecules information
-#     write_csv(neg_info, "data/invalid.csv")     ## copy data for invalid lipids information
-#     message("Please view file imputeNA.csv for all the data contains negative values after background subtraction.")
-#     # write data which transform negative into NA
-#     write_csv(negs_all, "data/imputeNA.csv")
-#     message("\nType 1 if you would like the pipleline to proceed with this function \nType 2 if you prefer to exlcude certain lipid molecules for fold change analysis ")
-#     option <- readline("Please type 1/2: ") %>% str_to_upper()
-#     filtered_negs <- negs_all %>% filter_at(sample_list, any_vars(!is.na(.)))
-#     if(option == "2"){
-#       # this step need manually editting the invalid lipid molecules on your computer for advanced users
-#       message("Select 'checkInvalid.csv' to manually exclude specific lipid molecules and click SAVE.")
-#       # here stops 10 seconds
-#       Sys.sleep(10)
-#       # deleting the lipid molecules you select in the checkInvalid.csv
-#       #message("Now we need to open the changed file checkInvalid.csv after you deleting the invalid lipid molecules.")
-#       continues <- readline("If you finished preprocess the data, please continue and press Y: ")
-#       # advanced users
-#       manual_data <- read_csv("data/checkInvalid.csv", col_types = cols())
-#       # deleting the invalid lipid molecules in raw data based on your standards and saved it in pre_filtered.lipidomics.csv
-#       data <- fix_invalid_by_choice(data, manual_data, filtered_negs)
-#       write_csv(data, "data/manual_filtered.lipidomics.csv")
-#       
-#     }
-#     while(option != "2"){
-#       if(option ==  "1"){
-#         message("The pipeline will first transform all the negative value into NA.")
-#         message("If negative percentage is over 50% in a group, all the values in the group for the molecule will be transformed into NA.")
-#         message("If a molecule which negative percentage is over 50% for all groups, it will then be deleted.")
-#         # delete the molecule which negative values of replicates for all group are over 50% (all NA.)
-#         deleted_neg_molec <- negs_all %>% filter_at(sample_list, all_vars(is.na(.))) 
-#         deleted_molec <- negs_all %>% filter_at(sample_list, all_vars(.==0)) %>% bind_rows(., deleted_neg_molec)
-#         if(nrow(deleted_molec) != 0){
-#           deleted <- deleted_molec$LipidMolec %>% unlist() %>% paste0(., ", ", collapse = "") %>% substr(., 1, nchar(.)-2)
-#           message("\n
-#   Since the lipid molecule ", deleted, " is invalid (all negative or all 0 values) after background subtraction. 
-#   \nIt will be deleted in the filtered data.")
-#           # delete corresponding lipid molecules in total data
-#           data <- anti_join(data, deleted_molec, by = "LipidMolec") #%>% select(LipidMolec, contains("MainArea"))
-#           data_copy <- anti_join(data_copy, deleted_molec, by = "LipidMolec")
-#         }
-#         write_csv(data, "data/filtered_to_NA.csv")
-#         write_csv(data_copy, "data/post_filtered.lipids.csv")
-#         break
-#       } else{
-#         option = readline("You typed wrong, please type again, 1/2: ")
-#       }
-#     }
-#   }
-#   
-#   return(data)
-#   
-# }
-
-
-
-
-
-
-
 

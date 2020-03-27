@@ -13,6 +13,7 @@
 #      
 # Versions:  LipidSearch 4.1.        
 #####################################################################################
+
 rm(list=ls())  ##### empty the environment first. If you need to keep former variables in workspace, just comment this part
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 # source function from FWL_lipidomics.**.functions.R script
@@ -198,7 +199,7 @@ source("FWL_EtherLipids_3.2.2.R", echo = FALSE)
 ##########################################################################################
 # Visualize random sample distribution
 ##########################################################################################
-# test sample distribution
+# visualize sample density plot
 # log transformation and visualize approximately normal distribution of the transformed data
 log2_lipids <- filtered_lipidomics %>% mutate_at(sample_raw_list, log2trans)
 # log2_lipids %>% filter_at(sample_raw_list, any_vars(.<= 0)) 

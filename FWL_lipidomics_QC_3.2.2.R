@@ -79,6 +79,20 @@ filtered_lipidomics1 <- lipid_select %>%
 write.csv(filtered_lipidomics1, "data/QC/filtered.raw.data.csv")
 
 
+##########################################################################################
+# retention time analysis
+##########################################################################################
+###  Abundance vs. retention time for all samples
+retention_data <- filtered_lipidomics1 %>% 
+  select(contains("MainArea[s"), BaseRt, Class) %>% 
+  gather(sample, MainArea, -c(BaseRt, Class))
+n_classes <- retention_data$Class %>% unique() %>% length()
+pars <- c("MainArea", "BaseRt", n_classes)
+rt_plot <- plot_rt_allsamples(retention_data, pars)
+print(rt_plot)
+ggsave(filename = "all_retention.png", path = 'plot/', device = "png", 
+       width = 20, height = 20, dpi = 150, units = "in")
+
 
 ##########################################################################################
 # Fix duplicated lipid molecules
@@ -89,19 +103,13 @@ write.csv(filtered_lipidomics1, "data/QC/filtered.raw.data.csv")
 duplicate_molecs <- detect_duplicates(filtered_lipidomics1)
 # if move on, fix method for duplicated molecules
 paras <- c("Class", "LipidMolec", "BaseRt", "MainIon")
-
 filtered_lipidomics2  <- filter_duplicate(duplicate_molecs, filtered_lipidomics1, paras)
 
-
-
-
-#filtered_lipidomics1 <- filtered_lipidomics1 %>% separate(., LipidIon, into=c("LipidMolec", "MainIon"), sep = "\\)")
 
 ##########################################################################################
 # check background information
 ##########################################################################################
 # plot the background information of the blank sample c
-
 blank_sample <-filtered_lipidomics2 %>% 
   select(Class, contains("MainArea[c]")) %>% 
   group_by(Class) %>% 
@@ -114,12 +122,7 @@ p1 <- plot_all(blank_sample, parameters_bw) +
   labs(x = "Lipid Classes", 
        y = (bquote("Fold change: " ~ log[10]~"("~AUC~")")), 
        title = "Area under Curve for blank sample (background) in each class") +
-  # scale_y_continuous(trans = pseudo_log_trans(base = 10),
-  #                    breaks = c(0, 10^3, 10^6, 10^9, 10^12),
-  #                    labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
-  #                    expand = c(0, 0, 0.1, 0)) +
   add_scales() +
- # scale_y_continuous(labels = scientific_format(), expand = c(0,0, 0.1, 0)) +
   coord_flip() 
 print(p1)
 # the blank sample plot is stored in background.png
@@ -159,22 +162,6 @@ prop_data %>%
   mutate(prop = percent(prop*100/100)) %>%
   rename(number_of_lipid_molec = count, proportion = prop)%>% 
   write_csv(., "data/QC/proportion_classes.csv")
-
-
-##########################################################################################
-# retention time analysis
-##########################################################################################
-###  Abundance vs. retention time for all samples
-retention_data <- filtered_lipidomics2 %>% 
-  select(contains("MainArea[s"), BaseRt, Class) %>% 
-  gather(sample, MainArea, -c(BaseRt, Class))
-n_classes <- retention_data$Class %>% unique() %>% length()
-pars <- c("MainArea", "BaseRt", n_classes)
-rt_plot <- plot_rt_allsamples(retention_data, pars)
-print(rt_plot)
-ggsave(filename = "all_retention.png", path = 'plot/', device = "png", 
-       width = 20, height = 20, dpi = 150, units = "in")
-
 
 
 ##########################################################################################

@@ -45,9 +45,6 @@ total_plot <- plot_all(total_data, paras1, se=TRUE) +
        fill = "Experiment Groups") +
   coord_flip() + 
   guides(fill = guide_legend(reverse = TRUE))  
-
-  #scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.1,0))
-
 print(total_plot)
 # save filtered total class lipid abundance in plot total.class.png
 ggsave(filename="total.class.png", path = 'plot/Quantification/', device = "png", width = 20, height = 20)
