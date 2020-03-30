@@ -122,6 +122,13 @@ all_samples <- filtered_lipidomics %>%
   mutate(SAMPLES = str_remove_all(SAMPLES, "MainArea\\[") %>% str_remove_all(., "\\]")) %>%
   gather(type, value, -c("Class", "SAMPLES", "GROUPS"))
 
+ordered_samples<- unique(all_samples$SAMPLES) %>% 
+  str_remove_all(., "s") %>% 
+  as.numeric() %>% 
+  sort() %>% 
+  paste0("s", .)
+all_samples$SAMPLES <- factor(all_samples$SAMPLES, levels = ordered_samples)
+
 params <- c("SAMPLES", "value", "type")
 p1 <- plot_all(data = all_samples, params) +
   geom_bar(stat = "identity") +
@@ -134,16 +141,15 @@ print(p1)
 ggsave("plot/QC/raw_all_samples.pdf", device = "pdf", width=20, height = 20)
 
 # filter negative value
-# filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
-
-# p2 <- plot_all(data = filtered_samples, params) +
-#   geom_bar(stat = "identity", position = "fill") +
-#   facet_wrap(~Class, scales = "free") +
-#   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
-#         axis.line = element_line(size = 0.2)) +
-#   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
-#   labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "") 
-# print(p2)
+filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
+p2 <- plot_all(data = filtered_samples, params) +
+  geom_bar(stat = "identity", position = "fill") +
+  facet_wrap(~Class, scales = "free") +
+  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
+        axis.line = element_line(size = 0.2)) +
+  scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
+  labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "")
+print(p2)
 
 # check if deleting samples needed and plot new PCA
 message("\nPlots can visualized under 'plot' directory or r studio plots panel.\nDo you want to edit sample information for subsequent analyses?")
