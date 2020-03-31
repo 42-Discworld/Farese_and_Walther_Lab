@@ -146,6 +146,7 @@ p6 <- plot_all(each_class, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   facet_wrap(~Class, scales="free") +
   coord_flip() + 
   scale_fill_jco() +
+ # scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p6)
 ggsave(paste0("plot/Ether/ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -297,7 +298,6 @@ p8 <- plot_all(data = ether1, params1) +
   scale_fill_simpsons(labels = c("PUFA", "SFA_MUFA")) +
   facet_wrap(~Class, scales = "free") +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
-  add_scales() +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "value", title = "PUFA in ehter lipids for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p8)

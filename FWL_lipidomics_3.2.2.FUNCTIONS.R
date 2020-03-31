@@ -1908,7 +1908,7 @@ fit$design)", sep = '"')
   #plot_name <- readline("Please input the volcano plot name: ")
   ggsave(filename = paste0(option[1], "vs.", option[2], ".color.", image_option), path = 'plot/Volc/', 
          device = image_option, width = 20, height = 20) #  width=15, height=15, dpi=300
-  name44<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
+  name4<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
   ggsave(filename = name4, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   lipid_class <- rownames(input_lipids) %>% 
