@@ -846,7 +846,8 @@ GrepIndex <- function(sample, data){
 #           axis display style. 
 #           Please notice that this function is really long format. 
 #########################################################################################
-PCA_pairs_Plot <- function(info, filtered_lipids, mark){
+PCA_pairs_Plot <- function(info, filtered_lipids, mark, images){
+  multiple_device <- c("svg", images)
   # retrieve the sample info position 
   index         <- 1:length(info)
   sample_index  <- index[index %% 2 ==0]
@@ -855,13 +856,16 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
   # QC PLOT 2 - Pair-wise correlation between replicates, reformatted axis
   for(i in 1:length(sample_index)){
     range     <- sample_index[i]
-    plot_name <- paste("pairs.plot.", i, ".", mark, ".png",sep="")
-    path      <- file.path("plot/", plot_name)
     pairs2(log10(filtered_lipids[, info[[range]]]), 
            lower.panel = panel.smooth, diag.panel=panel.hist, 
            upper.panel = panel.cor, xlim=c(4,12), ylim=c(4,12))
-    dev.copy(png, path)
-    dev.off()
+    for (image_device in multiple_device){
+      dev.copy(
+        eval(parse(text = image_device)),
+        paste0("plot/QC/pairs.plot.", i, ".", mark, ".", image_device)
+      )
+      dev.off()
+    }
   }
   
   #################################################################
@@ -915,14 +919,22 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
   concat          <-  cbind.data.frame(log2_filtered_lipids_PCA[, ncol(log2_filtered_lipids_PCA)], res.pca$ind$coord)
   ellipse.coord   <-  coord.ellipse(concat, bary=TRUE)
   print(p1)
-  dev.copy(png, "plot/QC/component_proportion.png")
-  
+  dev.copy(
+    eval(parse(text = images)),
+    paste0("plot/QC/component_proportion.", images)
+  )
+    dev.off()
+    
   p2 <- plot.PCA(res.pca, habillage=ncol(log2_filtered_lipids_PCA), 
                  ellipse=ellipse.coord, cex=0.8, label="all")
   print(p2)
-  pca_name <- addquotes("plot/sample.pca.", !!mark, ".png")
-  dev.copy(png, pca_name)
-  dev.off()
+  for (image_device in multiple_device){
+    dev.copy(
+      eval(parse(text = image_device)),
+      paste0("plot/QC/sample.pca.", mark, ".", image_device)
+    )
+    dev.off()
+  }
   ###################################### 
   return(list(sample_list, group_repeat))
 }
@@ -933,7 +945,7 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark){
 # parameters: pca_check, data
 # utility: check if need to redo PCA analysis
 #########################################################################################
-PCAcheck <- function(pca_check, data){
+PCAcheck <- function(pca_check, data, images){
   if(str_to_lower(pca_check)!="n"){
     if(str_to_lower(pca_check)=="y"){
       samples <- Input(data)
@@ -941,11 +953,11 @@ PCAcheck <- function(pca_check, data){
       #group_name <- samples[[2]]
       # ngroups <- samples[[3]]
       label <- "new"
-      info_list <-  PCA_pairs_Plot(info, data, label)
+      info_list <-  PCA_pairs_Plot(info, data, label, images)
     }else{
       print("You typed wrong, please retype.")
       pca_check <- readline("Please type Y/N: ")
-      return(PCAcheck(pca_check, data))
+      return(PCAcheck(pca_check, data, images))
     }
   }
   return(info_list)
@@ -1269,85 +1281,27 @@ subtract_background <- function(data, sample_list, subtraction){
 }
 
 
-# ########################################################################
-# # function name: ClassPlot
-# # parameter: data, list of parameters (e.g. x, y, color)
-# # utility: make color bar plots for the data
-# ########################################################################
-# ClassPlot <- function(data, parameters){
-#   parameters <- syms(parameters)
-#   p1 <- parameters[[1]]
-#   p2 <- parameters[[2]]
-#   p3 <- parameters[[3]]
-#   p4 <- parameters[[4]]
-#   ranges <- data %>% 
-#     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
-#     summarise(max(limits), min(limits))
-#   limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
-#   classplot <- ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
-#     geom_errorbar(aes(ymin=sign(eval(p2))*abs(eval(p2)), ymax=sign(eval(p2))* (abs(eval(p2))+eval(p4))),
-#                   position=position_dodge(width = .9, preserve = "single"), 
-#                   width = 0.1,
-#                   size=.2) +
-#     theme_bw() +
-#     set_theme()+
-#     theme(plot.title = element_text(hjust = 0.5),
-#           axis.text.y = element_text(angle = 30, hjust=1)
-#     ) + 
-#     scale_y_continuous(trans = tn,
-#                        breaks = c(0, 10^3, 10^6, 10^9, 10^12),
-#                        labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
-#                        expand = c(0, 0, 0.1, 0)
-#     ) +
-#     expand_limits(y = limits) +
-#     scale_fill_manual(values = clPalette1) 
-#   return(classplot)
-# }
+########################################################################################
 
-
-
-# 
-# 
-# 
-# geom_mean <- function(){
-#   list(
-#     stat_summary(fun = "mean", geom = "bar", fill = "grey70"),
-#     stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 0.4)
-#   )
-# }
-# 
-# 
-
-
-
-
-# ClassPlot2 <- function(data, parameters, se){
-#   parameters <- syms(parameters)
-#   p1 <- parameters[[1]]
-#   p2 <- parameters[[2]]
-#   p3 <- parameters[[3]]
-#   p4 <- parameters[[4]]
-#   ranges <- data %>% 
-#     mutate(limits=sign(eval(p2))* (abs(eval(p2))+eval(p4))) %>% 
-#     summarise(max(limits), min(limits))
-#   limits <- sapply(ranges, function(x)sign(x)*10^(ceiling(log10(abs(x)))))
-#   classplot <-  ggplot(data, aes(x=reorder(eval(p1), eval(p2)), fill=eval(p3), y=eval(p2))) +
-#     theme_bw() +
-#     set_theme()+
-#     theme(plot.title = element_text(hjust = 0.5),
-#           axis.text.y = element_text(angle = 30, hjust=1)) + 
-#     
-#     scale_y_continuous(trans = tn,
-#                        breaks = c(0, 10^3, 10^6, 10^9, 10^12),
-#                        labels = c(0, bquote(10^3), bquote(10^6), bquote(10^9), bquote(10^12)),
-#                        expand = c(0, 0, 0.1, 0)) +
-#     expand_limits(y = limits) +
-#     scale_fill_manual(values = clPalette1) +
-#     geom_se(parameters, se)
-#   return(classplot)
-# }
-
-
+########################################################################################
+subtract_not <- function(data, sample_list, option, group){
+  if(option == "y"){
+    subtracted_data <- subtract_background(data, sample_list, "MainArea[c]")
+    write_csv(subtracted_data, "data/subtracted_lipids.csv")
+    filtered_lipidomics_copy <- data   ######## filtered_lipidomics_copy will store the raw filtered data (filtered_lipidomics)
+    data3<- subtracted_data   ######### if doing background subtraction, the filtered lipidomics data will be replaced by subtracted data
+    # detect potential invalid lipid molecules (empty or negative value in the samples)
+    invalid_lipids <- data3 %>% filter_at(sample_list, any_vars(. <= 0)) 
+    # add SFAE and UNSAFE flag for indicating potential invalid lipid molecules
+    data3 <- data3  %>% 
+      rowwise() %>% 
+      mutate(FLAG_invalid = ifelse(LipidMolec %in% invalid_lipids$LipidMolec, "UN_SAFE", "SAFE")) 
+    # filter potential invalid lipid molecules
+    data <- filter_invalid(data3, group, invalid_lipids) %>% ungroup()
+    subtracted_data <- subtracted_data %>% filter(LipidMolec %in% data$LipidMolec)
+  }
+  return(data)
+}
 
 
 
@@ -1569,7 +1523,7 @@ fix_invalid_by_choice <- function(data, filtered_data, invalid_data){
 # utility: Plot median or mean value for each lipid molecule in each group
 #         if you are a mac user, please install quartz via 
 ########################################################################################
-EachClassPlot <- function(long_data, paras, computer){
+EachClassPlot <- function(long_data, paras, computer, images){
   #quartz(type = "png")
   if(computer == "mac"){
     quartz() 
@@ -1595,8 +1549,8 @@ EachClassPlot <- function(long_data, paras, computer){
     options(warn=-1)
     pick_class <- classes[i]
     print(pick_class)
-    observations <- subset(counts, Class == classes[i], n) %>% unlist()
-    class_data <- subset(long_data, Class == classes[i]) %>% arrange(., !!molec)
+    observations <- subset(counts, Class == pick_class, n) %>% unlist()
+    class_data <- subset(long_data, Class == pick_class) %>% arrange(., !!molec)
     if(observations <= n_bar){
       axis_st <- class_data %>% filter(eval(symbols[[2]])<0) %>% nrow()
       if(length(symbols) < 4){
@@ -1620,9 +1574,9 @@ EachClassPlot <- function(long_data, paras, computer){
         scale_fill_npg() +
         coord_flip() 
       print(p1)
-      ggsave(filename = paste(post_name, pick_class, ".", ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
-      ggsave(filename = paste(post_name, pick_class, ".", ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
-    }else{
+      ggsave(filename = paste0(post_name, pick_class, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
+      ggsave(filename = paste0(post_name, pick_class, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+        }else{
       if(n_bar %% n_groups != 0){
         n_bar <- (n_bar%/% n_groups)*n_groups
       }
@@ -1649,8 +1603,9 @@ EachClassPlot <- function(long_data, paras, computer){
             scale_fill_npg() +
             coord_flip() 
           print(p2)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+          
         }else{
           ranges <- (n_bar*k+1):observations
           data <- class_data %>% slice(ranges)
@@ -1675,8 +1630,9 @@ EachClassPlot <- function(long_data, paras, computer){
             scale_fill_npg() +
             coord_flip() 
           print(p2)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".png", sep=""), path = 'plot/classes', device = "png", width = 20, height = 20)
-          ggsave(filename = paste(post_name, pick_class, ".", k+1, ".pdf", sep=""), path = 'plot/classes', device = "pdf", width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+          
         }
       }
     } 
@@ -1902,11 +1858,10 @@ fit$design)", sep = '"')
     guides(color = guide_legend(title = "Fold Change")) +
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) 
   print(volc1)
-  name3 <- paste(option[1], "vs.", option[2], ".png", sep = "")
-  # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name3, path = 'plot/Volc/', device = "png", width = 20, height = 20)
-  name33 <- paste(option[1], "vs.", option[2], ".pdf", sep = "")
-  ggsave(filename = name33, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".", image_option), path = 'plot/Volc/', 
+         device = image_option, width = 20, height = 20)
+  name33 <- paste(option[1], "vs.", option[2], ".svg", sep = "")
+  ggsave(filename = name33, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   # build mutated data frame
   class_names <- rownames(input) %>% str_extract_all(., "(.+)\\(") %>% str_remove_all(., "\\(")
@@ -1951,10 +1906,10 @@ fit$design)", sep = '"')
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) 
   print(volc2)
   #plot_name <- readline("Please input the volcano plot name: ")
-  name4 <- paste(option[1], "vs.", option[2], ".color.png", sep = "")
-  ggsave(filename = name4, path = 'plot/Volc/', device = "png", width = 20, height = 20) #  width=15, height=15, dpi=300
-  name44 <- paste(option[1], "vs.", option[2], ".color.pdf", sep = "")
-  ggsave(filename = name44, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".color.", image_option), path = 'plot/Volc/', 
+         device = image_option, width = 20, height = 20) #  width=15, height=15, dpi=300
+  name44<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
+  ggsave(filename = name4, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   lipid_class <- rownames(input_lipids) %>% 
     str_remove_all(., "\\(.*\\)") %>%
@@ -1987,11 +1942,10 @@ fit$design)", sep = '"')
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
     labs(title = title1)
   print(volc3)
-  name5 <- paste(option[1], "vs.", option[2], ".customized.png", sep = "")
-  # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name5, path = 'plot/Volc/', device = "png", width = 20, height = 20)
-  name5 <- paste(option[1], "vs.", option[2], ".customized.pdf", sep = "")
-  ggsave(filename = name5, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".customized.", image_option), 
+         path = 'plot/Volc/', device = image_option, width = 20, height = 20)
+  name5 <- paste(option[1], "vs.", option[2], ".customized.svg", sep = "")
+  ggsave(filename = name5, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   ether <- input_lipids 
   ether <- ether %>% 
@@ -2031,13 +1985,10 @@ fit$design)", sep = '"')
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
     labs(title = title2)
   print(volc4)
-  
-  name6 <- paste(option[1], "vs.", option[2], ".ether.png", sep = "")
-  # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name6, path = 'plot/Volc/', device = "png", width = 20, height = 20)
-  name6 <- paste(option[1], "vs.", option[2], ".ether.pdf", sep = "")
-  # plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = name6, path = 'plot/Volc/', device = "pdf", width = 20, height = 20)
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volc/', 
+         device = image_option, width = 20, height = 20)
+  name6 <- paste(option[1], "vs.", option[2], ".ether.svg", sep = "")
+  ggsave(filename = name6, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
 }
 

@@ -90,7 +90,8 @@ n_classes <- retention_data$Class %>% unique() %>% length()
 pars <- c("MainArea", "BaseRt", n_classes)
 rt_plot <- plot_rt_allsamples(retention_data, pars)
 print(rt_plot)
-ggsave(filename = "all_retention.png", path = 'plot/', device = "png", 
+name <- paste0("all_retention.", image_option)
+ggsave(filename = name, path = 'plot/QC', device = image_option, 
        width = 20, height = 20, dpi = 150, units = "in")
 
 
@@ -126,7 +127,8 @@ p1 <- plot_all(blank_sample, parameters_bw) +
   coord_flip() 
 print(p1)
 # the blank sample plot is stored in background.png
-ggsave(filename = "background.png", path="plot/QC/", device = "png", width = 20, height = 20)
+name <- paste0("background.", image_option)
+ggsave(filename = name, path="plot/QC/", device = image_option, width = 20, height = 20)
 
 
 ##########################################################################################
@@ -155,7 +157,8 @@ p2 <- plot_all(prop_data, c("Class", "prop")) +
   coord_flip() + 
   scale_fill_grey()
 print(p2)
-ggsave(filename = "prop_summary.png", path = 'plot/QC/', device = "png", width = 20, height = 20)
+name <- paste0("prop_summary.", image_option)
+ggsave(filename = name, path = 'plot/QC/', device = image_option, width = 20, height = 20)
 
 # save lipid class summary information into file proportion_classes.csv in data directory
 prop_data %>%
@@ -204,7 +207,8 @@ if(nrow(TG17) != 0){
     add_scales() +
     coord_flip()
   print(tp17)
-  ggsave(filename = "TG17_all.png", path="plot/", device="png", width = 20, height = 20)
+  name <- paste0("TG17_all.", image_option)
+  ggsave(filename = name, path = "plot/QC", device = image_option, width = 20, height = 20)
 }
 
 

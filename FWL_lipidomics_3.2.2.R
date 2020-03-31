@@ -23,7 +23,7 @@ source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
 
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
-dirs <- c("plot", "data", "plot/classes/fc", "plot/QC", "plot/Quantification", "plot/Saturation", "plot/Ether", "plot/Length",
+dirs <- c("plot", "data", "plot/classes/fc", "plot/classes/svgs/fc", "plot/QC", "plot/Quantification", "plot/Saturation", "plot/Ether", "plot/Length",
           "plot/Volc", "data/Volc","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/Length")
 mkdirs(dirs)
 
@@ -34,6 +34,9 @@ if(robot == "mac"){
           \nDo you want to continue?\n")
   process <- retype_choice("Y/N")
 }
+
+message("What type of images you want to save? PNG or PDF?")
+image_option <- retype_choice("PNG/PDF")
 
 # read the file from csv directory
 csv_files <- list.files(path = "converted", pattern = "\\.csv$")
@@ -70,7 +73,7 @@ sample_info <- samples[[1]]
 ##########################################################################################
 # pca and correlation plots
 label <- "initial"
-info_list <- PCA_pairs_Plot(sample_info, filtered_lipidomics2, label)
+info_list <- PCA_pairs_Plot(sample_info, filtered_lipidomics2, label, image_option)
 
 # making group repeats according to its position for making groups of later PCA
 sample_raw_list <- info_list[[1]]
@@ -90,23 +93,7 @@ ngroups <- length(group_names)
 ###########################################################################################
 message("\nsubtract sample area from background/solvent run?" )
 background_option <- retype_choice("Y/N")
-if(background_option == "y"){
-    subtracted_data <- subtract_background(filtered_lipidomics2, sample_raw_list, "MainArea[c]")
-    write_csv(subtracted_data, "data/subtracted_lipids.csv")
-    filtered_lipidomics_copy <- filtered_lipidomics2   ######## filtered_lipidomics_copy will store the raw filtered data (filtered_lipidomics)
-    filtered_lipidomics3 <- subtracted_data   ######### if doing background subtraction, the filtered lipidomics data will be replaced by subtracted data
-    # detect potential invalid lipid molecules (empty or negative value in the samples)
-    invalid_lipids <- filtered_lipidomics3 %>% filter_at(sample_raw_list, any_vars(. <= 0)) 
-    # add SFAE and UNSAFE flag for indicating potential invalid lipid molecules
-    filtered_lipidomics3 <- filtered_lipidomics3  %>% 
-      rowwise() %>% 
-      mutate(FLAG_invalid = ifelse(LipidMolec %in% invalid_lipids$LipidMolec, "UN_SAFE", "SAFE")) 
-    # filter potential invalid lipid molecules
-    filtered_lipidomics <- filter_invalid(filtered_lipidomics3, group_info, invalid_lipids) %>% ungroup()
-    subtracted_data <- subtracted_data %>% filter(LipidMolec %in% filtered_lipidomics$LipidMolec)
-}else{
-  filtered_lipidomics <- filtered_lipidomics2
-}
+filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, background_option, group_info)
 
 # visualize AUC of each sample in different lipid classes.
 all_samples <- filtered_lipidomics %>%
@@ -138,7 +125,7 @@ p1 <- plot_all(data = all_samples, params) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "")
 print(p1)
-ggsave("plot/QC/raw_all_samples.pdf", device = "pdf", width=20, height = 20)
+ggsave(paste0("plot/QC/raw_all_samples.", image_option), device = image_option, width=20, height = 20)
 
 # filter negative value
 filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
@@ -150,12 +137,13 @@ p2 <- plot_all(data = filtered_samples, params) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "")
 print(p2)
+ggsave(paste0("plot/QC/raw_all_samples_percentage.", image_option), device = image_option, width = 20, height = 20)
 
 # check if deleting samples needed and plot new PCA
 message("\nPlots can visualized under 'plot' directory or r studio plots panel.\nDo you want to edit sample information for subsequent analyses?")
 pca_check <- retype_choice("Y/N")
 if(pca_check == "y"){
-  info_list <- PCAcheck(pca_check, filtered_lipidomics2)
+  info_list <- PCAcheck(pca_check, filtered_lipidomics2, image_option)
   # making group repeats according to its position for making groups of later PCA
   sample_raw_list <- info_list[[1]]
   group_repeats <- info_list[[2]]
@@ -167,7 +155,10 @@ if(pca_check == "y"){
   write_csv(group_info, "data/group_information.csv")
   group_names <- unique(group_repeats)
   ngroups <- length(group_names)
+  # background subtraction 
+  filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, background_option, group_info)
 }
+
 
 write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
 

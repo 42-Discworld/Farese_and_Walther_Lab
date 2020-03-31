@@ -66,7 +66,7 @@ p1 <- plot_all(data = ether_percent, params1) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p1)
-ggsave("plot/Ether/ether.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/ether.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/ether.svg", device = "svg", width = 20, height = 20)
 
 # visualize ether lipid in each sample in percentage
@@ -78,7 +78,7 @@ p2 <- plot_all(data = ether_percent, params1) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p2)
-ggsave("plot/Ether/ether_percentage.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/ether_percentage.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/ther_percentage.svg", device = "svg", width = 20, height = 20)
 
 
@@ -93,7 +93,7 @@ p3 <- plot_all(data = ether_percent_group, params2) +
   scale_y_continuous(expand = c(0, 0, 0.2, 0), labels = scientific_format()) +
   labs(x = "experiment Groups", y = "value", title = "ether in lipid class for each group", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p3)
-ggsave("plot/Ether/ether_group.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/ether_group.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/ether_group.svg", device = "svg", width = 20, height = 20)
 
 # visualize mean value for ether lipid in each group for pencentage display
@@ -105,7 +105,7 @@ p4 <- plot_all(data = ether_percent_group, params2) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each group", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p4)
-ggsave("plot/Ether/ether_group_percent.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/ether_group_percent.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/ether_group_percent.svg", device = "svg", width = 20, height = 20)
 
 
@@ -123,7 +123,8 @@ p5 <- plot_all(data, c("Class", "value", "GROUPS", "sd"), se=FALSE) +
   scale_fill_simpsons() +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p5)
-ggsave("plot/Ether/ether_abundance.png", device = "png", width = 20, height = 20)  
+ggsave(paste0("plot/Ether/ether_abundance.", image_option), device = image_option, width = 20, height = 20)  
+ggsave("plot/Ether/ether_abundance.svg", device = "svg", width = 20, height = 20)  
 
 group_par <- c("LipidMolec", "Class")
 data_mean <- cal_lipid_statistics(ether_yes, group_info, "mean", group_par)
@@ -147,7 +148,8 @@ p6 <- plot_all(each_class, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   scale_fill_jco() +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p6)
-ggsave("plot/Ether/ether_molec_abundance.png", device = "png", width = 20, height = 20)  
+ggsave(paste0("plot/Ether/ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
+ggsave("plot/Ether/ether_molec_abundance.svg", device = "svg", width = 20, height = 20)  
 
 
 message("Please type control group name among all experiment groups for total visualization")
@@ -167,7 +169,7 @@ p7 <- plot_all(nm_ether, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   geom_errorbar(aes(x=LipidMolec, ymin=mean, ymax = mean + sd), 
                 position=position_dodge(preserve = "single", width = 0.6), 
                 stat="identity", width= 0.1, size= 0.2) +
-  labs(title = "Ether lipid molecules (Normalized by mean)", x = "Lipid Classes", y= "AUC (Area under curve)",
+  labs(title = "Ether lipid molecules (Normalized by mean)", x = "Lipid Classes", y= "Relative Fold Change",
        fill = "Experiment Groups") +
   facet_wrap(~Class, scales="free") +
   scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
@@ -177,8 +179,8 @@ p7 <- plot_all(nm_ether, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   scale_y_continuous( expand= c(0, 0, 0.2, 0)) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p7)
-ggsave("plot/Ether/normalized_ether_molec_abundance.png", device = "png", width = 20, height = 20)  
-
+ggsave(paste0("plot/Ether/normalized_ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
+ggsave("plot/Ether/normalized_ether_molec_abundance.svg", device = "svg", width = 20, height = 20)  
 
 
 # althernative method
@@ -299,10 +301,11 @@ p8 <- plot_all(data = ether1, params1) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "value", title = "PUFA in ehter lipids for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p8)
-ggsave("plot/Ether/pufa_ether.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/pufa_ether.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/Ether/pufa_ether.svg", device = "svg", width = 20, height = 20)
 
-
-p9 <- ggplot(data = ether1, aes(x=SAMPLES, y = value, fill = type)) +
+filtered_ether <- ether1 %>% mutate(value = ifelse(value < 0, NA, value))
+p9 <- ggplot(data = filtered_ether, aes(x=SAMPLES, y = value, fill = type)) +
   geom_bar(stat = "identity", position = "fill") +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   scale_fill_jco(labels = c("PUFA", "SFA_MUFA")) +
@@ -311,11 +314,16 @@ p9 <- ggplot(data = ether1, aes(x=SAMPLES, y = value, fill = type)) +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
   labs(x = "experiment samples", y = "value", title = "PUFA in ehter lipids for each sample", color = "", caption = "This visualization is only for ether lipids here") 
 print(p9)
+ggsave(paste0("plot/Ether/pufa_ether_percentage.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/pufa_ether_percentage.png", device = "png", width = 20, height = 20)
 
 
+aggregated_ether <- ether_saturation %>% 
+  ungroup() %>% 
+  group_by(Class) %>% 
+  summarise_at(vars(all_of(sample_raw_list)), list(~sum(.))) %>% 
+  arrange(Class)
 
-aggregated_ether <- ether_saturation %>% group_by(Class) %>% summarise_at(vars(all_of(sample_raw_list)), list(~sum(.))) %>% arrange(Class)
 ether_mean <- cal_lipid_statistics(aggregated_ether, group_info, "mean", "Class")
 ether_mean_long <- ether_mean[[2]] 
 pufa_mean <- cal_lipid_statistics(pufa_ether, group_info, "mean", "Class")
@@ -325,6 +333,7 @@ ether_pufa_mean <- left_join(ether_mean_long, pufa_mean_long, by = c("Class", "G
 ether2 <- ether_pufa_mean %>% select(-mean) %>% gather(type, value, -c("Class", "Groups"))
 
 ether2 <- ether_info %>% 
+  ungroup() %>% 
   group_by(Class, GROUPS) %>% 
   summarise_at(vars(c(PUFA_value, SFA_MUFA)), list(~mean(.))) %>% 
   gather(type, value, -c(Class, GROUPS))
@@ -339,7 +348,7 @@ p10 <- plot_all(ether2, c("GROUPS", "value", "type")) +
   labs(x = "Experiment Groups", y = "value", fill = "",
        title = "PUFA (mean) in ether lipids for each group in each lipid class", color = "", caption = "This visualization is only for ether lipids here") 
 print(p10)
-ggsave("plot/Ether/pufa_ether_group.png", device = "png", width = 20, height = 20)
+ggsave(paste0("plot/Ether/pufa_ether_group.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Ether/pufa_ether_group.svg", device = "svg", width = 20, height = 20)
 
 

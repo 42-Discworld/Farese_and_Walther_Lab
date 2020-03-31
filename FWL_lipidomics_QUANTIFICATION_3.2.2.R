@@ -46,8 +46,9 @@ total_plot <- plot_all(total_data, paras1, se=TRUE) +
   coord_flip() + 
   guides(fill = guide_legend(reverse = TRUE))  
 print(total_plot)
-# save filtered total class lipid abundance in plot total.class.png
-ggsave(filename="total.class.png", path = 'plot/Quantification/', device = "png", width = 20, height = 20)
+# save filtered total class lipid abundance in plot total.class plot
+name <- paste0("total.class.", image_option)
+ggsave(filename=name, path = 'plot/Quantification/', device = image_option, width = 20, height = 20)
 
 
 ##########################################################################################
@@ -81,7 +82,7 @@ post_name <- ""
 pars <- list(nbar, ngroups, par_eachclass, plot_all, post_name, labs1)
 message("\nEach plot is split no more than ", nbar, " bars for display")
 each_class$Groups <- factor(each_class$Groups, levels = rev(group_names))
-EachClassPlot(each_class, pars, robot)
+EachClassPlot(each_class, pars, robot, image_option)
 
 # # overview of each class plot 
 # nbar <- lipidmolecNO_max
@@ -166,7 +167,7 @@ pd <- plot_all(class_long, paras2) +
   labs(title = "Normalized by median", caption = "each dot represent the replicate of one lipid class", 
        x = "Experiment Groups", y = "Relative Fold Change", fill="Experiment Groups")
 print(pd)
-ggsave(filename = "class_median_dot.png", path="plot/Quantification", device = "png", width = 20, height = 20)
+ggsave(filename = paste0("class_median_dot.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "class_median_dot.svg", path="plot/Quantification", device = "svg", width = 20, height = 20)
 
 # plot relative fold change of lipid class (normalized by median), boxplot
@@ -182,8 +183,8 @@ pb <- plot_all(class_long, paras2) +
   #scale_fill_d3()
   scale_fill_manual(values = wes_palette("GrandBudapest2"))
 print(pb)
+ggsave(filename = paste0("class_median_box.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "class_median_box.png", path="plot/Quantification", device = "png", width = 20, height = 20)
-
 
 
 ##########################################################################################
@@ -238,14 +239,14 @@ for(i in 1:fc_times){
   selected_molec <- molec_info_long %>% 
     filter(Groups %in% c(control, contrasts)) %>% 
     ungroup()
-  post_name <- paste0("fc/", control, "_", contrasts, "_", method, "_", i, "_")
+  post_name <- paste0("fc/", control, "_", paste(contrasts, collapse = "_"), "_", method, "_", i, "_")
   #par_eachclass <- list("LipidMolec", "mean", "Groups", "sd", scales)  
   n <- length(c(control, contrasts))
  # nbar <- selected_molec %>% group_by(Class) %>% tally() %>% select(n) %>% unlist() %>% max()
   nbar <- 80
   pars <- list(nbar, n, par_eachclass, plot_fc, post_name, labs)
   selected_molec$Groups <- factor(selected_molec$Groups, levels = rev(group_names))
-  EachClassPlot(selected_molec, pars, robot)
+  EachClassPlot(selected_molec, pars, robot, image_option)
  }
   
   
@@ -307,7 +308,7 @@ pv <- ggplot(molecules, aes(GROUPS, VALs, label=Molecule)) +
   scale_fill_manual(values = wes_palette("GrandBudapest2")) 
   
 print(pv)
-ggsave(filename = "molec_violin.png", path="plot/Quantification", device = "png", width = 20, height = 20)
+ggsave(filename = paste0("molec_violin.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "molec_violin.svg", path="plot/Quantification", device = "svg", width = 20, height = 20)
 
 # set path
