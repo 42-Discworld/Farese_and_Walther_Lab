@@ -44,7 +44,7 @@ total_plot <- plot_all(total_data, paras1, se=TRUE) +
   labs(title = "Total lipid classes", x = "Lipid Classes", y= "AUC (Area under curve)",
        fill = "Experiment Groups") +
   coord_flip() + 
-  guides(fill = guide_legend(reverse = TRUE))  
+  guides(fill = guide_legend(reverse = TRUE))
 print(total_plot)
 # save filtered total class lipid abundance in plot total.class plot
 name <- paste0("total.class.", image_option)
@@ -157,7 +157,6 @@ pd <- plot_all(class_long, paras2) +
   stat_summary(fun.y = median, geom = "point",  size = 5, color = "red", shape = 95, alpha = 0.8, stroke = 3) +
   facet_wrap(~Class, scales = "free") +
   #scale_fill_manual(values = wes_palette("GrandBudapest2")) +
-  scale_fill_startrek() +
   theme(axis.text.x =  element_text(angle=45, hjust=1, size =6),
         axis.line = element_line(size = 0.2)) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
@@ -179,9 +178,7 @@ pb <- plot_all(class_long, paras2) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
   expand_limits(y = 0) +
   theme(axis.text.x =  element_text(angle=45, hjust=1, size =6),
-        axis.line = element_line(size = 0.2)) +
-  #scale_fill_d3()
-  scale_fill_manual(values = wes_palette("GrandBudapest2"))
+        axis.line = element_line(size = 0.2)) 
 print(pb)
 ggsave(filename = paste0("class_median_box.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "class_median_box.png", path="plot/Quantification", device = "png", width = 20, height = 20)
@@ -305,7 +302,7 @@ pv <- ggplot(molecules, aes(GROUPS, VALs, label=Molecule)) +
   labs(title = paste0("Individual Lipidmolecules (normalized by ", method, ")"),
        caption = paste0("each dot represent a replicate of one lipid molecule\nThe red line represent ", method),
       y = "Relative Foldchange") +
-  scale_fill_manual(values = wes_palette("GrandBudapest2")) 
+  eval(parse(text = color_choice))
   
 print(pv)
 ggsave(filename = paste0("molec_violin.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)

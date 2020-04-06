@@ -35,8 +35,10 @@ if(robot == "mac"){
   process <- retype_choice("Y/N")
 }
 
-message("What type of images you want to save? PNG or PDF?")
+message("What type of images you want to save? PNG or PDF?\n\n")
 image_option <- retype_choice("PNG/PDF")
+
+
 
 # read the file from csv directory
 csv_files <- list.files(path = "converted", pattern = "\\.csv$")
@@ -95,6 +97,45 @@ message("\nsubtract sample area from background/solvent run?" )
 background_option <- retype_choice("Y/N")
 filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, background_option, group_info)
 
+
+
+
+
+
+
+
+message("\nPlease pick a color from ggsci theme link: 
+        \nhttps://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
+        \nOR
+        \nhttps://github.com/karthik/wesanderson\n\n")
+colors1 <- c("npg", "aaas", "nejm", "jama", "jco", "ucscgb", "d3 ", 
+             "locuszoom", "igv", "uchicago", "startrek", "tron", 
+             "futurama", "rickandmonty", "simpsons", "gsea") 
+colors1_no <- c(10, 10, 8, 7, 10, 15, 10, 7, 15, 15, 7, 7, 12, 12, 15, 12) 
+colors2 <-  c("BottleRocket1", "BottleRocket2", "Rushmore1", "Royal1", "Royal2", "Zissou",
+              "Darjeeling1", "Darjeeling2", "Chevalier1", "FantasticFox1", "Moonrise1", 
+              "Moonrise2", "Moonrise3", "Cavalcanti1", "GrandBudapest1", "GrandBudapest2",
+              "IsleofDogs1", "IsleofDogs2") 
+colors2_no <- c(7, 5, 5, 4, 5, 5, 5, 5, 4, 5, 4, 4, 5, 5, 4, 4, 6, 5)
+dt1 <- data.table(t(data.frame(colors1, colors1_no)), row.names = c("ggsci_name", "color_number"))
+dt2 <- data.table(t(data.frame(colors2, colors2_no)), row.names = c("wesanderson", "color_number"))
+dt1 <- dt1 %>% select(length(colors1)+1, 1:length(colors1))
+dt2 <- dt2 %>% select(length(colors2)+1, 1:length(colors2))
+colnames(dt1) <- colnames(dt2) <- NULL
+colors3 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+message("\nPlease pick a color for you plots. 
+\nNotice that the color numbers can't exceed your experiment groups!!!!!
+        \nJust pick the color name from the two tables below.
+        \n OR you could pick color3 theme which has 8 colors. \n\n")
+print(dt1, row.names = TRUE, col.names = "none")
+print(dt2, row.names = TRUE, col.names = "none", topn = 4)
+color_option <- readline("Please type the color theme name, e.g. npg: ")
+
+color_choice <- set_color(color_option, colors1, colors2, colors3)
+
+
+
 # visualize AUC of each sample in different lipid classes.
 all_samples <- filtered_lipidomics %>%
   as.data.frame() %>%
@@ -123,7 +164,7 @@ p1 <- plot_all(data = all_samples, params) +
   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
         axis.line = element_line(size = 0.2)) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
-  labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "")
+  labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "") 
 print(p1)
 ggsave(paste0("plot/QC/raw_all_samples.", image_option), device = image_option, width=20, height = 20)
 
@@ -135,7 +176,7 @@ p2 <- plot_all(data = filtered_samples, params) +
   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
         axis.line = element_line(size = 0.2)) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
-  labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "")
+  labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "") 
 print(p2)
 ggsave(paste0("plot/QC/raw_all_samples_percentage.", image_option), device = image_option, width = 20, height = 20)
 
@@ -159,7 +200,14 @@ if(pca_check == "y"){
   filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, background_option, group_info)
 }
 
-
+# delete unchoosed samples from sample list
+total_samples <- filtered_lipidomics %>% select(contains("MainArea[s")) %>% colnames()
+deleted_samples <- total_samples %>% subset(!total_samples %in% sample_raw_list) 
+filtered_lipidomics <- filtered_lipidomics %>% select(-all_of(deleted_samples))
+deleted <- deleted_samples %>% str_remove_all(., "MainArea\\[") %>% str_remove_all(., "\\]") %>% paste0(., sep = ",", collapse = "") %>% remove(.,  pos = -1)
+if(length(deleted)>0){
+  message("Samples ", deleted, " will be removed from analysis")
+}
 write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
 
 

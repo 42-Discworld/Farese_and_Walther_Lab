@@ -14,9 +14,10 @@
 #         "fattyAcidsSaturation_analysis.3.2.3.R" in directory fattyAcids_saturation_analysis.
 #         This script is derived from Laura's project
 #####################################################################################
-data <- cal_sample_saturation(filtered_lipidomics,  group_info)
+data1 <- count_saturation(filtered_lipidomics, group_info)
+data2 <-   cal_sample_saturation(data1, filtered_lipidomics)
 
-data <- data %>% filter_all(any_vars(!is.na(.)))
+data <- data2 %>% filter_all(any_vars(!is.na(.)))
 
 # find all groups which mean or median value is 0
 empty_group <- data %>% 
@@ -120,7 +121,7 @@ dtFA_long <- dtFA_long %>% filter(!is.na(mean))
 write_csv(dtFA_long, "data/Saturation/fa_normalized_mean_long.csv")
 
 
-plot_fas <- function(dtFA_median, dtFA_long, dtFA){
+plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
   options(warn=-1)
   # stack plots based on mean
   pars1 <- c("Groups", "mean", "TYPE")
@@ -131,7 +132,6 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
          title ="mean based stackplot", fill = NULL,
          caption = "error bar is standard error") +
-    scale_fill_jco() +
     theme(
       axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
       axis.line = element_line(size = 0.2)
@@ -149,7 +149,6 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
          title ="median based stackplot", fill = NULL,
          caption = "error bar is standard error") +
-    scale_fill_simpsons() +
     theme(
       axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
       axis.line = element_line(size = 0.2)
@@ -163,7 +162,6 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
   p3 <- plot_all(dtFA, pars3, se = TRUE) +
     geom_bar(stat = "identity",  position=position_dodge(preserve = "single")) +
     facet_wrap(~Class, scales = "free") +
-    scale_fill_jama() +
     scale_y_continuous(labels = label_scientific(digits = 2), 
                        expand = c(0, 0, 0.2, 0)) +
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
@@ -185,7 +183,6 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     labs(x = "Fatty Acids types", y = "fold change (normalized)", 
          title = "Fold Change plots", fill = NULL,
          caption = "error bar is standard error") +
-    scale_fill_nejm()+
     theme(
       axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
       axis.line = element_line(size = 0.2)
@@ -202,20 +199,17 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA){
     scale_y_continuous(labels = scales::percent_format(), expand = c(0, 0, 0, 0)) +
     labs(title = "mean based stackplot", fill = NULL,
          x ="Fatty Acids types", y = "Percentage") +
-    # scale_fill_igv()
-    scale_fill_manual(values = wes_palette("GrandBudapest2")) +
     theme(
       axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
       axis.line = element_line(size = 0.2)
     )
-  # scale_fill_simpsons()
   print(p5)
   ggsave(filename = paste0("percentage.", image_option), path="plot/Saturation/", device = image_option, width = 20, height = 20)
   ggsave(filename = "percentage.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
 }
 
 
-plot_fas(dtFA_median, dtFA_long, dtFA)
+plot_fas(dtFA_median, dtFA_long, dtFA, image_option)
 
 # setting order for groups and legends
 #ms <- message("Do you need reorder the group names for display? Please enter Y/N: ")
@@ -228,7 +222,7 @@ if(options == "y"){
   #dtFA$TYPE <- factor(dtFA$TYPE, levels= legend_level)
   dtFA_long$Groups <- factor(dtFA_long$Groups, levels = group_level)
   dtFA_median$Groups <- factor(dtFA_median$Groups, levels = group_level)
-  plot_fas(dtFA_median, dtFA_long, dtFA)
+  plot_fas(dtFA_median, dtFA_long, dtFA, image_option)
 }
 #return(dtFA)
 #}

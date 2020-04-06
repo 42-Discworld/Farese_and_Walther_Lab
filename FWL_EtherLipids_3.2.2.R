@@ -59,7 +59,6 @@ ether_percent$GROUPS <- factor(ether_percent$GROUPS, levels = group_names)
 params1 <- c("SAMPLES", "value", "type")
 p1 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity") +
-  scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
   facet_wrap(~Class, scales = "free") +
   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
         axis.line = element_line(size = 0.2)) +
@@ -72,7 +71,6 @@ ggsave("plot/Ether/ether.svg", device = "svg", width = 20, height = 20)
 # visualize ether lipid in each sample in percentage
 p2 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity", position = "fill") +
-  scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
   facet_wrap(~Class, scales = "free") +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
@@ -87,7 +85,6 @@ ether_percent_group <- ether_percent %>% group_by(Class, GROUPS, type)  %>% summ
 params2 <- c("GROUPS", "value", "type")
 p3 <- plot_all(data = ether_percent_group, params2) +
   geom_bar(stat = "identity") +
-  scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
   facet_wrap(~Class, scales = "free") +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
   scale_y_continuous(expand = c(0, 0, 0.2, 0), labels = scientific_format()) +
@@ -99,7 +96,6 @@ ggsave("plot/Ether/ether_group.svg", device = "svg", width = 20, height = 20)
 # visualize mean value for ether lipid in each group for pencentage display
 p4 <- plot_all(data = ether_percent_group, params2) +
   geom_bar(stat = "identity", position = "fill") +
-  scale_fill_simpsons(labels = c("ether", "rest_lipid")) +
   facet_wrap(~Class, scales = "free") +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
@@ -120,7 +116,6 @@ p5 <- plot_all(data, c("Class", "value", "GROUPS", "sd"), se=FALSE) +
   labs(title = "Total lipid classes", x = "Experiment Groups", y= "AUC (Area under curve)",
        fill = "Experiment Groups") +
   coord_flip() + 
-  scale_fill_simpsons() +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p5)
 ggsave(paste0("plot/Ether/ether_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -144,8 +139,7 @@ p6 <- plot_all(each_class, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   labs(title = "Ether lipid molecules", x = "Lipid Classes", y= "AUC (Area under curve)",
        fill = "Experiment Groups") +
   facet_wrap(~Class, scales="free") +
-  coord_flip() + 
-  scale_fill_jco() +
+  coord_flip() +
  # scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p6)
@@ -176,8 +170,6 @@ p7 <- plot_all(nm_ether, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
   theme(axis.line = element_line(size = .2)) + 
   coord_flip() + 
-  scale_fill_jco() +
-  scale_y_continuous( expand= c(0, 0, 0.2, 0)) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p7)
 ggsave(paste0("plot/Ether/normalized_ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -202,15 +194,13 @@ ggsave("plot/Ether/normalized_ether_molec_abundance.svg", device = "svg", width 
 
 
 # ether lipid
-saturation_data <- read_csv("data/Saturation/count_lipid_filtered_lipidomics.csv", col_types = cols())
+ether_lipids <- count_saturation(ether_yes, group_info)
+ether_dt <- ether_lipids %>% mutate_at(vars(SFA, MUFA, PUFA), list(~as.numeric(.)))
 
-ether_lipids <- saturation_data %>% rowwise() %>% mutate(ether = ifelse(str_detect(LipidMolec, "\\(.*[ep]"), "YES", "NO"))
-
-ether_dt <- ether_lipids %>% filter(ether == "YES")
 write_csv(ether_dt,"data/Ether/ether_lipids_saturation.csv")
 
 
-all_lipids <- ether_lipids %>% 
+all_lipids <- ether_detection %>% 
   filter(Class %in% unique(ether_dt$Class)) %>% 
   select(Class, contains("MainArea"), -"MainArea[c]") %>% 
   group_by(Class)%>% 
@@ -218,7 +208,7 @@ all_lipids <- ether_lipids %>%
   gather(SAMPLES, all_AUC, -Class)
 
 
-ether_saturation <- ether_dt %>% filter(!FA_types == "None")
+ether_saturation <- ether_dt %>% filter(!FA_types == "None") %>% ungroup()
 
 ether_long <- ether_saturation %>% 
   group_by(Class) %>% 
@@ -295,7 +285,6 @@ ether1$SAMPLES <- factor(ether1$SAMPLES, levels = name_factor)
 params1 <- c("SAMPLES", "value", "type")
 p8 <- plot_all(data = ether1, params1) +
   geom_bar(stat = "identity") +
-  scale_fill_simpsons(labels = c("PUFA", "SFA_MUFA")) +
   facet_wrap(~Class, scales = "free") +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
@@ -308,7 +297,6 @@ filtered_ether <- ether1 %>% mutate(value = ifelse(value < 0, NA, value))
 p9 <- ggplot(data = filtered_ether, aes(x=SAMPLES, y = value, fill = type)) +
   geom_bar(stat = "identity", position = "fill") +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
-  scale_fill_jco(labels = c("PUFA", "SFA_MUFA")) +
   facet_wrap(~Class, scales = "free") +
   theme_bw() +
   set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
@@ -341,7 +329,6 @@ ether2$GROUPS <- factor(ether2$GROUPS, levels = group_names)
 
 p10 <- plot_all(ether2, c("GROUPS", "value", "type")) +
   geom_bar(stat = "identity") +
-  scale_fill_d3(labels = c("PUFA", "SFA_MUFA")) +
   facet_wrap(~Class, scales = "free") +
   set_theme() +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
@@ -352,6 +339,6 @@ ggsave(paste0("plot/Ether/pufa_ether_group.", image_option), device = image_opti
 ggsave("plot/Ether/pufa_ether_group.svg", device = "svg", width = 20, height = 20)
 
 
-
-
+ether_pufa <- ether_dt %>% filter(PUFA != 0)
+write_csv(ether_pufa, "data/ether/pufa.csv")
 

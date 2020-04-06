@@ -24,7 +24,7 @@ list.of.packages <- c( "FactoMineR", "factoextra", "scales", "magrittr", "ggrepe
                        "stringr", "readxl", "RCy3", "igraph", "tidyverse", "dplyr","viridis", 
                        "igraph", "network", "visNetwork", "extrafont", "ggforce", "kableExtra", 
                        "ggpubr", "wesanderson", "formattable", "ggsci", "plotly", "htmlwidgets", 
-                       "gridExtra", "grid",  "readr")
+                       "gridExtra", "grid",  "readr", "data.table")
 need.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
 if(length(need.packages) > 0) BiocManager::install(need.packages)
 
@@ -325,15 +325,36 @@ add_scales <- function(..., scale.params = list()){
 }
 
 
+##########################################################################################
+# function name: set_color
+# parameters: color_option, color1, color2, color3
+# utility: set graph color by user choice. The ggsci offer
+#           16 color themes, the wesanderson offer 18 color themes. And last color last 
+#           color theme has 8 colors.
+##########################################################################################
+set_color <- function(color_option, color1, color2, color3){
+  color3_name <- deparse(substitute(color3))
+  if(color_option %in% color1){
+    color_scheme <- paste0("scale_fill_", color_option, "()")
+  }else if(color_option %in% color2 ){
+    color_scheme <-  paste0("scale_fill_manual(values = wes_palette('", color_option, "'))")
+  }else if(color_option == color3_name){
+    color_scheme <-  paste0("scale_fill_manual(values = ", color_option, ")")
+  }else{
+    message("Type wrong!")
+    color_option <- readline("Please retype the color theme name, e.g. npg: ")
+    return(set_color(color_option, color1, color2, color3))
+  }  
+}
 
 
 
 
-########################################################################
+##########################################################################################
 # function name: plot_all
 # parameters: data, parameters (list of paramters), ...
 # utility: passing data and a list of parameters for plotting
-########################################################################
+##########################################################################################
 plot_all <- function(data, parameters, se){
   paras <- syms(parameters)
   if(length(parameters) == 1){
@@ -349,13 +370,13 @@ plot_all <- function(data, parameters, se){
   } else if(length(parameters) == 3){
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
       theme_bw() +
-      set_theme() 
+      set_theme() +
+      eval(parse(text = color_choice))
     axis_st <- data %>% filter_at(vars(!!paras[[2]]), any_vars(.<0)) %>% nrow()
     if(axis_st >0){
       p <- p + 
         add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
-        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") +
-        scale_fill_d3()
+        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
     }else{
       p <-  p + add_scales()
     }
@@ -369,12 +390,10 @@ plot_all <- function(data, parameters, se){
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
       theme_bw() +
       set_theme() +
+      eval(parse(text = color_choice)) +
       theme(plot.title = element_text(hjust = 0.5),
             axis.text.y = element_text(angle = 30, hjust=1)) + 
-      #scale_fill_manual(values = clPalette1) +
-      scale_fill_d3() +
       geom_se(parameters, se)  
-    
     if(axis_st >0){
       p <- p + 
         add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
@@ -1245,25 +1264,7 @@ FormatData2 <- function(data, pick){
 }
 
 
-# ########################################################################################
-# # function name: PlotTypes
-# # parameter: data, m (x, y and color parameters for plots)
-# # utility: passing data and 3 plot parameters for plot
-# ########################################################################################
-# PlotTypes <- function(data, m){
-#   m <- syms(m)
-#   p1 <- m[[1]]
-#   p2 <- m[[2]]
-#   p3 <- m[[3]]
-#   min_y <- data %>% select(addquotes(!!p2)) %>% min()
-#   max_y <- data %>% select(addquotes(!!p2)) %>% max()
-#   plot_types <-   ggplot(data, aes(x=eval(p1), y=eval(p2), fill = eval(p3))) +
-#     # facet_wrap(~Class, scales = "free") +
-#     scale_fill_manual(values = clPalette1) +
-#     theme_bw()+
-#     set_theme()
-#   return(plot_types) 
-# } 
+
 
 
 ########################################################################################
@@ -1282,7 +1283,9 @@ subtract_background <- function(data, sample_list, subtraction){
 
 
 ########################################################################################
-
+# function name: subtract_not
+# parameters: data, sample_list, option, group
+# utility: check if background subtraction is needed, and do background subtraction if Y (yes)
 ########################################################################################
 subtract_not <- function(data, sample_list, option, group){
   if(option == "y"){
@@ -1472,7 +1475,8 @@ plot_fc <- function(data, parameters, se){
     limits <- ranges
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
       theme_bw() +
-      set_theme()
+      set_theme() +
+      eval(parse(text = color_choice))
   }else{
     ranges <- data %>% 
       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
@@ -1481,6 +1485,7 @@ plot_fc <- function(data, parameters, se){
     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
         theme_bw() +
         set_theme() +
+       eval(parse(text = color_choice)) +
        # scale_fill_manual(values = clPalette1) +
         geom_se(parameters, se)
   } 
@@ -1488,11 +1493,9 @@ plot_fc <- function(data, parameters, se){
   if(axis_st > 0){
       p <- p +
         scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) +
-        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") +
-        scale_fill_npg()
+        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
   }else{
-      p <-  p + scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
-        scale_fill_npg()
+      p <-  p + scale_y_continuous(expand = c(0, 0, 0.2, 0)) 
 
   }
   return(p)
@@ -1571,7 +1574,6 @@ EachClassPlot <- function(long_data, paras, computer, images){
         theme(plot.title = element_text(hjust = 0.5),
               axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
         guides(fill = guide_legend(reverse=TRUE)) +
-        scale_fill_npg() +
         coord_flip() 
       print(p1)
       ggsave(filename = paste0(post_name, pick_class, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
@@ -1600,7 +1602,6 @@ EachClassPlot <- function(long_data, paras, computer, images){
             ggtitle(pick_class) +
             theme(plot.title = element_text(hjust = 0.5),
                   axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
-            scale_fill_npg() +
             coord_flip() 
           print(p2)
           ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
@@ -1627,7 +1628,6 @@ EachClassPlot <- function(long_data, paras, computer, images){
             theme(plot.title = element_text(hjust = 0.5),
                   axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
             guides(fill = guide_legend(reverse=TRUE)) +
-            scale_fill_npg() +
             coord_flip() 
           print(p2)
           ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
@@ -1637,8 +1637,10 @@ EachClassPlot <- function(long_data, paras, computer, images){
       }
     } 
   }
-   dev.off()
-   options(device = "RStudioGD")
+  if(computer == "mac"){
+    dev.off()
+    options(device = "RStudioGD")
+  }
 }
 
 
@@ -1860,8 +1862,8 @@ fit$design)", sep = '"')
   print(volc1)
   ggsave(filename = paste0(option[1], "vs.", option[2], ".", image_option), path = 'plot/Volc/', 
          device = image_option, width = 20, height = 20)
-  name33 <- paste(option[1], "vs.", option[2], ".svg", sep = "")
-  ggsave(filename = name33, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
+  name3 <- paste(option[1], "vs.", option[2], ".svg", sep = "")
+  ggsave(filename = name3, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   # build mutated data frame
   class_names <- rownames(input) %>% str_extract_all(., "(.+)\\(") %>% str_remove_all(., "\\(")
@@ -1910,6 +1912,47 @@ fit$design)", sep = '"')
          device = image_option, width = 20, height = 20) #  width=15, height=15, dpi=300
   name4<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
   ggsave(filename = name4, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
+  
+  
+# interactive volcano
+significant_points <- significant_points %>% 
+  rownames_to_column("LipidMolec") %>% 
+  mutate(text = paste0("LipidMolecule: ", LipidMolec, "\nAdj.Pvalue: ", 
+                       format(adj.P.Val, format = "e", digits = 2), "\n")) %>% 
+  column_to_rownames("LipidMolec")
+  
+volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
+    geom_vline(xintercept = c(-1, 1),  colour = "black", size = 1.5, linetype = "dotted") +
+    geom_hline(yintercept= -log10(0.05), linetype="dotted", colour="black", size=1.5) +
+    geom_point(alpha = 0.4, aes(size = AveExpr)) +
+    geom_point(data = significant_points, alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
+                                                            colour=lipclass, text = text, size = AveExpr)) +
+    theme_bw() +
+    set_theme() +
+    theme(
+      axis.line = element_line(colour = "black", size = 2),
+      legend.position = "right",
+      axis.ticks.length = unit(1.8, "mm"),
+      axis.ticks = element_line(size = 1.5),
+      axis.text = element_text(size = 18, face = "bold", colour = "black"),
+      axis.title = element_text(size = 20),
+      legend.text = element_text(size = 16),
+      legend.title = element_text(size = 18)
+    ) +
+    scale_y_continuous(breaks = c(0, -log10(0.05), 2, 4, 6, 8, 10),
+                       labels = c(0, "-log10(q value)", 2, 4, 6, 8, 10),
+                       expand = c(0, 0, 0.2, 0)) 
+  p <- volc %>%
+    ggplotly(tooltip = "text") %>%
+    layout(
+      dragmode = "select"
+    )
+  
+  print(p)
+  dir_path <- paste0(getwd(),"/plot/Volc") 
+  name <- paste0(option[1], "_vs_", option[2], "_volc.html")
+  saveWidget(as_widget(p), file.path(dir_path, name))
+  
   
   lipid_class <- rownames(input_lipids) %>% 
     str_remove_all(., "\\(.*\\)") %>%
@@ -2101,12 +2144,129 @@ build_igraph <- function(data, group){
 
 
 
+# ########################################################################################
+# # function name: cal_sample_saturation
+# # parameters: data_fa, group_info
+# # utility: calculate the data saturation of SFA, MUFA, PUFA
+# ########################################################################################
+# cal_sample_saturation <- function(data_fa, group_info){
+#   data_name <- deparse(substitute(data_fa))
+#   sample_raw_list <- group_info$samples
+#   # make a data store the pattern and count information
+#   lipid_list <- sapply(data_fa$LipidMolec, function(x) count_pathway(x)) 
+#   lipid_list <- t(lipid_list) %>% data.frame(., stringsAsFactors = FALSE)
+#   # name the pattern data
+#   colnames(lipid_list) <- c("FA_types", "SFA", "MUFA", "PUFA")
+#   
+#   # reformat the FA_types style by deleting extra speration mark "/"
+#   message("\nLipid molecules are classified as SFA, MUFA, PUFA or None, e.g Q10")
+#   lipid_list$FA_types <- apply(lipid_list, 1, function(x) x[1] <- x[1] %>% 
+#                                  str_replace(., "//", "/") %>% 
+#                                  str_remove(., "^/") %>% 
+#                                  str_remove(., "/$"))
+#   
+#   # assign the other pattern as None, e.g. Q10
+#   lipid_list$FA_types[lipid_list$FA_types==""] <- "None"
+#   
+#   # reorder the column position and put the counting patterns in between FA and FA Group key columns
+#   count_lipid <- data_fa %>% select(1:4) %>% cbind(., lipid_list)
+#   count_lipid <- count_lipid %>% cbind(., data_fa[5:ncol(data_fa)]) 
+#   rownames(count_lipid) <- NULL
+#   
+#   # write the count of pattern into count_lipid.csv file. 
+#   message("\nClassification of SFA, MUFA and PUFA are stored under count_lipid.csv and aggregated.csv")
+#   file_name1 <- paste("data/Saturation/count_lipid_", data_name, ".csv", sep = "")
+#   write.csv(count_lipid, file_name1)
+#   
+#   # delete lipid which can't do saturation analysis
+#   dis_lipid <- count_lipid %>% filter(FA_types=="None") %>% select(LipidMolec) %>% unlist()
+#   if(length(dis_lipid)>=1){
+#     lip <- paste(dis_lipid, sep = ", ", collapse = " ")
+#     message("\n\n", lip, " can't be used for saturation analysis and will delete in saturation analysis.\n\n") 
+#   }
+#   
+#   count_lipid <- count_lipid %>% filter(!LipidMolec %in% dis_lipid)
+#   # select columns of information for calculating the aggregation of MainArea of samples
+#   selected_lipids <- count_lipid %>% select(LipidMolec, Class, FA_types, SFA, MUFA, PUFA, contains("MainArea"))
+#   # transform attributes of SFA, MUFA, PUFA for calculations
+#   names <- c("SFA", "MUFA", "PUFA")
+#   # transformed_lipid <- selected_lipids %>% mutate_at(names, transform_to_numeric)
+#   transformed_lipid <-  selected_lipids %>% mutate_at(names, as.numeric) 
+#   
+#   # # filter all negative or 0 values
+#   # deleted_lipid <- transformed_lipid %>% filter_at(sample_raw_list, all_vars(.<=0))
+#   # # reserve last lipids
+#   # filtered_lipid <- anti_join(transformed_lipid, deleted_lipid)
+#   # delete lipid molecules contains negative values
+#   # reserved_lipid <- filtered_lipid %>% filter_at(sample_raw_list, all_vars(.>0))
+#   # if(nrow(filtered_lipid) > nrow(reserved_lipid)){
+#   #   deleted_molec <- anti_join(transformed_lipid, reserved_lipid) %>% 
+#   #     select(LipidMolec) %>% 
+#   #     unlist() %>% 
+#   #     paste0(., ", ", collapse = " ")
+#   #   message("Lipid Molecule(s): ", deleted_molec, "are deleted for saturantion and later ether composition analysis.\n\n")
+#   # }
+#   # 
+#   # reserved_lipid <- reserved_lipid %>% select(-LipidMolec)
+#   # selected_lipids <- selected_lipids
+#   
+#   # transform negative into NA
+#   reserved_lipid <- transformed_lipid %>% 
+#     mutate_at(sample_raw_list, list(~ifelse(.<0, NA, .))) 
+#   
+#   #calculate the aggregation of lipid by same class and FA_types
+#   aggregate_lipids <-  reserved_lipid %>% select(-LipidMolec) %>% group_by(Class, FA_types) %>% summarise_all(list(~sum(., na.rm = TRUE)))
+#   observation_count <-  reserved_lipid %>% group_by(Class, FA_types) %>% tally()
+#   aggregate_lipids <- left_join(aggregate_lipids, observation_count, by = c("Class", "FA_types")) 
+#   aggregate_lipids <- aggregate_lipids %>% select(Class, n, FA_types, SFA, MUFA, PUFA, all_of(sample_raw_list))
+#   
+#   # write the aggregation information into aggregated.csv file
+#   file_name2 <- paste("data/Saturation/aggregated_", data_name, ".csv", sep = "")
+#   aggregate_lipids %>% arrange(Class, FA_types) %>% write.csv(., file_name2)
+#   
+#   # select three variables Class, n, FA_types for analysis
+#   group_lipids <- aggregate_lipids %>% select(Class, n, FA_types)
+#   
+#   # calculate the SFA, MUFA and PUFA's percentages 
+#   fa_percent <- group_lipids %>% rowwise() %>% 
+#     # calculate how many SFA, MUFA and PUFA by row (by different SFA, MUFA and PUFA combination patterns)
+#     mutate(SFA = str_count(FA_types, "SFA"),
+#            MUFA= str_count(FA_types, "MUFA"), 
+#            PUFA= str_count(FA_types, "PUFA"), ) %>%   
+#     # calcutate SFA, MUFA and PUFA's percentage by row
+#     mutate("%SFA" = SFA/(SFA+ MUFA + PUFA), 
+#            "%MUFA" = MUFA/(SFA+ MUFA + PUFA), 
+#            "%PUFA"= PUFA/(SFA+ MUFA + PUFA)) 
+#   
+#   # combine the percentage information with aggregated lipid info
+#   fa_percent <- aggregate_lipids %>% ungroup() %>% select(all_of(sample_raw_list)) %>% cbind(fa_percent, .)
+#   file_name3 <- paste("data/Saturation/fa_percentage_", data_name, ".csv", sep="")
+#   write_csv(fa_percent, file_name3)
+#   
+#   # find median and mean for each sample in each group and calculate its value
+#   data_list <- calc_group(fa_percent, group_info)
+#   dt <- data_list[[1]]
+#   dd <- data_list[[2]]
+#   data <- data_list[[3]]
+#   
+#   dt <- dt %>% mutate_if(is.numeric, list(~formatC(., format = "f", digits = 3)))
+#   
+#   file_name4 <- paste("data/Saturation/individual_saturations_", data_name, ".csv", sep = "")
+#   file_name5 <- paste("data/Saturation/class_saturations_", data_name, ".csv", sep = "")
+#   file_name6 <- paste("data/Saturation/mean_median_", data_name, ".csv", sep = "")
+#   write_csv(dt, file_name4)
+#   write_csv(dd, file_name5)
+#   write.csv(data, file_name6)
+#   return(data)
+# }
+# 
+
 ########################################################################################
 # function name: cal_sample_saturation
 # parameters: data_fa, group_info
 # utility: calculate the data saturation of SFA, MUFA, PUFA
 ########################################################################################
-cal_sample_saturation <- function(data_fa, group_info){
+count_saturation <- function(data_fa, group_info){
   data_name <- deparse(substitute(data_fa))
   sample_raw_list <- group_info$samples
   # make a data store the pattern and count information
@@ -2135,6 +2295,11 @@ cal_sample_saturation <- function(data_fa, group_info){
   file_name1 <- paste("data/Saturation/count_lipid_", data_name, ".csv", sep = "")
   write.csv(count_lipid, file_name1)
   
+  return(count_lipid)
+}
+
+cal_sample_saturation <- function(count_lipid, data_fa){
+  data_name <- deparse(substitute(data_fa))
   # delete lipid which can't do saturation analysis
   dis_lipid <- count_lipid %>% filter(FA_types=="None") %>% select(LipidMolec) %>% unlist()
   if(length(dis_lipid)>=1){
@@ -2216,6 +2381,17 @@ cal_sample_saturation <- function(data_fa, group_info){
   write.csv(data, file_name6)
   return(data)
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 ########################################################################################
