@@ -164,7 +164,7 @@ pd <- plot_all(class_long, paras2) +
   geom_text_repel(aes(label = SAMPLES), size = 2) + 
   #scale_y_continuous(labels = function(x) format(x, scientific = TRUE)) +
   labs(title = "Normalized by median", caption = "each dot represent the replicate of one lipid class", 
-       x = "Experiment Groups", y = "Relative Fold Change", fill="Experiment Groups")
+       x = "Experiment Groups", y = "Relative Fold Change", fill="Experiment Groups") 
 print(pd)
 ggsave(filename = paste0("class_median_dot.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "class_median_dot.svg", path="plot/Quantification", device = "svg", width = 20, height = 20)

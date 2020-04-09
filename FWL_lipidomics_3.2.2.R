@@ -23,7 +23,7 @@ source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
 
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
-dirs <- c("plot", "data", "plot/classes/fc", "plot/classes/svgs/fc", "plot/QC", "plot/Quantification", "plot/Saturation", "plot/Ether", "plot/Length",
+dirs <- c("plot", "data", "plot/Quantification/classes/fc", "plot/Quantification/classes/svgs/fc", "plot/QC", "plot/Saturation", "plot/Ether", "plot/Length",
           "plot/Volc", "data/Volc","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/Length")
 mkdirs(dirs)
 
@@ -45,7 +45,7 @@ csv_files <- list.files(path = "converted", pattern = "\\.csv$")
 csv_list <- c()
 for(i in seq_along(csv_files)) csv_list[i] <- addquotes(!!as.character(i), " ", !!csv_files[i], "\n")
 message("\nThe following files had been generated. \nSelect ONE for subsequent the list of file names:\n", csv_list)
-file_option <- readline("Please input the index of the file: ") %>% as.numeric()
+file_option <- readline("Please input the index number of the file: ") %>% as.numeric()
 # the file path and name
 target_file <- paste("converted/", csv_files[file_option], sep = "")
 print(target_file)
@@ -56,8 +56,6 @@ lipidomics <- read_csv(target_file, col_types = cols())
 # QC part I
 ##########################################################################################
 source("FWL_lipidomics_QC_3.2.2.R", echo = FALSE)
-
-
 
 
 ##########################################################################################
@@ -89,7 +87,6 @@ write_csv(group_info, "data/group_information.csv")
 group_names <- unique(group_repeats)
 ngroups <- length(group_names)
 
-
 ###########################################################################################
 # Background subtraction, filter potential invalid lipids
 ###########################################################################################
@@ -98,20 +95,17 @@ background_option <- retype_choice("Y/N")
 filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, background_option, group_info)
 
 
-
-
-
-
-
-
+###########################################################################################
+# Set color theme for plots
+###########################################################################################
 message("\nPlease pick a color from ggsci theme link: 
         \nhttps://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
         \nOR
         \nhttps://github.com/karthik/wesanderson\n\n")
 colors1 <- c("npg", "aaas", "nejm", "jama", "jco", "ucscgb", "d3 ", 
              "locuszoom", "igv", "uchicago", "startrek", "tron", 
-             "futurama", "rickandmonty", "simpsons", "gsea") 
-colors1_no <- c(10, 10, 8, 7, 10, 15, 10, 7, 15, 15, 7, 7, 12, 12, 15, 12) 
+             "futurama", "rickandmonty", "simpsons", "gsea", "lancet") 
+colors1_no <- c(10, 10, 8, 7, 10, 15, 10, 7, 15, 15, 7, 7, 12, 12, 15, 12, 9) 
 colors2 <-  c("BottleRocket1", "BottleRocket2", "Rushmore1", "Royal1", "Royal2", "Zissou",
               "Darjeeling1", "Darjeeling2", "Chevalier1", "FantasticFox1", "Moonrise1", 
               "Moonrise2", "Moonrise3", "Cavalcanti1", "GrandBudapest1", "GrandBudapest2",
@@ -163,7 +157,7 @@ p1 <- plot_all(data = all_samples, params) +
   facet_wrap(~Class, scales = "free") +
   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
         axis.line = element_line(size = 0.2)) +
-  scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
+  scale_y_continuous(labels = scientific_format(), expand = c(0.01, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "") 
 print(p1)
 ggsave(paste0("plot/QC/raw_all_samples.", image_option), device = image_option, width=20, height = 20)

@@ -375,8 +375,8 @@ plot_all <- function(data, parameters, se){
     axis_st <- data %>% filter_at(vars(!!paras[[2]]), any_vars(.<0)) %>% nrow()
     if(axis_st >0){
       p <- p + 
-        add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
-        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
+        add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) #+
+      #  geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
     }else{
       p <-  p + add_scales()
     }
@@ -391,13 +391,11 @@ plot_all <- function(data, parameters, se){
       theme_bw() +
       set_theme() +
       eval(parse(text = color_choice)) +
-      theme(plot.title = element_text(hjust = 0.5),
-            axis.text.y = element_text(angle = 30, hjust=1)) + 
       geom_se(parameters, se)  
     if(axis_st >0){
       p <- p + 
-        add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
-        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed")
+        add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) #+
+        #geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed")
     }else{
       p <-  p + add_scales()
     }
@@ -1354,112 +1352,6 @@ detect_invalid <- function(data, group_information){
 }
 
 
-
-
-
-# 
-# plot_fc <- function(data, parameters, se){
-#   print("abc")
-#   paras <- syms(parameters)
-#   if(length(parameters) == 3){
-#     ranges <- data %>% 
-#       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])))) %>% 
-#       summarise(max(bounds, na.rm = TRUE), min(bounds, na.rm = TRUE))
-#     limits <- ranges
-#     p <- ggplot(data, aes(x = eval(paras[[1]]), y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
-#       theme_bw() +
-#       set_theme() +
-#       # theme(axis.line = element_line(colour = "black", 
-#       #                                size = .15),
-#       #       plot.title = element_text(hjust = 0.5),
-#       #       axis.text.y = element_text(angle = 30, hjust=1, size = 6),
-#       #       axis.text.x = element_text(size = 6),
-#       #       axis.ticks = element_line(size = .8),
-#       #       axis.ticks.length = unit(1, "mm")) +
-#       # scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
-#       # ylim(limits) +
-#       scale_fill_manual(values = clPalette1)
-#     }else{
-#       print("haha")
-#     ranges <- data %>% 
-#       mutate(bounds=sign(eval(paras[[2]])) * (abs(eval(paras[[2]])) + abs(eval(paras[[4]])))) %>% 
-#       summarise(max(bounds, na.rm = TRUE), min(bounds, na.rm = TRUE))
-#     limits <- ranges
-#     
-#       p <- ggplot(data, aes(x = reorder(eval(paras[[1]]), eval(paras[[2]])), 
-#                             y = eval(paras[[2]]), fill = eval(paras[[3]]))) +
-#         #   expand_limits(y = limits) +
-#         theme_bw() +
-#         set_theme() +
-#         # theme(axis.line = element_line(colour = "black", 
-#         #                                size = .2),
-#         #       plot.title = element_text(hjust = 0.5),
-#         #       axis.text.y = element_text(angle = 30, hjust=1, size = 6),
-#         #       axis.text.x = element_text(size = 6),
-#         #       axis.ticks = element_line(size = .8),
-#         #       axis.ticks.length = unit(1, "mm")) +
-#         # scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
-#         # ylim(limits) +
-#         scale_fill_manual(values = clPalette1) +
-#         geom_se(parameters, se)
-#    
-#     
-#     
-#     } 
-#   print(
-#     "yyy"
-#   )
-#     axis_st <-  data %>% ungroup() %>% filter(eval(paras[[2]]) < 0) %>% nrow()
-#     if(axis_st >0){
-#       if(max(limits) < 200){
-#         p <- p +
-#           scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) +
-#           geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
-#       }else{
-#         p <- p +
-#           #scale_y_continuous(expand = c(0.02, 0, 0.2, 0), labels = scientific_format()) +
-#           #add_scales(scale.params = list(breaks = c(0, 10, 100, 1000, 10000) ,labels = c(),))
-#           scale_y_continuous(trans = tn2, 
-#                              breaks = c(0, 4, 16, 256, 2^16),
-#                              labels = c(0, expression(paste("2"^"2")), expression(paste("2"^"4")), 
-#                                         expression(paste("2"^"8")), expression(paste("2"^"16"))),
-#                              expand = c(0.02, 0, 0.2, 0)) +
-#           geom_text(aes(label = "log2 transformed", x= Inf, y = Inf), hjust = -1, vjust = -1) +
-#           geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
-#       }
-#     
-#         
-#     }else{
-#       if(max(limits) < 200){
-#         p <-  p + scale_y_continuous(expand = c(0, 0, 0.2, 0))
-#       }else{
-#         p <-  p + 
-#           geom_text(aes(label = "log2 transformed", x= Inf, y = Inf), hjust = -1, vjust = -1) +
-#           scale_y_continuous(trans = tn2, 
-#                              breaks = c(0, 4, 16, 256, 2^16),
-#                              labels = c(0, expression(paste("2"^"2")), expression(paste("2"^"4")), 
-#                                         expression(paste("2"^"8")), expression(paste("2"^"16"))),
-#                              expand = c(0, 0, 0.2, 0)) 
-#       }
-#      
-#     }
-#     if(axis_st >0){
-#       p <- p + 
-#         add_scales(scale.params = list(expand = c(0.02, 0, 0.2, 0))) +
-#         geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed")
-#     }else{
-#       p <-  p + add_scales()
-#     }
-#     # if(axis_st > 0){
-#     #   p <- p + geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
-#     # }
-# }
-
-
-
-
-
-
 ########################################################################################
 # function name:  plot_fc
 # parameters: data, parameters, se
@@ -1492,10 +1384,9 @@ plot_fc <- function(data, parameters, se){
   axis_st <-  data %>% ungroup() %>% filter(eval(paras[[2]]) < 0) %>% nrow()
   if(axis_st > 0){
       p <- p +
-        scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) +
-        geom_hline(yintercept = 0, color = "black",size = 1, linetype = "dashed") 
+        scale_y_continuous(expand = c(0.02, 0, 0.2, 0)) 
   }else{
-      p <-  p + scale_y_continuous(expand = c(0, 0, 0.2, 0)) 
+      p <-  p +   scale_y_continuous(expand = c(0, 0, 0.2, 0)) 
 
   }
   return(p)
@@ -1571,13 +1462,17 @@ EachClassPlot <- function(long_data, paras, computer, images){
       p1 <- p1 +
         labs_info +
         ggtitle(pick_class) +
-        theme(plot.title = element_text(hjust = 0.5),
-              axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
+        set_theme(theme_params = list(plot.title = element_text(hjust = 0.5),
+              axis.text.y = element_text(angle = 30, hjust=1, size = 10, face = "bold"))) + 
         guides(fill = guide_legend(reverse=TRUE)) +
         coord_flip() 
+      if(axis_st > 0){
+        p1 <- p1 + geom_hline(yintercept = 0, color = "black", size = 1, linetype = "dashed")
+          
+      }
       print(p1)
-      ggsave(filename = paste0(post_name, pick_class, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
-      ggsave(filename = paste0(post_name, pick_class, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+      ggsave(filename = paste0(post_name, pick_class, ".", images), path = 'plot/Quantification/classes/', device = images, width = 20, height = 20)
+      ggsave(filename = paste0(post_name, pick_class, ".svg"), path = 'plot/Quantification/classes/svgs/', device = "svg", width = 20, height = 20)
         }else{
       if(n_bar %% n_groups != 0){
         n_bar <- (n_bar%/% n_groups)*n_groups
@@ -1600,12 +1495,16 @@ EachClassPlot <- function(long_data, paras, computer, images){
             labs_info +
             guides(fill = guide_legend(reverse=TRUE)) +
             ggtitle(pick_class) +
-            theme(plot.title = element_text(hjust = 0.5),
-                  axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
+            set_theme(theme_params = list(plot.title = element_text(hjust = 0.5),
+                                          axis.text.y = element_text(angle = 30, hjust=1, size = 10, face = "bold"))) + 
             coord_flip() 
+          if(axis_st > 0){
+            p2<- p2 + geom_hline(yintercept = 0, color = "black", size = 1, linetype = "dashed")
+            
+          }
           print(p2)
-          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
-          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/Quantification/classes/', device = images, width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/Quantification/classes/svgs/', device = "svg", width = 20, height = 20)
           
         }else{
           ranges <- (n_bar*k+1):observations
@@ -1625,13 +1524,17 @@ EachClassPlot <- function(long_data, paras, computer, images){
           p2 <- p2 + 
             labs_info +
             ggtitle(pick_class) +
-            theme(plot.title = element_text(hjust = 0.5),
-                  axis.text.y = element_text(angle = 30, hjust=1, size = 7, face = "bold")) + 
+            set_theme(theme_params = list(plot.title = element_text(hjust = 0.5),
+                                          axis.text.y = element_text(angle = 30, hjust=1, size = 10, face = "bold"))) + 
             guides(fill = guide_legend(reverse=TRUE)) +
             coord_flip() 
+          if(axis_st > 0){
+            p2 <- p2 + geom_hline(yintercept = 0, color = "black", size = 1, linetype = "dashed")
+            
+          }
           print(p2)
-          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/classes/', device = images, width = 20, height = 20)
-          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/classes/svgs/', device = "svg", width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".", images), path = 'plot/Quantification/classes/', device = images, width = 20, height = 20)
+          ggsave(filename = paste0(post_name, pick_class, "_", k+1, ".svg"), path = 'plot/Quantification/classes/svgs/', device = "svg", width = 20, height = 20)
           
         }
       }
