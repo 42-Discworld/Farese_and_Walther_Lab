@@ -520,7 +520,8 @@ figure 7            |  figure 8
 
  |  figure 9|
 :-------------------------:
-|![](display/pairs.plot.3.initial.png)|
+|<img  src="display/sample.pca.initial.png" width = "50%"/>|
+
 
 
 
