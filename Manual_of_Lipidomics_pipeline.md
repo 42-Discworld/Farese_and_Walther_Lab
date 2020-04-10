@@ -510,6 +510,8 @@ figure 1            |  figure 2
 <p float="left">
   <img src="/display/pairs.plot.1.initial.png" width="45%" />
   <img src="/display/pairs.plot.2.initial.png" width="45%" /> 
+  <img src="/display/pairs.plot.3.initial.png" width="45%" /> 
+  <img src="/display/pairs.plot.4.initial.png" width="45%" /> 
 </p>
 
 
