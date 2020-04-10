@@ -516,38 +516,11 @@ figure 7            |  figure 8
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
-
-![alt-text-1](display/pairs.plot.1.initial.png "title-1") ![alt-text-2](display/pairs.plot.2.initial.png "title-2")
-
-<div class="half">
-  <div> 
-    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
-    <p>caption 1</p>
-  
-    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
-    <p>caption 2</p>
-
-    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
-    <p>caption 3</p>
-
-    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
-    <p>caption 4</p>
- </div>
-</div>
-
-
-
+<img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
-<p float="left">
-  <img src="/display/pairs.plot.1.initial.png" width="45%" alt = "figure 5"/>
-  <img src="/display/pairs.plot.2.initial.png" width="45%" alt = "figure 6"/> 
-  <figcaption>Figure 5                                  figure 6</figcaption>
-  <img src="/display/pairs.plot.3.initial.png" width="45%" alt = "figure 7"/> 
-  <img src="/display/pairs.plot.4.initial.png" width="45%" alt = "figure 8"/> 
-</p>
 
 
 
@@ -804,13 +777,13 @@ display:
 
 **(2) Volcano plots**
 
-  - Overview: Volcano plots will generate 4 formats of the same plot.
+  - Overview: Volcano plots will generate 5 formats of the same plot.
     The first plot will only distinguish significant lipid molecule. The
     second plot will classify significant lipid molecules into
     Glycerophospholipids, Neutral lipids, Sphingolipids, Sterols and
-    other lipids. The third plot is customized by the user, and it will
+    other lipids. The third is interactive volcano plot which won't be displayed in the manual book. The forth plot is customized by the user, and it will
     onldy display the lipid class user input from the lipid class list.
-    The fourth plot will only mark significant ether lipids if they
+    The last plot will only mark significant ether lipids if they
     exist. Data and plots will under subfolder Volc of data and plot.  
   - Utility: User will need to input times of contrast, group names for
     contrast, fold change threshold and customized lipid class(es).
