@@ -520,7 +520,7 @@ figure 7            |  figure 8
 
  |  figure 9|
 :-------------------------:
-| ![](display/sample.pca.initial.png)|
+| ![](display/sample.pca.initial.png width = 50%)|
 
 
 
