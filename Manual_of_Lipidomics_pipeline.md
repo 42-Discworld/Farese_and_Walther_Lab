@@ -495,6 +495,10 @@ List of 8
   ..$ : chr [1:2] "sample.names" "col.index"
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
+figure 1            |  figure 2
+:-------------------------:|:-------------------------:
+![](display/background.png)  |  ![](display/prop_summary.png)
+
 
 <img src="display/background.png" alt="figure1" width="45%" /><img align="middle" src="display/prop_summary.png" alt="figure2" width="45%"/>
 
