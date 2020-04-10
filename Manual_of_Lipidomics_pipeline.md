@@ -709,7 +709,7 @@ figure 14: relative fold change dot plot    |  figure 15: relative fold change b
 
 figure 16: relative fold change bar plot  |  figure 17: relative fold change violin plot
 :-------------------------:|:-------------------------:
-![](display/LPC.fc.png)  |  !  ![](display/molec_violin.png)
+![](display/LPC.fc.png)  | ![](display/molec_violin.png)
 
 
 
