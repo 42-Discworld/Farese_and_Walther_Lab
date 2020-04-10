@@ -557,7 +557,7 @@ Just pick the color name from colors3 or any color theme from the two tables bel
 ![](Manual_of_Lipidomics_pipeline_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->![](Manual_of_Lipidomics_pipeline_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
 
 |color_theme| npg | aaas |nejm | jama | jco |ucscgb |d3 |locuszoom | igv |uchicago | startrek | tron | futurama | rickandmonty | simpsons | gsea | lancet |  wesanderson|BottleRocket1 |BottleRocket2|Rushmore1|Royal1 |Royal2 | Zissou | Darjeeling1 | Darjeeling2 | FantasticFox1 |Moonrise1|Moonrise2 | Moonrise3 |Cavalcanti1|GrandBudapest1 | GrandBudapest2 | IsleofDogs1 | IsleofDogs2 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 |color_numbers| 10 | 10 | 8 | 7 | 10 | 15 | 10 | 7| 15 | 15 | 7| 7| 12 | 12| 15| 12| 9 |7 | 5|5|4|5|5|5|5|4|5|4|4|5|5|4|4|6|5 |
 
 
