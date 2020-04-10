@@ -503,6 +503,10 @@ figure 1            |  figure 2
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
+|figure 4| 
+:-------------------------:
+|<img align="middle" src="display/TG17_all.png" width = "50%"/>|
+
 
 
 figure 5            |  figure 6
@@ -514,9 +518,9 @@ figure 7            |  figure 8
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
-figure 4           |  figure 9
-:-------------------------:|:-------------------------:
-![](display/display/TG17_all.png)  |  ![](display/sample.pca.initial.png)
+ |  figure 9|
+:-------------------------:
+| ![](display/sample.pca.initial.png)|
 
 
 
