@@ -501,7 +501,7 @@ figure 1            |  figure 2
 
 figure 3            |  figure 4
 :-------------------------:|:-------------------------:
-![](display/all.retention.png)  |  ![](display/TG17_all.png)
+![](display/all_retention.png)  |  ![](display/TG17_all.png)
 
 
 
