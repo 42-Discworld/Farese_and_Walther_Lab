@@ -499,10 +499,13 @@ figure 1            |  figure 2
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
-figure 3            |  figure 4
-:-------------------------:|:-------------------------:
-![](display/all.retention.png)  |  ![](display/TG17_all.png)
+|figure 3|
+:-------------------------:
+|<img align="middle" src="display/all_retention.png" width = "20" height = "10" />|
 
+ figure 4
+:-------------------------:
+ ![](display/TG17_all.png)
 
 
 figure 5            |  figure 6
