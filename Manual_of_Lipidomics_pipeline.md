@@ -516,6 +516,31 @@ figure 7            |  figure 8
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
+
+![alt-text-1](display/pairs.plot.1.initial.png "title-1") ![alt-text-2](display/pairs.plot.2.initial.png "title-2")
+
+<div class="half">
+  <div> 
+    <img src="display/pairs.plot.1.initial.png" alt="">
+    <p>caption 1</p>
+  </div>
+  <div> 
+    <img src="display/pairs.plot.1.initial.png" alt="">
+    <p>caption 2</p>
+  </div>
+  <div> 
+    <img src="display/pairs.plot.1.initial.png" alt="">
+    <p>caption 3</p>
+  </div>
+  <div> 
+    <img src="display/pairs.plot.1.initial.png" alt="">
+    <p>caption 4</p>
+  </div>
+</div>
+
+
+
+
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
