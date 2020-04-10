@@ -495,13 +495,24 @@ List of 8
   ..$ : chr [1:2] "sample.names" "col.index"
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
+figure 1            |  figure 2
+:-------------------------:|:-------------------------:
+![](display/background.png)  |  ![](display/prop_summary.png)
 
-<img src="display/background.png" alt="figure1" width="45%" height="45%" /><img align="middle" src="display/prop_summary.png" alt="figure2" width="45%" height="45%"/>
+
+<img src="display/background.png" alt="figure1" width="45%" /><img align="middle" src="display/prop_summary.png" alt="figure2" width="45%"/>
 
 <img src="display/all.retention.png" alt="figure3" width="50%" height="50%" /><img src="display/TG17_all.png" alt="figure4" width="50%" height="50%" />
 
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
+
+<p float="left">
+  <img src="/display/pairs.plot.1.initial.png" width="45%" />
+  <img src="/display/pairs.plot.2.initial.png" width="45%" /> 
+</p>
+
+
 
 #### **Set color theme**
 
