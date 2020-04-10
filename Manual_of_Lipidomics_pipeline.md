@@ -495,21 +495,21 @@ List of 8
   ..$ : chr [1:2] "sample.names" "col.index"
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
-figure 1            |  figure 2
+figure 1: background plot       |  figure 2: lipid class summary
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
-|figure 3| 
+|figure 3: retention time analysis| 
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
-|figure 4| 
+|figure 4: standard TG(17:1/17:1/17:1) in all samples| 
 :-------------------------:
 |<img  src="display/TG17_all.png" width = "50%"/>|
 
 
 
-figure 5            |  figure 6
+figure 5:   |  figure 6
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.1.initial.png)  |  ![](display/pairs.plot.2.initial.png)
 
