@@ -505,7 +505,7 @@ figure 1            |  figure 2
 
  figure 4
 :-------------------------:
- ![](display/TG17_all.png width = 45%)
+ <img src="display/TG17_all.png" width="40%"/>
 
 
 figure 5            |  figure 6
