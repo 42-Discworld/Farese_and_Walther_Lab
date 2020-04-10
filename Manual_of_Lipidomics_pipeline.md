@@ -562,8 +562,11 @@ Just pick the color name from colors3 or any color theme from the two tables bel
 
 |color_theme| wesanderson | BottleRocket1 | BottleRocket2 | Rushmore1 | Royal1 | Royal2 | Zissou | Darjeeling1 | Darjeeling2 | FantasticFox1 |Moonrise1| Moonrise2 | Moonrise3 | Cavalcanti1 |GrandBudapest1 | GrandBudapest2 | IsleofDogs1 | IsleofDogs2 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|7 | 5 | 5 | 4 | 5 | 5 | 5 | 5 | 4 | 5 | 4 | 4 | 5 | 5 | 4 | 4 | 6 | 5 |
+|color_numbers| 7 | 5 | 5 | 4 | 5 | 5 | 5 | 5 | 4 | 5 | 4 | 4 | 5 | 5 | 4 | 4 | 6 | 5 |
 
+|color_theme| colors3 |
+|---|---|
+|color_numbers| 8 |
 ``` 
 
  OR you could pick color3 theme which has 8 colors. 
