@@ -499,9 +499,9 @@ figure 1            |  figure 2
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
-figure 3            
+figure 3
 :-------------------------:
-![](display/all_retention.png)   
+<img align="middle" src="display/all_retention.png"  width="80%" height="50%"/>
 
  figure 4
 :-------------------------:
