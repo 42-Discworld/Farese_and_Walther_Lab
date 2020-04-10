@@ -589,10 +589,8 @@ Related data and plots will be under `Quantification` subfolders of
     standard deviation for each experiment group. Please note that, the
     data does include negative values if user selects background
     subtraction.
-  - Example
-display:
+  - Example display: figure 10
 
-<img src="display/total.class.png" width="40%" style="display: block; margin: auto;" />
 
 **(2) Quantification of individual lipid classes (mean, sd)**
 
@@ -661,10 +659,8 @@ options(device = "RStudioGD")
 ###############################################################################
 ```
 
-  - Example
-display:
+  - Example display: figure 11, figure 12
 
-<img src="display/CL.1.png" width="40%" /><img src="display/Cer.png" width="40%" />
 
 **(3) Visualization of lipid class data, normalized by median**
 
@@ -677,8 +673,7 @@ display:
     will need to input the control group name as comparison for fold
     change
 analysis.
-
-<img src="display/class_median_dot.png" width="45%" /><img src="display/class_median_box.png" width="45%" />
+  - Example display: figure 13, figure 14
 
 **(4) Visualization of lipid molecule data, normalized by mean/median
 value**
@@ -698,10 +693,26 @@ value**
     click panel `Plots` to view other plots.  
   - Example display: The first plot is normalized by mean, while second
     by median. The third one is violin plot, and only static violin plot
-    is showed in the manual
-book.
+    is showed in the manual book. figure 
 
-<img src="display/PE.3_mean_in_CONTROL_HET_1.png" width="30%" /><img src="display/DG.1_median_in_control_het_1.png" width="30%" /><img src="display/molec_violin.png" width="30%" />
+figure 10            |  figure 11
+:-------------------------:|:-------------------------:
+![](display/total.class.png)  |  ![](display/CerG1.png)
+
+figure 12            |  figure 13
+:-------------------------:|:-------------------------:
+![](display/Cer.png)  |  ![](display/class_median_box.png)
+
+figure 14            |  figure 15
+:-------------------------:|:-------------------------:
+![](display/class_median_dot.png)  |  ![](display/LPC.fc.png)
+
+figure 16            |  figure 17
+:-------------------------:|:-------------------------:
+![](display/PE.fc.png)  |  ![](display/molec_violin.png)
+
+
+
 
 #### **Fatty Acids Saturation Analysis**
 
