@@ -501,7 +501,7 @@ figure 1            |  figure 2
 
 |figure 3|
 :-------------------------:
-|<img align="middle" src="display/all_retention.png" height = "85%" />|
+|<img align="middle" src="display/all_retention.png" width = "20" height = "10" />|
 
  figure 4
 :-------------------------:
