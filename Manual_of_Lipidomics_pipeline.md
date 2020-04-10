@@ -496,21 +496,21 @@ List of 8
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
 figure 1            |  figure 2
-|-------------------------:|:-------------------------|
+:-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
 figure 3            |  figure 4
-|-------------------------:|:-------------------------|
+:-------------------------:|:-------------------------:
 ![](display/all.retention.png)  |  ![](display/TG17_all.png)
 
 
 figure 5            |  figure 6
-|-------------------------:|:-------------------------|
+:-------------------------:|:-------------------------:
 ![ahhaha](display/pairs.plot.1.initial.png)  |  ![kkkkk](display/pairs.plot.2.initial.png)
 
 
 figure 7            |  figure 8
-|-------------------------:|:-------------------------|
+:-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
