@@ -521,19 +521,19 @@ figure 7            |  figure 8
 
 <div class="half">
   <div> 
-    <img src="display/pairs.plot.1.initial.png" alt="">
+    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
     <p>caption 1</p>
   </div>
   <div> 
-    <img src="display/pairs.plot.1.initial.png" alt="">
+    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
     <p>caption 2</p>
   </div>
   <div> 
-    <img src="display/pairs.plot.1.initial.png" alt="">
+    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
     <p>caption 3</p>
   </div>
   <div> 
-    <img src="display/pairs.plot.1.initial.png" alt="">
+    <img src="display/pairs.plot.1.initial.png" alt="" width = 45%>
     <p>caption 4</p>
   </div>
 </div>
