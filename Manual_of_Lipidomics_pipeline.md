@@ -701,16 +701,19 @@ figure 10            |  figure 11
 
 figure 12            |  figure 13
 :-------------------------:|:-------------------------:
-![](display/Cer.png)  |  ![](display/class_median_box.png)
+![](display/Cer.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
 figure 14            |  figure 15
 :-------------------------:|:-------------------------:
-![](display/class_median_dot.png)  |  ![](display/LPC.fc.png)
+![](display/class_median_dot.png)  |  ![](HET_KO_median_1_CerG1.png)
 
 figure 16            |  figure 17
 :-------------------------:|:-------------------------:
-![](display/PE.fc.png)  |  ![](display/molec_violin.png)
+![](display/PE.fc.png)  |  !  ![](display/LPC.fc.png)
 
+  figure 18           
+:-------------------------:
+| ![](display/molec_violin.png)  | 
 
 
 
