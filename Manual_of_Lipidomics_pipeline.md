@@ -499,13 +499,10 @@ figure 1            |  figure 2
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
-|figure 3|
+|figure 3| 
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
-| figure 4|
-|:-------------------------:|
-| <img src="display/TG17_all.png" width="50%"/>|
 
 
 figure 5            |  figure 6
@@ -517,10 +514,9 @@ figure 7            |  figure 8
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
-<img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
-
-<img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
-<img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
+figure 4           |  figure 9
+:-------------------------:|:-------------------------:
+![](display/display/TG17_all.png)  |  ![](display/sample.pca.initial.png)
 
 
 
