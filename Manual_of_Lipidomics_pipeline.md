@@ -560,8 +560,8 @@ Just pick the color name from colors3 or any color theme from the two tables bel
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 |color_numbers| 10 | 10 | 8 | 7 | 10 | 15 | 10 | 7| 15 | 15 | 7| 7| 12 | 12| 15| 12| 9 | 
 
-|color_theme|wesanderson|BottleRocket1 | BottleRocket2 | Rushmore1 | Royal1 | Royal2 | Zissou | Darjeeling1 | Darjeeling2 | FantasticFox1 |Moonrise1| Moonrise2 | Moonrise3 | Cavalcanti1 |GrandBudapest1 | GrandBudapest2 | IsleofDogs1 | IsleofDogs2 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|color_theme| wesanderson | BottleRocket1 | BottleRocket2 | Rushmore1 | Royal1 | Royal2 | Zissou | Darjeeling1 | Darjeeling2 | FantasticFox1 |Moonrise1| Moonrise2 | Moonrise3 | Cavalcanti1 |GrandBudapest1 | GrandBudapest2 | IsleofDogs1 | IsleofDogs2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 |7 | 5 | 5 | 4 | 5 | 5 | 5 | 5 | 4 | 5 | 4 | 4 | 5 | 5 | 4 | 4 | 6 | 5 |
 
 ``` 
