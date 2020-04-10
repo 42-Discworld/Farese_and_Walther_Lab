@@ -705,15 +705,13 @@ figure 12            |  figure 13
 
 figure 14            |  figure 15
 :-------------------------:|:-------------------------:
-![](display/class_median_dot.png)  |  ![](HET_KO_median_1_CerG1.png)
+![](display/class_median_dot.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
 figure 16            |  figure 17
 :-------------------------:|:-------------------------:
-![](display/PE.fc.png)  |  !  ![](display/LPC.fc.png)
+![](display/LPC.fc.png)  |  !  ![](display/molec_violin.png)
 
-  figure 18           
-:-------------------------:
-| ![](display/molec_violin.png)  | 
+
 
 
 
