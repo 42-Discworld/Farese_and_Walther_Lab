@@ -505,7 +505,7 @@ figure 1            |  figure 2
 
 |figure 4| 
 :-------------------------:
-|<img align="middle" src="display/TG17_all.png" width = "50%"/>|
+|<img  src="display/TG17_all.png" width = "50%"/>|
 
 
 
