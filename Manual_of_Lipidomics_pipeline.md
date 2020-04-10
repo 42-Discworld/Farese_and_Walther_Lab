@@ -508,10 +508,10 @@ figure 1            |  figure 2
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
 <p float="left">
-  <img src="/display/pairs.plot.1.initial.png" width="45%" />
-  <img src="/display/pairs.plot.2.initial.png" width="45%" /> 
-  <img src="/display/pairs.plot.3.initial.png" width="45%" /> 
-  <img src="/display/pairs.plot.4.initial.png" width="45%" /> 
+  <img src="/display/pairs.plot.1.initial.png" width="45%" alt = "figure 5"/>
+  <img src="/display/pairs.plot.2.initial.png" width="45%" alt = "figure 6"/> 
+  <img src="/display/pairs.plot.3.initial.png" width="45%" alt = "figure 7"/> 
+  <img src="/display/pairs.plot.4.initial.png" width="45%" alt = "figure 8"/> 
 </p>
 
 
