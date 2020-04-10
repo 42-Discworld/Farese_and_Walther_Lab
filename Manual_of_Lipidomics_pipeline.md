@@ -501,12 +501,12 @@ figure 1            |  figure 2
 
 figure 3            |  figure 4
 :-------------------------:|:-------------------------:
-![](display/all.retention.png)  |  ![](display/TG17_all.png)
+![](display/all.retention.png)  |  ![](display/TG17_all.png width = 45% height = 45%)
 
 
 figure 5            |  figure 6
 :-------------------------:|:-------------------------:
-![ahhaha](display/pairs.plot.1.initial.png)  |  ![kkkkk](display/pairs.plot.2.initial.png)
+![](display/pairs.plot.1.initial.png)  |  ![](display/pairs.plot.2.initial.png)
 
 
 figure 7            |  figure 8
