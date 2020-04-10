@@ -567,9 +567,10 @@ Just pick the color name from colors3 or any color theme from the two tables bel
 |color_theme| colors3 |
 |---|---|
 |color_numbers| 8 |
+
 ``` 
 
- OR you could pick color3 theme which has 8 colors. 
+ OR you could pick 'color3' theme which has 8 colors. 
 
 
 
