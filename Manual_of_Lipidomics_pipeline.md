@@ -503,9 +503,9 @@ figure 1            |  figure 2
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
- figure 4
-:-------------------------:
- <img src="display/TG17_all.png" width="40%"/>
+| figure 4|
+|:-------------------------:|
+| <img src="display/TG17_all.png" width="50%"/>|
 
 
 figure 5            |  figure 6
