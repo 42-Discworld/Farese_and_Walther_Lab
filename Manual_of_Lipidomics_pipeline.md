@@ -520,7 +520,7 @@ figure 7            |  figure 8
 
  |  figure 9|
 :-------------------------:
-| <img src="display/sample.pca.initial.png" width="50%" style="display: block; margin: auto;" />|
+|![](display/pairs.plot.3.initial.png)|
 
 
 
