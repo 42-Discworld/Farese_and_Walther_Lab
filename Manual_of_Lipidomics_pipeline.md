@@ -499,18 +499,28 @@ figure 1            |  figure 2
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
+figure 3            
+:-------------------------:|
+![](display/all.retention.png)  
 
-<img src="display/background.png" alt="figure1" width="45%" /><img align="middle" src="display/prop_summary.png" alt="figure2" width="45%"/>
+<img src="display/TG17_all.png" alt="figure 4" width="40%" />
 
-<img src="display/all.retention.png" alt="figure3" width="50%" height="50%" /><img src="display/TG17_all.png" alt="figure4" width="50%" height="50%" />
+
+
+figure 5            |  figure 6
+:-------------------------:|:-------------------------:
+![](display/pairs.plot.1.initial.png)  |  ![](display/pairs.plot.2.initial.png)
+
+
+figure 7            |  figure 8
+:-------------------------:|:-------------------------:
+![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
+
+<img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
-<p float="left">
-  <img src="/display/pairs.plot.1.initial.png" width="45%" />
-  <img src="/display/pairs.plot.2.initial.png" width="45%" /> 
-</p>
 
 
 
@@ -767,13 +777,13 @@ display:
 
 **(2) Volcano plots**
 
-  - Overview: Volcano plots will generate 4 formats of the same plot.
+  - Overview: Volcano plots will generate 5 formats of the same plot.
     The first plot will only distinguish significant lipid molecule. The
     second plot will classify significant lipid molecules into
     Glycerophospholipids, Neutral lipids, Sphingolipids, Sterols and
-    other lipids. The third plot is customized by the user, and it will
+    other lipids. The third is interactive volcano plot which won't be displayed in the manual book. The forth plot is customized by the user, and it will
     onldy display the lipid class user input from the lipid class list.
-    The fourth plot will only mark significant ether lipids if they
+    The last plot will only mark significant ether lipids if they
     exist. Data and plots will under subfolder Volc of data and plot.  
   - Utility: User will need to input times of contrast, group names for
     contrast, fold change threshold and customized lipid class(es).
