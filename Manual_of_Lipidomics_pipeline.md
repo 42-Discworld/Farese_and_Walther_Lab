@@ -703,11 +703,11 @@ figure 12: Individual lipid class (normalized by mean)            |  figure 13: 
 :-------------------------:|:-------------------------:
 ![](display/CerG1.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
-figure 14            |  figure 15
+figure 14: relative fold change dot plot    |  figure 15: relative fold change box plot
 :-------------------------:|:-------------------------:
-![](display/class_median_dot.png)  |  ![](display/HET_KO_median_1_CerG1.png)
+![](display/class_median_dot.png)  |  ![](display/class_median_box.png)
 
-figure 16            |  figure 17
+figure 16: relative fold change bar plot  |  figure 17: relative fold change violin plot
 :-------------------------:|:-------------------------:
 ![](display/LPC.fc.png)  |  !  ![](display/molec_violin.png)
 
