@@ -507,6 +507,13 @@ figure 1            |  figure 2
 <img src="display/pairs.plot.1.initial.png" width="40%" /><img src="display/pairs.plot.2.initial.png" width="40%" /><img src="display/pairs.plot.3.initial.png" width="40%" /><img src="display/pairs.plot.4.initial.png" width="40%" />
 <img align="middle" src="display/sample.pca.initial.png"  width="50%" height="50%"/>
 
+<p float="left">
+  <img src="/display/pairs.plot.1.initial.png" width="45%" />
+  <img src="/display/pairs.plot.2.initial.png" width="45%" /> 
+</p>
+
+
+
 #### **Set color theme**
 
   - Overview: User can choose a color theme from three color sets which
