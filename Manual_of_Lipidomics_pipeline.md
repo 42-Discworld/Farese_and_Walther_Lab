@@ -496,7 +496,7 @@ List of 8
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
 figure 1            |  figure 2
-:-------------------------:|:-------------------------:
+-------------------------:|:-------------------------
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
 
