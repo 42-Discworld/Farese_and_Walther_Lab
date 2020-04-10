@@ -695,13 +695,13 @@ value**
     by median. The third one is violin plot, and only static violin plot
     is showed in the manual book. figure 
 
-figure 10            |  figure 11
+figure 10: Lipid class summary            |  figure 11: Individual lipid class
 :-------------------------:|:-------------------------:
-![](display/total.class.png)  |  ![](display/CerG1.png)
+![](display/total.class.png)  |  ![](display/Cer.png)
 
-figure 12            |  figure 13
+figure 12: Individual lipid class (normalized by mean)            |  figure 13: Individual lipid class (normalized by median) 
 :-------------------------:|:-------------------------:
-![](display/Cer.png)  |  ![](display/HET_KO_median_1_CerG1.png)
+![](display/CerG1.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
 figure 14            |  figure 15
 :-------------------------:|:-------------------------:
