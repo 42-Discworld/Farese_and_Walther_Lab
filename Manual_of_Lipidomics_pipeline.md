@@ -518,7 +518,7 @@ figure 8            |  figure 9
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
- |  figure 9|
+ |  figure 10|
 :-------------------------:
 |<img  src="display/sample.pca.initial.png" width = "50%"/>|
 
@@ -590,7 +590,7 @@ Related data and plots will be under `Quantification` subfolders of
     standard deviation for each experiment group. Please note that, the
     data does include negative values if user selects background
     subtraction.
-  - Example display: figure 10
+  - Example display: figure 11
 
 
 **(2) Quantification of individual lipid classes (mean, sd)**
@@ -660,7 +660,7 @@ options(device = "RStudioGD")
 ###############################################################################
 ```
 
-  - Example display: figure 11
+  - Example display: figure 12
 
 
 **(3) Visualization of lipid class data, normalized by median**
@@ -674,7 +674,7 @@ options(device = "RStudioGD")
     will need to input one group name as control group for fold
     change analysis. 
 analysis.
-  - Example display: figure 12, figure 13
+  - Example display: figure 13, figure 14
 
 **(4) Visualization of lipid molecule data, normalized by mean/median
 value**
@@ -695,15 +695,15 @@ value**
   - Example display: Please note that only static violin plot
     is showed in the manual book, the interactive violin plots are under html files.
 
-figure 10: Lipid class summary|figure 11: Individual lipid class
+figure 11: Lipid class summary|figure 12: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/total.class.png)  |  ![](display/Cer.png)
 
-figure 12: relative fold change dot plot|figure 13: relative fold change box plot
+figure 13: relative fold change dot plot|figure 14: relative fold change box plot
 :-------------------------:|:-------------------------:
 ![](display/class_median_dot.png)  |  ![](display/class_median_box.png)
 
-figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lipid class (normalized by median) 
+figure 15: Individual lipid class (normalized by mean)|figure 16: Individual lipid class (normalized by median) 
 :-------------------------:|:-------------------------:
 ![](display/LPC.fc.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
@@ -735,11 +735,11 @@ figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lip
     fatty acids
 saturation.
 
-figure 18: Lipid class summary| figure 19: Individual lipid class
+figure 18: stack plot (mean value of each group)| figure 19: stack plot (median value of each group)
 :-------------------------:|:-------------------------:
 ![](display/meanBased.stackplots.png) | ![](display/medianBased.stackplots.png)
 
-figure 20: group abundance based on mean| figure 21: relative fold change analysis for each group
+figure 20: group mean value | figure 21: relative fold change analysis for each group (normalized by mean)
 :-------------------------:|:-------------------------:
 ![](display/meanBased.fattyAcids.png)  |  ![](display/meanBased.fc.png)
 
@@ -767,17 +767,17 @@ figure 20: group abundance based on mean| figure 21: relative fold change analys
     be excluded for analysis.
   - Example display: 
   
-figure 18: Lipid class summary | figure 19: Individual lipid class
+figure 23: fatty acids length in each sample | figure 24: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length.png)  |  ![](display/fa_length_percentage.png)
 
-figure 20: Lipid class summary | figure 21: Individual lipid class
+figure 25: fatty acids length in each group (stack plot) | figure 26: fatty acids length in each group
 :-------------------------:|:-------------------------:
-![](display/fa_length_group.png)  |  ![](display/fa_length_gr_percentage.png)
+![](display/fa_length_group.png)  |  ![](display/fa_length_gr.png)
 
-figure 22: Lipid class summary| figure 23: Individual lipid class
+figure 27: fatty acids length percentage in each group| figure 28: Fatty Acids composition (normalized by median/mean)
 :-------------------------:|:-------------------------:
-![](display/fa_length_gr.png)  |  ![](display/PE.fc.png)
+![](display/fa_length_gr_percentage.png)  |  ![](display/ChE.composition.fc.png)
 
 
 
@@ -792,8 +792,26 @@ figure 22: Lipid class summary| figure 23: Individual lipid class
 
   - Example
 display:
+figure 22: Lipid class summary| figure 23: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/ether.png)  |  ![](display/ether_percentage.png)
 
-<img src="display/ether.png" width="40%" /><img src="display/ether_percentage.png" width="40%" /><img src="display/ether_group.png" width="40%" /><img src="display/ether_group_percent.png" width="40%" /><img src="display/ether_abundance.png" width="40%" /><img src="display/ether_molec_abundance.png" width="40%" /><img src="display/normalized_ether_molec_abundance.png" width="40%" /><img src="display/pufa_ether.png" width="40%" /><img src="display/pufa_ether_percentage.png" width="40%" /><img src="display/pufa_ether_group.png" width="40%" />
+figure 22: Lipid class summary| figure 23: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/ether_group.png)  |  ![](display/ether_group_percent.png)
+
+figure 22: Lipid class summary| figure 23: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/ether_abundance.png)  |  ![](display/ether_molec_abundance.png)
+
+figure 22: Lipid class summary| figure 23: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/normalized_ether_molec_abundance.png)  |  ![](display/pufa_ether.png)
+
+figure 22: Lipid class summary| figure 23: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/pufa_ether_percentage.png)  |  ![](display/pufa_ether_group.png)
+
 
 #### **Impute Lipid Molecules for Differential Expression Analysis**
 
