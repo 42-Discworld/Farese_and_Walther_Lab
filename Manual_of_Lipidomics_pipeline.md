@@ -740,11 +740,11 @@ figure 18: Lipid class summary|figure 19: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/meanBased.stackplots.png)  |  ![](medianBased.stackplots.png)
 
-figure 20: Lipid class summary|figure 21: Individual lipid class
+figure 20: group abundance based on mean|figure 21: relative fold change analysis for each group
 :-------------------------:|:-------------------------:
 ![](display/meanBased.fattyAcids.png)  |  ![](meanBased.fc.png)
 
-| figure 22: violin plot (normalized by mean or median) |
+| figure 22: percentage plot |
 :-------------------------:
 |<img  src="display/percentage.png" width = "50%"/>|
 
