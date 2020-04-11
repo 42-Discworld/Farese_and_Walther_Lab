@@ -768,15 +768,15 @@ figure 20: group abundance based on mean| figure 21: relative fold change analys
     be excluded for analysis.
   - Example display: 
   
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 18: Lipid class summary | figure 19: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length.png)  |  ![](display/fa_length_percentage.png)
 
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 20: Lipid class summary | figure 21: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length_group.png)  |  ![](display/fa_length_gr_percentage.png)
 
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 22: Lipid class summary| figure 23: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length_gr.png)  |  ![](display/PE.fc.png)
 
