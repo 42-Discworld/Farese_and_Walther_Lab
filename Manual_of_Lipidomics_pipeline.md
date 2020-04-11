@@ -792,11 +792,12 @@ figure 27: fatty acids length percentage in each group| figure 28: Fatty Acids c
 
   - Example
 display:
-figure 22: Lipid class summary| figure 23: Individual lipid class
+
+figure 29: Ether abundance in each sample | figure 30: Ether percentage in each sample
 :-------------------------:|:-------------------------:
 ![](display/ether.png)  |  ![](display/ether_percentage.png)
 
-figure 22: Lipid class summary| figure 23: Individual lipid class
+figure 22: Ether abundance in each group | figure 23: Ether abundance percentage in each group
 :-------------------------:|:-------------------------:
 ![](display/ether_group.png)  |  ![](display/ether_group_percent.png)
 
