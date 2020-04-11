@@ -691,9 +691,8 @@ value**
     customized lipid class(es) violin plot (`molec_violin_all.html`).  
     Please note that the interactive plots will display in teh `Viewer`,
     click panel `Plots` to view other plots.  
-  - Example display: The first plot is normalized by mean, while second
-    by median. The third one is violin plot, and only static violin plot
-    is showed in the manual book. figure 
+  - Example display: Please note that only static violin plot
+    is showed in the manual book, the interactive violin plots are under html files.
 
 figure 10: Lipid class summary            |  figure 11: Individual lipid class
 :-------------------------:|:-------------------------:
