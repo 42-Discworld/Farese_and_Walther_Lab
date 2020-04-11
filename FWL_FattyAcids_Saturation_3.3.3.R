@@ -132,11 +132,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
          title ="mean based stackplot", fill = NULL,
          caption = "error bar is standard error") + 
-    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1, size = 8)))
-    # theme(
-    #   axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
-    #   axis.line = element_line(size = 0.2)
-    # )
+    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1)))
+
   print(p1)    
   ggsave(filename = paste0("meanBased.stackplots.", image_option), path="plot/Saturation/", device = image_option, width = 20, height = 20)
   ggsave(filename = "meanBased.stackplots.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
@@ -150,11 +147,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
          title ="median based stackplot", fill = NULL,
          caption = "error bar is standard error") +
-    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1, size = 8)))
-    # theme(
-    #   axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
-    #   axis.line = element_line(size = 0.2)
-    # )
+    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1)))
+ 
   print(p2)
   ggsave(filename = paste0("medianBased.stackplots.", image_option), path="plot/Saturation/", device = image_option, width = 20, height = 20)
   ggsave(filename = "medianBased.stackplots.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
@@ -169,12 +163,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
     labs(x = "Fatty Acids types", y = "Main Area value (AUC)", 
          title = "Mean based data", fill = NULL,
          caption = "error bar is standard error") +
-    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1, size = 8)))
+    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1)))
   
-    # theme(
-    #   axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
-    #   axis.line = element_line(size = 0.2)
-    # ) 
   print(p3)
   ggsave(filename = paste0("meanBased.fattyAcids.", image_option), path="plot/Saturation/", device=image_option, width = 20, height = 20)
   ggsave(filename = "meanBased.fattyAcids.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
@@ -187,11 +177,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
     labs(x = "Fatty Acids types", y = "fold change (normalized)", 
          title = "Fold Change plots", fill = NULL,
          caption = "error bar is standard error") +
-    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1, size = 8)))
-  # theme(
-    #   axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
-    #   axis.line = element_line(size = 0.2)
-    # )
+    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1)))
+
   print(p4)
   ggsave(filename = paste0("meanBased.fc.", image_option), path="plot/Saturation/", device=image_option, width = 20, height = 20)
   ggsave(filename = "meanBased.fc.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)
@@ -204,12 +191,8 @@ plot_fas <- function(dtFA_median, dtFA_long, dtFA, image_option){
     scale_y_continuous(labels = scales::percent_format(), expand = c(0, 0, 0, 0)) +
     labs(title = "mean based stackplot", fill = NULL,
          x ="Fatty Acids types", y = "Percentage") +
-    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1, size = 8)))
-  
-    # theme(
-    #   axis.text.x  = element_text(angle = 30, hjust = 1, size = 8),
-    #   axis.line = element_line(size = 0.2)
-    #)
+    set_theme(theme_params = list(axis.text.x = element_text(angle = 30, hjust = 1)))
+
   print(p5)
   ggsave(filename = paste0("percentage.", image_option), path="plot/Saturation/", device = image_option, width = 20, height = 20)
   ggsave(filename = "percentage.svg", path="plot/Saturation/", device = "svg", width = 20, height = 20)

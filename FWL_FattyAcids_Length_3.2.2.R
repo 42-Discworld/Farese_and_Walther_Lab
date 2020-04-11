@@ -120,7 +120,7 @@ p1 <- plot_all(data = length_long, c("SAMPLES", "value", "length_type")) +
   geom_bar(stat = "identity", position = "stack") + 
   facet_wrap(~Class, scales = "free") +
   scale_y_continuous(labels = label_scientific(digits = 2), expand = c(0, 0, 0.2, 0)) +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 
@@ -131,7 +131,7 @@ ggsave("plot/Length/fa_length.svg", device = "svg", width = 20, height = 20)
 p2 <- plot_all(data = length_long, length_pars1) +
   geom_bar(stat = "identity", position = "fill") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
@@ -155,7 +155,7 @@ p3 <- plot_all(data = length_groups, length_pars2) +
   scale_y_continuous(labels = label_scientific(digits = 2), 
                      expand = c(0.01, 0, 0.2, 0)) +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
   labs(x = "Experiment groups", y = "AUC (mean value)", 
        title = "Fatty acids length of lipid class for each group", fill = "") 
 
@@ -166,7 +166,7 @@ ggsave("plot/Length/fa_length_group.svg", device = "svg", width = 20, height = 2
 p4 <- plot_all(data = length_groups, length_pars2) +
   geom_bar(stat = "identity", position = "fill") + 
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
   labs(x = "Experiment groups", y = "Percentage", 
        title = "Fatty acids length of lipid class for each group", fill = "") +
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format())
@@ -225,7 +225,7 @@ p6 <- plot_all(length_info_long, length_pars4, se = TRUE)  +
   labs(x = "Experiment groups", y = "AUC (mean value)", 
        title = titles, fill = "",
        caption = captions) +
-  set_theme(theme_params  =list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8)))
+  set_theme(theme_params  =list(axis.text.x  = element_text(angle = 30, hjust = 1)))
 print(p6)
 ggsave(paste0("plot/Length/fa_length_normalized.", image_option), device = image_option, width = 20, height = 20)
 ggsave("plot/Length/fa_length_normalized.svg", device = "svg", width = 20, height = 20)
