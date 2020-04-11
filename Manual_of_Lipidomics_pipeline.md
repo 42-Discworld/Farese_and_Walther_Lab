@@ -504,18 +504,17 @@ figure 1: background plot       |  figure 2: lipid class summary
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
-|figure 4: standard TG(17:1/17:1/17:1) in all samples| 
-:-------------------------:
-|<img  src="display/TG17_all.png" width = "50%"/>|
+figure 4: standard TG(17:1/17:1/17:1) in all samples| figure 5: aggregated AUC in each sample
+:-------------------------:|:-------------------------:
+![](display/TG17_all.png)  |  ![](display/raw_all_samples.png)
 
 
-
-figure 5:   |  figure 6
+figure 6:   |  figure 7
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.1.initial.png)  |  ![](display/pairs.plot.2.initial.png)
 
 
-figure 7            |  figure 8
+figure 8            |  figure 9
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.3.initial.png)  |  ![](display/pairs.plot.4.initial.png)
 
