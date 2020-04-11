@@ -157,8 +157,7 @@ pd <- plot_all(class_long, paras2) +
   stat_summary(fun.y = median, geom = "point",  size = 5, color = "red", shape = 95, alpha = 0.8, stroke = 3) +
   facet_wrap(~Class, scales = "free") +
   #scale_fill_manual(values = wes_palette("GrandBudapest2")) +
-  theme(axis.text.x =  element_text(angle=45, hjust=1, size =6),
-        axis.line = element_line(size = 0.2)) +
+  set_theme(theme_params = list(axis.text.x =  element_text(angle=45, hjust=1, size =6))) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
   expand_limits(y = 0) +
   geom_text_repel(aes(label = SAMPLES), size = 2) + 
@@ -177,8 +176,7 @@ pb <- plot_all(class_long, paras2) +
        y = "Relative Foldchange", fill = "Experiment Groups") +
   scale_y_continuous(expand = c(0, 0, 0.1, 0)) +
   expand_limits(y = 0) +
-  theme(axis.text.x =  element_text(angle=45, hjust=1, size =6),
-        axis.line = element_line(size = 0.2)) 
+  set_theme(theme_params = list(axis.text.x =  element_text(angle=45, hjust=1, size =6)))
 print(pb)
 ggsave(filename = paste0("class_median_box.", image_option), path="plot/Quantification", device = image_option, width = 20, height = 20)
 ggsave(filename = "class_median_box.png", path="plot/Quantification", device = "png", width = 20, height = 20)
@@ -294,9 +292,7 @@ pv <- ggplot(molecules, aes(GROUPS, VALs, label=Molecule)) +
                size=5, color = "red", shape = 95, alpha = 0.5) +
   facet_wrap(~Class, scales = "free") +
   theme_bw() +
-  set_theme() +
-  theme(axis.text.x =  element_text(angle=45, hjust=1, size = 6),
-        axis.line = element_line(size = 0.3, colour = "black")) +
+  set_theme(theme_params = list(axis.text.x =  element_text(angle=45, hjust=1, size = 6))) +
   expand_limits(y = 0) +
   scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
   labs(title = paste0("Individual Lipidmolecules (normalized by ", method, ")"),

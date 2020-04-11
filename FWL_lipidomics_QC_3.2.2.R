@@ -92,7 +92,7 @@ rt_plot <- plot_rt_allsamples(retention_data, pars)
 print(rt_plot)
 name <- paste0("all_retention.", image_option)
 ggsave(filename = name, path = 'plot/QC', device = image_option, 
-       width = 20, height = 20, dpi = 150, units = "in")
+       width = 10, height = 8, dpi = 150, units = "in")
 
 
 ##########################################################################################
