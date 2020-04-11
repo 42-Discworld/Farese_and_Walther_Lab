@@ -331,6 +331,7 @@ p10 <- plot_all(ether2, c("GROUPS", "value", "type")) +
   facet_wrap(~Class, scales = "free") +
   set_theme() +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   labs(x = "Experiment Groups", y = "value", fill = "",
        title = "PUFA (mean) in ether lipids for each group in each lipid class", color = "", caption = "This visualization is only for ether lipids here") 
 print(p10)
