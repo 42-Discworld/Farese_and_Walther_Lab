@@ -793,23 +793,23 @@ figure 27: fatty acids length percentage in each group| figure 28: Fatty Acids c
   - Example
 display:
 
-figure 29: Ether abundance in each sample | figure 30: Ether percentage in each sample
+figure 29: Relative ether abundance in each sample | figure 30: Relative ether percentage in each sample
 :-------------------------:|:-------------------------:
 ![](display/ether.png)  |  ![](display/ether_percentage.png)
 
-figure 22: Ether abundance in each group | figure 23: Ether abundance percentage in each group
+figure 31: Relative ether abundance in each group | figure 32: Relative ether abundance percentage in each group
 :-------------------------:|:-------------------------:
 ![](display/ether_group.png)  |  ![](display/ether_group_percent.png)
 
-figure 22: Lipid class summary| figure 23: Individual lipid class
+figure 33: Lipid class ether abundance | figure 34: Inidividual lipid class of ether abundance 
 :-------------------------:|:-------------------------:
 ![](display/ether_abundance.png)  |  ![](display/ether_molec_abundance.png)
 
-figure 22: Lipid class summary| figure 23: Individual lipid class
+figure 35: Individule lipid class (normalized by mean)| figure 36: PUFA in ether lipid for each sample
 :-------------------------:|:-------------------------:
 ![](display/normalized_ether_molec_abundance.png)  |  ![](display/pufa_ether.png)
 
-figure 22: Lipid class summary| figure 23: Individual lipid class
+figure 37: PUFA percentage in ether lipid for each sample| figure 38: Relative PUFA abundance in ether lipid
 :-------------------------:|:-------------------------:
 ![](display/pufa_ether_percentage.png)  |  ![](display/pufa_ether_group.png)
 
@@ -827,7 +827,7 @@ figure 22: Lipid class summary| figure 23: Individual lipid class
 
 | figure 17: random sample distribution |
 :-------------------------:
-|<img  src="display/sample_distr.png" width = "50%"/>|
+|<img  src="display/sample_distr.png" width = "45%"/>|
 **(2) Volcano plots**
 
   - Overview: Volcano plots will generate 5 formats of the same plot.
@@ -874,5 +874,11 @@ Please note that the input is caps sensitive!
 
 Input the name of lipid class(es), e.g. Cer TG: TG
 ```
+figure 39: significant vs non-significant| figure 40: lipid classification
+:-------------------------:|:-------------------------:
+![](display/LINOLEATEvs.OLEATE.png)  |  ![](display/LINOLEATEvs.OLEATE.color.png)
 
-<img src="display/LINOLEATEvs.OLEATE.png" width="40%" /><img src="display/LINOLEATEvs.OLEATE.color.png" width="40%" /><img src="display/LINOLEATEvs.OLEATE.customized.png" width="40%" /><img src="display/LINOLEATEvs.OLEATE.ether.png" width="40%" />
+figure 41: customized lipid class | figure 42: Significant ether lipid 
+:-------------------------:|:-------------------------:
+![](display/LINOLEATEvs.OLEATE.customized.png)  |  ![](display/LINOLEATEvs.OLEATE.ether.png)
+
