@@ -495,21 +495,21 @@ List of 8
   ..$ : chr [1:2] "sample.names" "col.index"
   ..$ : chr [1:4] "Control" "KO" "OE1" "OE2"
 ```
-figure 1            |  figure 2
+figure 1: background plot       |  figure 2: lipid class summary
 :-------------------------:|:-------------------------:
 ![](display/background.png)  |  ![](display/prop_summary.png)
 
-|figure 3| 
+|figure 3: retention time analysis| 
 :-------------------------:
 |<img align="middle" src="display/all_retention.png"/>|
 
-|figure 4| 
+|figure 4: standard TG(17:1/17:1/17:1) in all samples| 
 :-------------------------:
 |<img  src="display/TG17_all.png" width = "50%"/>|
 
 
 
-figure 5            |  figure 6
+figure 5:   |  figure 6
 :-------------------------:|:-------------------------:
 ![](display/pairs.plot.1.initial.png)  |  ![](display/pairs.plot.2.initial.png)
 
@@ -695,21 +695,22 @@ value**
     by median. The third one is violin plot, and only static violin plot
     is showed in the manual book. figure 
 
-figure 10            |  figure 11
+figure 10: Lipid class summary            |  figure 11: Individual lipid class
 :-------------------------:|:-------------------------:
-![](display/total.class.png)  |  ![](display/CerG1.png)
+![](display/total.class.png)  |  ![](display/Cer.png)
 
-figure 12            |  figure 13
+figure 12: Individual lipid class (normalized by mean)            |  figure 13: Individual lipid class (normalized by median) 
 :-------------------------:|:-------------------------:
-![](display/Cer.png)  |  ![](display/class_median_box.png)
+![](display/CerG1.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
-figure 14            |  figure 15
+figure 14: relative fold change dot plot    |  figure 15: relative fold change box plot
 :-------------------------:|:-------------------------:
-![](display/class_median_dot.png)  |  ![](display/LPC.fc.png)
+![](display/class_median_dot.png)  |  ![](display/class_median_box.png)
 
-figure 16            |  figure 17
+figure 16: relative fold change bar plot  |  figure 17: relative fold change violin plot
 :-------------------------:|:-------------------------:
-![](display/PE.fc.png)  |  ![](display/molec_violin.png)
+![](display/LPC.fc.png)  | ![](display/molec_violin.png)
+
 
 
 
