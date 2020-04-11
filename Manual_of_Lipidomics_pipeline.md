@@ -736,11 +736,11 @@ figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lip
     fatty acids
 saturation.
 
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 18: Lipid class summary| figure 19: Individual lipid class
 :-------------------------:|:-------------------------:
-![](display/meanBased.stackplots.png)  |  ![](medianBased.stackplots.png)
+![](display/meanBased.stackplots.png) | ![](medianBased.stackplots.png)
 
-figure 20: group abundance based on mean|figure 21: relative fold change analysis for each group
+figure 20: group abundance based on mean| figure 21: relative fold change analysis for each group
 :-------------------------:|:-------------------------:
 ![](display/meanBased.fattyAcids.png)  |  ![](meanBased.fc.png)
 
@@ -768,15 +768,15 @@ figure 20: group abundance based on mean|figure 21: relative fold change analysi
     be excluded for analysis.
   - Example display: 
   
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 18: Lipid class summary | figure 19: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length.png)  |  ![](display/fa_length_percentage.png)
 
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 20: Lipid class summary | figure 21: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length_group.png)  |  ![](display/fa_length_gr_percentage.png)
 
-figure 18: Lipid class summary|figure 19: Individual lipid class
+figure 22: Lipid class summary| figure 23: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/fa_length_gr.png)  |  ![](display/PE.fc.png)
 
