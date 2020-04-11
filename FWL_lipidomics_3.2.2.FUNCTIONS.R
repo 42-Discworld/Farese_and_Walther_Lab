@@ -1828,8 +1828,8 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     geom_vline(xintercept = c(-1, 1),  colour = "black", size = 1.5, linetype = "dotted") +
     geom_hline(yintercept= -log10(0.05), linetype="dotted", colour="black", size=1.5) +
     geom_point(alpha = 0.4, aes(size = AveExpr)) +
-    geom_point(data = significant_points, alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
-                                                            colour=lipclass, text = text, size = AveExpr)) +
+    suppressWarnings(geom_point(data = significant_points, alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
+                                                            colour=lipclass, text = text, size = AveExpr))) +
     theme_bw() +
     set_theme() +
     theme(
@@ -1856,6 +1856,7 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
   name <- paste0(option[1], "_vs_", option[2], "_volc.html")
   saveWidget(as_widget(p), file.path(dir_path, name))
   
+
   
   lipid_class <- rownames(input_lipids) %>% 
     str_remove_all(., "\\(.*\\)") %>%

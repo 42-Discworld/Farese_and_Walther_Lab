@@ -60,8 +60,7 @@ params1 <- c("SAMPLES", "value", "type")
 p1 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity") +
   facet_wrap(~Class, scales = "free") +
-  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
-        axis.line = element_line(size = 0.2)) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p1)
@@ -72,7 +71,7 @@ ggsave("plot/Ether/ether.svg", device = "svg", width = 20, height = 20)
 p2 <- plot_all(data = ether_percent, params1) +
   geom_bar(stat = "identity", position = "fill") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p2)
@@ -86,7 +85,7 @@ params2 <- c("GROUPS", "value", "type")
 p3 <- plot_all(data = ether_percent_group, params2) +
   geom_bar(stat = "identity") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   scale_y_continuous(expand = c(0, 0, 0.2, 0), labels = scientific_format()) +
   labs(x = "experiment Groups", y = "value", title = "ether in lipid class for each group", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p3)
@@ -97,7 +96,7 @@ ggsave("plot/Ether/ether_group.svg", device = "svg", width = 20, height = 20)
 p4 <- plot_all(data = ether_percent_group, params2) +
   geom_bar(stat = "identity", position = "fill") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   labs(x = "experiment samples", y = "value", title = "ether in lipid class for each group", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p4)
@@ -115,6 +114,7 @@ p5 <- plot_all(data, c("Class", "value", "GROUPS", "sd"), se=FALSE) +
                 stat="identity", width= 0.1, size= 0.2) +
   labs(title = "Total lipid classes", x = "Experiment Groups", y= "AUC (Area under curve)",
        fill = "Experiment Groups") +
+  set_theme(theme_params = list(axis.text.y = element_text(angle = 45, hjust = 1))) +
   coord_flip() + 
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p5)
@@ -140,7 +140,7 @@ p6 <- plot_all(each_class, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
        fill = "Experiment Groups") +
   facet_wrap(~Class, scales="free") +
   coord_flip() +
- # scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
+  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1))) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p6)
 ggsave(paste0("plot/Ether/ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -168,8 +168,8 @@ p7 <- plot_all(nm_ether, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
        fill = "Experiment Groups") +
   facet_wrap(~Class, scales="free") +
   scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
-  theme(axis.line = element_line(size = .2)) + 
   coord_flip() + 
+  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1))) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p7)
 ggsave(paste0("plot/Ether/normalized_ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -286,7 +286,7 @@ params1 <- c("SAMPLES", "value", "type")
 p8 <- plot_all(data = ether1, params1) +
   geom_bar(stat = "identity") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45,  hjust = 1))) +
   scale_y_continuous(labels = scientific_format(), expand = c(0, 0, 0.2, 0)) +
   labs(x = "experiment samples", y = "value", title = "PUFA in ehter lipids for each sample", fill = "", caption = "This visualization is only for ether lipids here") 
 print(p8)
@@ -294,12 +294,11 @@ ggsave(paste0("plot/Ether/pufa_ether.", image_option), device = image_option, wi
 ggsave("plot/Ether/pufa_ether.svg", device = "svg", width = 20, height = 20)
 
 filtered_ether <- ether1 %>% mutate(value = ifelse(value < 0, NA, value))
-p9 <- ggplot(data = filtered_ether, aes(x=SAMPLES, y = value, fill = type)) +
+p9 <- plot_all(filtered_ether, params1) +
   geom_bar(stat = "identity", position = "fill") +
   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
   facet_wrap(~Class, scales = "free") +
-  theme_bw() +
-  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, size = 8, hjust = 1))) +
+  set_theme(theme_params = list(axis.text.x = element_text(angle = 45, hjust = 1))) +
   labs(x = "experiment samples", y = "value", title = "PUFA in ehter lipids for each sample", color = "", caption = "This visualization is only for ether lipids here") 
 print(p9)
 ggsave(paste0("plot/Ether/pufa_ether_percentage.", image_option), device = image_option, width = 20, height = 20)

@@ -128,8 +128,6 @@ color_option <- readline("Please type the color theme name, e.g. npg: ")
 
 color_choice <- set_color(color_option, colors1, colors2, colors3)
 
-
-
 # visualize AUC of each sample in different lipid classes.
 all_samples <- filtered_lipidomics %>%
   as.data.frame() %>%
@@ -276,5 +274,6 @@ fit <- lmFit(processed_lipids, design)
 # plot volcano graph
 VolPlot(ncomparisons, fit, processed_lipids)
 
+message("The pipeline for experiment reference is done here!")
 
 
