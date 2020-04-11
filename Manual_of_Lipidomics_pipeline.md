@@ -502,7 +502,7 @@ figure 1: background plot       |  figure 2: lipid class summary
 
 |figure 3: retention time analysis| 
 :-------------------------:
-|<img align="middle" src="display/all_retention.png"/>|
+|<img align="middle" src="display/all_retention.png" width = "85%"/>|
 
 figure 4: standard TG(17:1/17:1/17:1) in all samples| figure 5: aggregated AUC in each sample
 :-------------------------:|:-------------------------:
