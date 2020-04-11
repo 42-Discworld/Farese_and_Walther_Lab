@@ -709,9 +709,8 @@ figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lip
 ![](display/LPC.fc.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
 | figure 17: violin plot (normalized by mean or median) |
-:-------------------------:|:-------------------------:
- | ![](display/molec_violin.png) |
-
+:-------------------------:
+|<img  src="display/molec_violin.png" width = "50%"/>|
 
 
 
