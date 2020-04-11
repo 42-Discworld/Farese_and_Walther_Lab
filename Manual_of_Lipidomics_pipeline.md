@@ -359,6 +359,7 @@ The odd chain information is stored in odd_chains.csv.
         files `neg.percent.csv`, `checkInvalid.csv` or `invalid.csv`,
         `imputeNA.csv`.  
       - type 1 or 2
+      - small trick: if you typed group information wrong, just continue typing or hit enter, pipeline will ask user to retype or not at the end.
   - Code display: The variable `label` in the code will be the suffix in
     the generated plot names. It can be modified. Sample information for
     subsequent analyses may be edited if user types Y in command
@@ -532,6 +533,7 @@ figure 7            |  figure 8
     themes, `wesanderson` contains 18 color themes, and `colors3`
     contains 1 color theme. Plese note that the color theme is case
     sensitive.
+  - small trick: if typed wrong color theme, e.g JCO, pipeline will ask user to retype.
   - Example display:
 
 <!-- end list -->
@@ -659,7 +661,7 @@ options(device = "RStudioGD")
 ###############################################################################
 ```
 
-  - Example display: figure 11, figure 12
+  - Example display: figure 11
 
 
 **(3) Visualization of lipid class data, normalized by median**
@@ -670,17 +672,17 @@ options(device = "RStudioGD")
     and then median for each group is displayed as dot plot and box
     plot. If the median value of lipid in control group is 0 or
     negative, the molecule will be deleted for foldchange analysis. User
-    will need to input the control group name as comparison for fold
-    change
+    will need to input one group name as control group for fold
+    change analysis. 
 analysis.
-  - Example display: figure 13, figure 14
+  - Example display: figure 12, figure 13
 
 **(4) Visualization of lipid molecule data, normalized by mean/median
 value**
 
   - Overview: Samples of lipid molecules are normalized by mean or
     median value. Corresponding mean or median value will be visualized
-    by bar plots. This visualization also activates `EachClassPlot`
+    by bar plots and violin plots. This visualization also activates `EachClassPlot`
     function; thus the plots are under classes, and data are stored as
     `molecules_group_statics.cs, raw_molec.csv, normalized_molec.csv,
     normalized_molec_mean( or normalized_molec_median)` under the
@@ -691,26 +693,24 @@ value**
     customized lipid class(es) violin plot (`molec_violin_all.html`).  
     Please note that the interactive plots will display in teh `Viewer`,
     click panel `Plots` to view other plots.  
-  - Example display: The first plot is normalized by mean, while second
-    by median. The third one is violin plot, and only static violin plot
-    is showed in the manual book. figure 
+  - Example display: Please note that only static violin plot
+    is showed in the manual book, the interactive violin plots are under html files.
 
-figure 10: Lipid class summary            |  figure 11: Individual lipid class
+figure 10: Lipid class summary|figure 11: Individual lipid class
 :-------------------------:|:-------------------------:
 ![](display/total.class.png)  |  ![](display/Cer.png)
 
-figure 12: Individual lipid class (normalized by mean)            |  figure 13: Individual lipid class (normalized by median) 
-:-------------------------:|:-------------------------:
-![](display/CerG1.png)  |  ![](display/HET_KO_median_1_CerG1.png)
-
-figure 14: relative fold change dot plot    |  figure 15: relative fold change box plot
+figure 12: relative fold change dot plot|figure 13: relative fold change box plot
 :-------------------------:|:-------------------------:
 ![](display/class_median_dot.png)  |  ![](display/class_median_box.png)
 
-figure 16: relative fold change bar plot  |  figure 17: relative fold change violin plot
+figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lipid class (normalized by median) 
 :-------------------------:|:-------------------------:
-![](display/LPC.fc.png)  | ![](display/molec_violin.png)
+![](display/LPC.fc.png)  |  ![](display/HET_KO_median_1_CerG1.png)
 
+| figure 17: violin plot (normalized by mean or median) |
+:-------------------------:
+|<img  src="display/molec_violin.png" width = "50%"/>|
 
 
 
