@@ -736,7 +736,18 @@ figure 14: Individual lipid class (normalized by mean)|figure 15: Individual lip
     fatty acids
 saturation.
 
-<img src="display/meanBased.stackplots.png" width="45%" /><img src="display/medianBased.stackplots.png" width="45%" /><img src="display/meanBased.fattyAcids.png" width="45%" /><img src="display/meanBased.fc.png" width="45%" /><img src="display/percentage.png" width="45%" />
+figure 18: Lipid class summary|figure 19: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/meanBased.stackplots.png)  |  ![](medianBased.stackplots.png)
+
+figure 20: group abundance based on mean|figure 21: relative fold change analysis for each group
+:-------------------------:|:-------------------------:
+![](display/meanBased.fattyAcids.png)  |  ![](meanBased.fc.png)
+
+| figure 22: percentage plot |
+:-------------------------:
+|<img  src="display/percentage.png" width = "50%"/>|
+
 
 #### **Fatty Acids Length Analysis**
 
@@ -751,22 +762,26 @@ saturation.
     user, meaning that the user can choose which group should be used as
     the control group and whether the mean or median should be used for
     normalization. Additionally, many plots will display fold change
-    analysis for individuale chains (file name will end with fc.XXX).
-    The user will need to choose the control group and normalization
-    value as the mean or median or well. Please note that negative
-    values are transformed into NA after background subtraction and will
+    analysis for fatty acids compositions.(file name will end with fc.XXX).
+    The user will need to choose one group as control for normalization
+    by mean or median. Please note that negative values are transformed into NA after background subtraction and will
     be excluded for analysis.
-  - Example display: The first plot displays the different fatty acids
-    length abundance in each sample. The second plot displays the
-    percentages of different lengths in each sample. The third stack
-    plot displays different length abundance in each group. The fourth
-    plot displays the percentage of different length in each group. The
-    fifth plot displays the different length abundance in each group.
-    The last plot shows all the chains fold change in PE lipid class as
-    an
-example.
+  - Example display: 
+  
+figure 18: Lipid class summary|figure 19: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/fa_length.png)  |  ![](display/fa_length_percentage.png)
 
-<img src="display/fa_length.png" width="45%" /><img src="display/fa_length_percentage.png" width="45%" /><img src="display/fa_length_group.png" width="45%" /><img src="display/fa_length_gr_percentage.png" width="45%" /><img src="display/fa_length_gr.png" width="45%" /><img src="display/PE.fc.png" width="45%" />
+figure 18: Lipid class summary|figure 19: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/fa_length_group.png)  |  ![](display/fa_length_gr_percentage.png)
+
+figure 18: Lipid class summary|figure 19: Individual lipid class
+:-------------------------:|:-------------------------:
+![](display/fa_length_gr.png)  |  ![](display/PE.fc.png)
+
+
+
 
 #### **Ether lipid analysis**
 
@@ -792,8 +807,9 @@ display:
     Plese note that, the plot CAN NOT be used for testing normality.
   - Example display:
 
-<img src="display/sample_distr.png" width="40%" />
-
+| figure 17: random sample distribution |
+:-------------------------:
+|<img  src="display/sample_distr.png" width = "50%"/>|
 **(2) Volcano plots**
 
   - Overview: Volcano plots will generate 5 formats of the same plot.
