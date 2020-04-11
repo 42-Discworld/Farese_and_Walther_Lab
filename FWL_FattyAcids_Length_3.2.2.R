@@ -119,8 +119,8 @@ length_pars1 <- c("SAMPLES", "value", "length_type")
 p1 <- plot_all(data = length_long, c("SAMPLES", "value", "length_type")) +
   geom_bar(stat = "identity", position = "stack") + 
   facet_wrap(~Class, scales = "free") +
-  scale_y_continuous(labels = label_scientific(digits = 2), expand = c(0, 0, 0.2, 0)) +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
+ scale_y_continuous(labels = label_scientific(digits = 2), expand = c(0, 0, 0.2, 0)) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 
@@ -131,8 +131,8 @@ ggsave("plot/Length/fa_length.svg", device = "svg", width = 20, height = 20)
 p2 <- plot_all(data = length_long, length_pars1) +
   geom_bar(stat = "identity", position = "fill") +
   facet_wrap(~Class, scales = "free") +
-  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1))) +
-  scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
+  set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8))) +
+  suppressMessages(scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format())) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 print(p2)

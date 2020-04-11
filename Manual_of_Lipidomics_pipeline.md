@@ -502,7 +502,7 @@ figure 1: background plot       |  figure 2: lipid class summary
 
 |figure 3: retention time analysis| 
 :-------------------------:
-|<img align="middle" src="display/all_retention.png"/>|
+|<img align="middle" src="display/all_retention.png" width = "85%"/>|
 
 figure 4: standard TG(17:1/17:1/17:1) in all samples| figure 5: aggregated AUC in each sample
 :-------------------------:|:-------------------------:
@@ -876,9 +876,9 @@ Input the name of lipid class(es), e.g. Cer TG: TG
 ```
 figure 39: significant vs non-significant| figure 40: lipid classification
 :-------------------------:|:-------------------------:
-![](display/LINOLEATEvs.OLEATE.png)  |  ![](display/LINOLEATEvs.OLEATE.color.png)
+![](display/G3vs.G4.png)  |  ![](display/G3vs.G4.color.png)
 
 figure 41: customized lipid class | figure 42: Significant ether lipid 
 :-------------------------:|:-------------------------:
-![](display/LINOLEATEvs.OLEATE.customized.png)  |  ![](display/LINOLEATEvs.OLEATE.ether.png)
+![](display/G3vs.G4.customized.png)  |  ![](display/G3vs.G4.ether.png)
 

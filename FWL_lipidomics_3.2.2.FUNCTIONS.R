@@ -1344,7 +1344,7 @@ detect_invalid <- function(data, group_information){
   # transform all negative values into NA and format percentage value
   dt3 <- data %>%
     rowwise()%>%
-    mutate_at(vars(all_of(samples)), list(~ifelse(. < 0, NA, .))) %>%
+    mutate_at(vars(all_of(sample_list)), list(~ifelse(. < 0, NA, .))) %>%
     mutate_at(vars(contains("percent")), list(~scales::percent(.)))
   # get information for all values into NA in a group
   dt4 <- data %>% select(-all_of(sample_list)) %>% cbind(., dt1) %>% select(colnames(data))
