@@ -876,9 +876,9 @@ Input the name of lipid class(es), e.g. Cer TG: TG
 ```
 figure 39: significant vs non-significant| figure 40: lipid classification
 :-------------------------:|:-------------------------:
-![](display/G3VS.G4.png)  |  ![](display/G3VS.G4.color.png)
+![](display/G3vs.G4.png)  |  ![](display/G3vs.G4.color.png)
 
 figure 41: customized lipid class | figure 42: Significant ether lipid 
 :-------------------------:|:-------------------------:
-![](display/G3VS.G4.customized.png)  |  ![](display/G3VS.G4.ether.png)
+![](display/G3vs.G4.customized.png)  |  ![](display/G3vs.G4.ether.png)
 
