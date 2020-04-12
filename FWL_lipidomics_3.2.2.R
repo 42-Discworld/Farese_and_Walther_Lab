@@ -98,10 +98,6 @@ filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, backg
 ###########################################################################################
 # Set color theme for plots
 ###########################################################################################
-message("\nPlease pick a color from ggsci theme link: 
-        \nhttps://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
-        \nOR
-        \nhttps://github.com/karthik/wesanderson\n\n")
 colors1 <- c("npg", "aaas", "nejm", "jama", "jco", "ucscgb", "d3 ", 
              "locuszoom", "igv", "uchicago", "startrek", "tron", 
              "futurama", "rickandmonty", "simpsons", "gsea", "lancet") 
@@ -117,7 +113,10 @@ dt1 <- dt1 %>% select(length(colors1)+1, 1:length(colors1))
 dt2 <- dt2 %>% select(length(colors2)+1, 1:length(colors2))
 colnames(dt1) <- colnames(dt2) <- NULL
 colors3 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
+message("\nPlease pick a color from ggsci theme link: 
+        \nhttps://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
+        \nOR
+        \nhttps://github.com/karthik/wesanderson\n\n")
 message("\nPlease pick a color for you plots. 
 \nNotice that the color numbers can't exceed your experiment groups!!!!!
         \nJust pick the color name from the two tables below.

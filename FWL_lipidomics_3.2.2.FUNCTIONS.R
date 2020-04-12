@@ -1290,7 +1290,7 @@ subtract_not <- function(data, sample_list, option, group){
     subtracted_data <- subtract_background(data, sample_list, "MainArea[c]")
     write_csv(subtracted_data, "data/subtracted_lipids.csv")
     filtered_lipidomics_copy <- data   ######## filtered_lipidomics_copy will store the raw filtered data (filtered_lipidomics)
-    data3<- subtracted_data   ######### if doing background subtraction, the filtered lipidomics data will be replaced by subtracted data
+    data3 <- subtracted_data   ######### if doing background subtraction, the filtered lipidomics data will be replaced by subtracted data
     # detect potential invalid lipid molecules (empty or negative value in the samples)
     invalid_lipids <- data3 %>% filter_at(sample_list, any_vars(. <= 0)) 
     # add SFAE and UNSAFE flag for indicating potential invalid lipid molecules
@@ -1765,7 +1765,7 @@ fit$design)", sep = '"')
   print(volc1)
   ggsave(filename = paste0(option[1], "vs.", option[2], ".", image_option), path = 'plot/Volc/', 
          device = image_option, width = 20, height = 20)
-  name3 <- paste(option[1], ".vs.", option[2], ".svg", sep = "")
+  name3 <- paste(option[1], "vs.", option[2], ".svg", sep = "")
   ggsave(filename = name3, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   # build mutated data frame
@@ -1813,7 +1813,7 @@ fit$design)", sep = '"')
   #plot_name <- readline("Please input the volcano plot name: ")
   ggsave(filename = paste0(option[1], "vs.", option[2], ".color.", image_option), path = 'plot/Volc/', 
          device = image_option, width = 20, height = 20) #  width=15, height=15, dpi=300
-  name4<- paste(option[1], ".vs.", option[2], ".color.svg", sep = "")
+  name4<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
   ggsave(filename = name4, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   
@@ -1891,7 +1891,7 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
   print(volc3)
   ggsave(filename = paste0(option[1], "vs.", option[2], ".customized.", image_option), 
          path = 'plot/Volc/', device = image_option, width = 20, height = 20)
-  name5 <- paste(option[1], ".vs.", option[2], ".customized.svg", sep = "")
+  name5 <- paste(option[1], "vs.", option[2], ".customized.svg", sep = "")
   ggsave(filename = name5, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
   ether <- input_lipids 
@@ -1934,7 +1934,7 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
   print(volc4)
   ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volc/', 
          device = image_option, width = 20, height = 20)
-  name6 <- paste(option[1], ".vs.", option[2], ".ether.svg", sep = "")
+  name6 <- paste(option[1], "vs.", option[2], ".ether.svg", sep = "")
   ggsave(filename = name6, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
 }

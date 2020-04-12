@@ -140,7 +140,7 @@ p6 <- plot_all(each_class, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
        fill = "Experiment Groups") +
   facet_wrap(~Class, scales="free") +
   coord_flip() +
-  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1))) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p6)
 ggsave(paste0("plot/Ether/ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
@@ -169,7 +169,7 @@ p7 <- plot_all(nm_ether, c("LipidMolec", "mean", "Groups", "sd"), se=FALSE) +
   facet_wrap(~Class, scales="free") +
   scale_y_continuous(expand = c(0, 0, 0.2, 0)) +
   coord_flip() + 
-  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1, size = 8))) +
+  set_theme(theme_params = list(axis.text.y = element_text(angle = 30, hjust = 1))) +
   guides(fill = guide_legend(reverse = TRUE)) 
 print(p7)
 ggsave(paste0("plot/Ether/normalized_ether_molec_abundance.", image_option), device = image_option, width = 20, height = 20)  
