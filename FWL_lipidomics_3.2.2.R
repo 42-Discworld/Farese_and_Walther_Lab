@@ -120,9 +120,11 @@ message("\nPlease pick a color from ggsci theme link:
 message("\nPlease pick a color for you plots. 
 \nNotice that the color numbers can't exceed your experiment groups!!!!!
         \nJust pick the color name from the two tables below.
-        \n OR you could pick 'color3' theme which has 8 colors. \n\n")
+        \n OR you could pick 'colors3' theme which has 8 colors. \n\n")
 print(dt1, row.names = TRUE, col.names = "none")
 print(dt2, row.names = TRUE, col.names = "none", topn = 4)
+
+
 color_option <- readline("Please type the color theme name, e.g. npg: ")
 
 color_choice <- set_color(color_option, colors1, colors2, colors3)
