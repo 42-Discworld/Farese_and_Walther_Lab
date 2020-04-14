@@ -39,4 +39,4 @@ Department of Cell Biology, Harvard Medical School
 
 ### Acknowledgements
 
-Carson, Nicole, Whitney, Jeeyun
+Bob, Tobi, Carson, Nicole, Whitney, Jeeyun
