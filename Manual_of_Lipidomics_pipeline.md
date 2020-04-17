@@ -692,8 +692,16 @@ value**
     customized lipid class(es) violin plot (`molec_violin_all.html`).  
     Please note that the interactive plots will display in teh `Viewer`,
     click panel `Plots` to view other plots.  
+  - Code display:
+  
+```
+How many fold change analysis do you want to do?
+Please input the number: 1
+Please type the name of control group: WT
+Please type the name of contrast group: OE KO
+```
   - Example display: Please note that only static violin plot
-    is showed in the manual book, the interactive violin plots are under html files.
+    is showed in the manual book, the interactive violin plots are under html files.  
 
 figure 11: Lipid class summary|figure 12: Individual lipid class
 :-------------------------:|:-------------------------:
