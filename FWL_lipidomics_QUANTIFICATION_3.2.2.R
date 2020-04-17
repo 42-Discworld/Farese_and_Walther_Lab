@@ -198,7 +198,7 @@ molec_all <- left_join(selected_lipid, molec_group_mean[[1]]) %>%
   left_join(., molec_group_median[[1]])
 write_csv(molec_all, "data/Quantification/molecules_group_statistics.csv")
 # customize times of comparison  
-message("\nHow many times of fold change analysis for groups you want to do?\n")
+message("\nHow many fold change analysis do you want to do?\n")
 fc_times <- readline("Please input the number: ")
 for(i in 1:fc_times){
   message("\nPlease type the name of the control group.")

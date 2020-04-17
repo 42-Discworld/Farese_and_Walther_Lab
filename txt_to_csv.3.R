@@ -45,8 +45,8 @@ sample_neg <- sapply(files, function(x) length(which(str_detect(x, "neg"))))
 sample_pos <- sapply(files, function(x) length(which(str_detect(x, "pos"))))
 
 # Verify the sample size info are correct.
-message("Reminder: Is your sample negative tests are ", sample_neg, " times?")
-message("Reminder: Is your sample positive tests are ", sample_pos, " times?")
+message("Reminder: You have ", sample_neg, " samples that were run in negative mode.")
+message("Reminder: You have ", sample_pos, " samples that were run in positive mode.")
 
 
 # reconstruct the data columns and store it into the file
