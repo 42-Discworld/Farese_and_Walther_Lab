@@ -29,7 +29,7 @@ wlyu@hsph.harvard.edu
 lyuwting@gmail.com
 
 ### Contributors
-Wenting Lyu, Manuele Piccolis, Niklas Mejhert, Kun Wang, Zon Weng Lai & Laura Bond
+Wenting Lyu, Manuele Piccolis, Niklas Mejhert, Kun Wang, Zon Weng Lai, Laura Bond & Sebastian Boland
 
 Farese & Walther Lab
 
@@ -39,4 +39,4 @@ Department of Cell Biology, Harvard Medical School
 
 ### Acknowledgements
 
-Basti, Carson, Nicole, Whitney
+Bob, Tobi, Carson, Nicole, Whitney, Jeeyun
