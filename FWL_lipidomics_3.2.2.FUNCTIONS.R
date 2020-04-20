@@ -1708,7 +1708,7 @@ BuildContrast <- function(fit, filtered_data){
   option <- readline("Enter groups names for comparison, spaced by 'vs', e.g. KO vs WT: ") %>% 
     strsplit(., paste0("(?i) ", "vs", "( |[!\",.:;?})\\]])"),perl=TRUE) %>% 
     unlist()
-  if(!all(option  %in% group_names)){
+  if(!all(option  %in% group_names) | length(option)==1){
     message("You typed wrong.")
     option <- readline("Enter groups names for comparison, spaced by 'vs', e.g. KO vs WT: ") %>% 
       strsplit(., paste0("(?i) ", "vs", "( |[!\",.:;?})\\]])"),perl=TRUE) %>% 
