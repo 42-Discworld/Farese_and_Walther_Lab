@@ -685,15 +685,23 @@ value**
     function; thus the plots are under classes, and data are stored as
     `molecules_group_statics.cs, raw_molec.csv, normalized_molec.csv,
     normalized_molec_mean( or normalized_molec_median)` under the
-    Quantification of data folder. Two types of violin plots are used to
+    Quantification of data folder. User will also be asked to input times of fold change analysis, then input names of the control and contrast group(s). Two types of violin plots are used to
     display normalized data by choosing from mean or median as well. One
     type will display violin (`molec_violin.XXX`) will display all lipid
     class in one plot. The second will only display the interactive
     customized lipid class(es) violin plot (`molec_violin_all.html`).  
     Please note that the interactive plots will display in teh `Viewer`,
     click panel `Plots` to view other plots.  
+  - Code display:
+  
+```
+How many fold change analysis do you want to do?
+Please input the number: 1
+Please type the name of control group: WT
+Please type the name of contrast group: OE KO
+```
   - Example display: Please note that only static violin plot
-    is showed in the manual book, the interactive violin plots are under html files.
+    is showed in the manual book, the interactive violin plots are under html files.  
 
 figure 11: Lipid class summary|figure 12: Individual lipid class
 :-------------------------:|:-------------------------:
