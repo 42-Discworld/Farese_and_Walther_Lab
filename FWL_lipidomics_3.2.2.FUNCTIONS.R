@@ -1288,7 +1288,7 @@ subtract_background <- function(data, sample_list, subtraction){
 subtract_not <- function(data, sample_list, option, group){
   if(option == "y"){
     subtracted_data <- subtract_background(data, sample_list, "MainArea[c]")
-    write_csv(subtracted_data, "data/subtracted_lipids.csv")
+    write_csv(subtracted_data, "data/QC/subtracted_lipids.csv")
     filtered_lipidomics_copy <- data   ######## filtered_lipidomics_copy will store the raw filtered data (filtered_lipidomics)
     data3 <- subtracted_data   ######### if doing background subtraction, the filtered lipidomics data will be replaced by subtracted data
     # detect potential invalid lipid molecules (empty or negative value in the samples)
@@ -2361,14 +2361,14 @@ filter_invalid <- function(data, group_info, invalid_data){
   These values are subsequently replaced as non-valid values (NA). 
   Fold change analyses is performed using only samples containing valid values")
     # write negative and 0 percentage inforamtion
-    write_csv(neg_percent, "data/neg.percent.csv")
+    write_csv(neg_percent, "data/QC/neg.percent.csv")
     # write potential invalid lipid molecules information
-    write_csv(neg_info, "data/checkInvalid.csv")
+    write_csv(neg_info, "data/QC/checkInvalid.csv")
     # write copy of potential lipid molecules information
-    write_csv(neg_info, "data/invalid.csv")     ## copy data for invalid lipids information
+    write_csv(neg_info, "data/QC/invalid.csv")     ## copy data for invalid lipids information
     message("Please view file imputeNA.csv for all the data contains negative values after background subtraction.")
     # write data which transform negative into NA
-    write_csv(negs_all, "data/imputeNA.csv")
+    write_csv(negs_all, "data/QC/imputeNA.csv")
     message("\nType 1 if you would like the pipleline to proceed with this function \nType 2 if you prefer to exlcude certain lipid molecules for fold change analysis ")
     option <- retype_choice("1/2")
     filtered_negs <- negs_all %>% filter_at(vars(all_of(sample_list)), any_vars(!is.na(.)))
@@ -2381,11 +2381,11 @@ filter_invalid <- function(data, group_info, invalid_data){
       #message("Now we need to open the changed file checkInvalid.csv after you deleting the invalid lipid molecules.")
       continues <- readline("If you finished preprocess the data, please continue and press Y: ")
       # advanced users
-      manual_data <- read_csv("data/checkInvalid.csv", col_types = cols())
-      ref_data <- read_csv("data/invalid.csv", col_types = cols())
+      manual_data <- read_csv("data/QC/checkInvalid.csv", col_types = cols())
+      ref_data <- read_csv("data/QC/invalid.csv", col_types = cols())
       # deleting the invalid lipid molecules in raw data based on your standards and saved it in pre_filtered.lipidomics.csv
       data <- fix_invalid_by_choice(data, manual_data, ref_data)
-      write_csv(data, "data/manual_filtered.lipidomics.csv")
+      write_csv(data, "data/QC/manual_filtered.lipidomics.csv")
     }else{
       message("The pipeline will first transform all the negative value into NA.")
       message("If negative percentage is over 50% in a group, all the values in the group for the molecule will be transformed into NA.")
@@ -2401,7 +2401,7 @@ filter_invalid <- function(data, group_info, invalid_data){
         # delete corresponding lipid molecules in total data
         data <- anti_join(data, deleted_molec, by = "LipidMolec") #%>% select(LipidMolec, contains("MainArea"))
       }
-      write_csv(data, "data/auto_filtered.lipidomics.csv")
+      write_csv(data, "data/QC/auto_filtered.lipidomics.csv")
     }
   return(data)
   }

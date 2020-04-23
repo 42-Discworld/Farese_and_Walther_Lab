@@ -13,7 +13,6 @@
 #      
 # Versions:  LipidSearch 4.1.        
 #####################################################################################
-
 rm(list=ls())  ##### empty the environment first. If you need to keep former variables in workspace, just comment this part
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 # source function from FWL_lipidomics.**.functions.R script
@@ -83,7 +82,7 @@ group_info <- data.frame(samples=sample_raw_list,
                          groups=group_repeats, 
                          stringsAsFactors = FALSE) %>% 
   group_by(groups) 
-write_csv(group_info, "data/group_information.csv")
+write_csv(group_info, "data/QC/group_information.csv")
 group_names <- unique(group_repeats)
 ngroups <- length(group_names)
 
