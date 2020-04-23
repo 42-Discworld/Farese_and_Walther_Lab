@@ -100,7 +100,7 @@ filtered_lipidomics <- subtract_not(filtered_lipidomics2, sample_raw_list, backg
 ###########################################################################################
 colors1 <- c("npg", "aaas", "nejm", "jama", "jco", "ucscgb", "d3 ", 
              "locuszoom", "igv", "uchicago", "startrek", "tron", 
-             "futurama", "rickandmonty", "simpsons", "gsea", "lancet") 
+             "futurama", "rickandmorty", "simpsons", "gsea", "lancet") 
 colors1_no <- c(10, 10, 8, 7, 10, 15, 10, 7, 15, 15, 7, 7, 12, 12, 15, 12, 9) 
 colors2 <-  c("BottleRocket1", "BottleRocket2", "Rushmore1", "Royal1", "Royal2", "Zissou",
               "Darjeeling1", "Darjeeling2", "Chevalier1", "FantasticFox1", "Moonrise1", 
