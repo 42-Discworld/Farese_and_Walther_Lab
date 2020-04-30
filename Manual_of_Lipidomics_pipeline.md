@@ -166,7 +166,7 @@ Please type PNG/PDF:
     16 FGL_Ld_Lipidomics_0525.csv
     17 RNF213_LB_07292019.csv
     
-    Please input the index number of the file: 8
+    Please input the index number of the file: 5
 
     [1] "[1] converted/20171127_JC_Seipin.csv"
 
