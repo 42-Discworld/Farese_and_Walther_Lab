@@ -693,7 +693,7 @@ How many fold change analysis do you want to do?
 Please input the number: 1
 Please type the name of control group: WT
 Please type the name of contrast group: OE KO
-```
+```  
   - Example display: Please note that only static violin plot
     is showed in the manual book, the interactive violin plots are under html files.  
 
