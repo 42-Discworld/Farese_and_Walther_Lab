@@ -652,12 +652,6 @@ EachClassPlot(each_class, pars)
 # pars <- list(nbar, ngroups, par_eachclass, plot_all, post_name, labs1)
 # message("\nAlternative display quantification of individule lipid class (all lipids in a class in the same png)")
 # EachClassPlot(each_class, pars)
-
-
-################################################################################ turn off Quartz for mac
-dev.off()
-options(device = "RStudioGD")                                                                                                                                 
-###############################################################################
 ```
 
   - Example display: figure 12
