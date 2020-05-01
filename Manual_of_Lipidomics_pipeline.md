@@ -59,7 +59,8 @@ different experiments.
 - The standard input are case insensitive except lipid classes, group
 names, color themes.  
 - Mac user must install Quartz and gfortran manually before running the
-pipeline.
+pipeline.  
+- The interactive plots won't be displayed in manual.
 
 #### Initialization:
 
@@ -684,7 +685,7 @@ value**
     type will display violin (`molec_violin.XXX`) will display all lipid
     class in one plot. The second will only display the interactive
     customized lipid class(es) violin plot (`molec_violin_all.html`).    
-  - Please note that the interactive plots which are under html files won't be display in the manual book. It will display in the `Viewer` panel, click panel `Plots` to view other plots.  
+  - Please note that the interactive plots which are under html files and will display in the `Viewer` panel, click panel `Plots` to view other plots.  
   - Code display:
   
 ```
