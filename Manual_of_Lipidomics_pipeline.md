@@ -58,7 +58,7 @@ different experiments.
 - User can also freely apply data in the fold `data` to different plots.  
 - The standard input are case insensitive except lipid classes, group
 names, color themes.  
-- Mac user must install Quartz and gfortran manually before running the
+- Mac user must install XQuartz and gfortran manually before running the
 pipeline.  
 - The interactive plots won't be displayed in manual.
 
