@@ -21,7 +21,7 @@ standards, applied with statistics analysis and visualization.
   - Required R version 3.6.0 or later is required.  
   - For Windows users, please make sure your Rstudio has authority to
     install packages.
-  - For Mac users, XQaurtz and gfortran need to be installed manually.  
+  - For Mac users, XQuartz and gfortran need to be installed manually.  
   - Any additional packages/libraries will be installed and uploaded
     automatically.
   - Pipeline will store all the output under some automatically
@@ -30,13 +30,13 @@ standards, applied with statistics analysis and visualization.
   - To begin, please create R project via Rstudio and put all the scripts you download in the same directory.
    
 
-Suggested using homebrew for installing XQaurtz and gfortran.
+Suggested using homebrew for installing XQuartz and gfortran.
 
   - Open terminal on Mac, and paste the command below.  
   - Installing homebrew:  
     `/bin/bash -c "$(curl -fsSL
     https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`  
-  - Installing XQaurtz:
+  - Installing XQuartz:
       - `ruby -e "$(curl -fsSL
         https://raw.githubusercontent.com/Homebrew/install/master/install)"
         < /dev/null 2> /dev/null ; brew install
