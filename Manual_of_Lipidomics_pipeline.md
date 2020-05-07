@@ -21,7 +21,7 @@ standards, applied with statistics analysis and visualization.
   - Required R version 3.6.0 or later is required.  
   - For Windows users, please make sure your Rstudio has authority to
     install packages.
-  - For Mac users, XQaurtz and gfortran need to be installed manually.  
+  - For Mac users, XQuartz and gfortran need to be installed manually.  
   - Any additional packages/libraries will be installed and uploaded
     automatically.
   - Pipeline will store all the output under some automatically
@@ -30,13 +30,13 @@ standards, applied with statistics analysis and visualization.
   - To begin, please create R project via Rstudio and put all the scripts you download in the same directory.
    
 
-Suggested using homebrew for installing XQaurtz and gfortran.
+Suggested using homebrew for installing XQuartz and gfortran.
 
   - Open terminal on Mac, and paste the command below.  
   - Installing homebrew:  
     `/bin/bash -c "$(curl -fsSL
     https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`  
-  - Installing XQaurtz:
+  - Installing XQuartz:
       - `ruby -e "$(curl -fsSL
         https://raw.githubusercontent.com/Homebrew/install/master/install)"
         < /dev/null 2> /dev/null ; brew install
@@ -58,8 +58,9 @@ different experiments.
 - User can also freely apply data in the fold `data` to different plots.  
 - The standard input are case insensitive except lipid classes, group
 names, color themes.  
-- Mac user must install Quartz and gfortran manually before running the
-pipeline.
+- Mac user must install XQuartz and gfortran manually before running the
+pipeline.  
+- The interactive plots won't be displayed in manual.
 
 #### Initialization:
 
@@ -98,7 +99,8 @@ pipeline.
                 https://raw.githubusercontent.com/Homebrew/install/master/install)"
                 < /dev/null 2> /dev/null ; brew install
                 caskroom/cask/brew-cask 2> /dev/null`
-              - `brew cask install xquartz` -for gfortran installing:
+              - `brew cask install xquartz` 
+           - for gfortran installing:
                 `brew install gcc`
 
 <!-- end list -->
@@ -166,7 +168,7 @@ Please type PNG/PDF:
     16 FGL_Ld_Lipidomics_0525.csv
     17 RNF213_LB_07292019.csv
     
-    Please input the index number of the file: 8
+    Please input the index number of the file: 5
 
     [1] "[1] converted/20171127_JC_Seipin.csv"
 
@@ -652,12 +654,6 @@ EachClassPlot(each_class, pars)
 # pars <- list(nbar, ngroups, par_eachclass, plot_all, post_name, labs1)
 # message("\nAlternative display quantification of individule lipid class (all lipids in a class in the same png)")
 # EachClassPlot(each_class, pars)
-
-
-################################################################################ turn off Quartz for mac
-dev.off()
-options(device = "RStudioGD")                                                                                                                                 
-###############################################################################
 ```
 
   - Example display: figure 12
@@ -689,9 +685,8 @@ value**
     display normalized data by choosing from mean or median as well. One
     type will display violin (`molec_violin.XXX`) will display all lipid
     class in one plot. The second will only display the interactive
-    customized lipid class(es) violin plot (`molec_violin_all.html`).  
-    Please note that the interactive plots will display in teh `Viewer`,
-    click panel `Plots` to view other plots.  
+    customized lipid class(es) violin plot (`molec_violin_all.html`).    
+  - Please note that the interactive plots which are under html files and will display in the `Viewer` panel, click panel `Plots` to view other plots.  
   - Code display:
   
 ```
@@ -699,9 +694,9 @@ How many fold change analysis do you want to do?
 Please input the number: 1
 Please type the name of control group: WT
 Please type the name of contrast group: OE KO
-```
-  - Example display: Please note that only static violin plot
-    is showed in the manual book, the interactive violin plots are under html files.  
+```  
+  - Example display: only static plots
+    are showed in the manual book.
 
 figure 11: Lipid class summary|figure 12: Individual lipid class
 :-------------------------:|:-------------------------:
