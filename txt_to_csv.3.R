@@ -16,7 +16,9 @@ rm(list=ls())
 
 list.of.packages <- c("tidyverse", "readr", "magrittr")
 need.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
-if(length(need.packages)) install.packages(need.packages)
+if(length(need.packages)) {
+  install.packages(need.packages)
+}
 
 # path for storing converted files
 dir <- "converted"
