@@ -16,7 +16,9 @@
 # source("https://install-github.me/tidyverse/rlang")
 initial.package <- c("BiocManager", "rlang", "devtools", "svglite")
 need.package <- initial.package[!(initial.package %in% installed.packages()[, "Package"])]   
-if(length(need.package) > 0) install.packages(need.package)
+if(length(need.package) > 0) {
+  install.packages(need.package)
+}
 
 
 list.of.packages <- c( "FactoMineR", "factoextra", "scales", "magrittr", "ggrepel", "reshape2",
@@ -26,7 +28,9 @@ list.of.packages <- c( "FactoMineR", "factoextra", "scales", "magrittr", "ggrepe
                        "ggpubr", "wesanderson", "formattable", "ggsci", "plotly", "htmlwidgets", 
                        "gridExtra", "grid",  "readr", "data.table")
 need.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
-if(length(need.packages) > 0) BiocManager::install(need.packages)
+if(length(need.packages) > 0) {
+  BiocManager::install(need.packages)
+}
 
 
 # Suppress the package messages
@@ -922,8 +926,8 @@ PCA_pairs_Plot <- function(info, filtered_lipids, mark, images){
     str_remove_all(., "MainArea\\[") %>% str_remove_all(., "\\]")
   log2_filtered_lipids_PCA      <- log((filtered_lipids_PCA+1), 2)
   # making group info for PCA 
-  filtered_lipids_PCA$Group       <- group_repeat
-  log2_filtered_lipids_PCA$Group  <- group_repeat
+  filtered_lipids_PCA$Group       <- as.factor(group_repeat)
+  log2_filtered_lipids_PCA$Group  <- as.factor(group_repeat)
   # Perform PCA 
   res.pca         <-  PCA(log2_filtered_lipids_PCA, scale.unit=TRUE, 
                           quali.sup=ncol(filtered_lipids_PCA), graph=FALSE)
