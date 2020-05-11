@@ -37,7 +37,7 @@ fas <- filtered_dt %>%
          "FA4%" = sum(!is.na(FA4))/sum(!is.na(c(FA1, FA2, FA3, FA4)))) %>% 
    select(Rej, LipidMolec, FA1, "FA1%", FA2, "FA2%", FA3, "FA3%", FA4, "FA4%", 
           all_of(colnames(filtered_dt)[-c(1:3)]))
-write_csv(fas, "data/fa_chains.csv")
+write_csv(fas, "data/AcylLength/fa_chains.csv")
 
 # unite 2 columns into 1 column information
 fas_merged <- fas %>% 
@@ -58,13 +58,13 @@ fas_separate <- fas_merged %>%
   filter(!str_detect(FA, "NA")) %>% 
   group_by(Class, FA)
 
-write_csv(fas_separate, "data/Length/fa_chains_AUC.csv") 
+write_csv(fas_separate, "data/AcylLength/fa_chains_AUC.csv") 
 
 # count observations of lipid molecules
 fas_count <- fas_separate  %>% count(FA) 
 
 fas_class <- fas_separate %>% summarise_at(vars(all_of(sample_raw_list)), list(~sum(., na.rm = TRUE))) %>% left_join(fas_count, .)
-write_csv(fas_class, "data/Length/class_chain_auc.csv")
+write_csv(fas_class, "data/AcylLength/class_chain_auc.csv")
 
 # get pattern
 fas_length <- fas_class %>% 
@@ -81,7 +81,7 @@ fas_length_pattern <- fas_length %>%
                                  length < 22 ~"LCFA",
                                  length > 21 ~ "VLCFA")) %>% 
   select(Class, FA, length_type, length, all_of(sample_raw_list)) %>% 
-  write_csv(., "data/Length/fas_length.csv")
+  write_csv(., "data/AcylLength/fas_length.csv")
 
 fas_sum <- fas_length_pattern %>% 
   ungroup() %>% 
@@ -90,7 +90,7 @@ fas_sum <- fas_length_pattern %>%
   group_by(Class, length_type) %>% 
   summarise_all(list(~sum(., na.rm = TRUE))) %>% 
   ungroup() %>% 
-  write_csv(., "data/Length/fas_length_sum.csv")
+  write_csv(., "data/AcylLength/fas_length_sum.csv")
 
  fas_sum <- fas_sum %>% filter(!is.na(length_type))
 
@@ -113,7 +113,7 @@ ordered_samples<- unique(length_long$SAMPLES) %>%
   sort() %>% 
   paste0("s", .)
 length_long$SAMPLES <- factor(length_long$SAMPLES, levels = ordered_samples)
-write_csv(length_long, "data/Length/fas_length_long.csv")
+write_csv(length_long, "data/AcylLength/fas_length_long.csv")
 
 length_pars1 <- c("SAMPLES", "value", "length_type")
 p1 <- plot_all(data = length_long, c("SAMPLES", "value", "length_type")) +
@@ -125,8 +125,8 @@ p1 <- plot_all(data = length_long, c("SAMPLES", "value", "length_type")) +
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 
 print(p1)
-ggsave(paste0("plot/Length/fa_length.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length.svg", device = "svg", width = 20, height = 20)
 
 p2 <- plot_all(data = length_long, length_pars1) +
   geom_bar(stat = "identity", position = "fill") +
@@ -136,8 +136,8 @@ p2 <- plot_all(data = length_long, length_pars1) +
   labs(x = "experiment samples", y = "AUC", 
        title = "Fatty acids length of lipid classfor each sample", fill = "") 
 print(p2)
-ggsave(paste0("plot/Length/fa_length_percentage.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length_percentage.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length_percentage.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length_percentage.svg", device = "svg", width = 20, height = 20)
 
 
 length_groups <- length_long %>% 
@@ -145,7 +145,7 @@ length_groups <- length_long %>%
   summarise(mean =  mean(value, na.rm = TRUE),
             sd = sd(value, na.rm = TRUE)) %>% 
   ungroup() %>% 
-  write_csv(., "data/Length/length_groups.csv")
+  write_csv(., "data/AcylLength/length_groups.csv")
 length_groups$GROUPS <- factor(length_groups$GROUPS, levels = group_names)
 length_groups$length_type <- factor(length_groups$length_type, levels = length_type_levels)
 
@@ -160,8 +160,8 @@ p3 <- plot_all(data = length_groups, length_pars2) +
        title = "Fatty acids length of lipid class for each group", fill = "") 
 
 print(p3)
-ggsave(paste0("plot/Length/fa_length_group.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length_group.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length_group.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length_group.svg", device = "svg", width = 20, height = 20)
 
 p4 <- plot_all(data = length_groups, length_pars2) +
   geom_bar(stat = "identity", position = "fill") + 
@@ -171,8 +171,8 @@ p4 <- plot_all(data = length_groups, length_pars2) +
        title = "Fatty acids length of lipid class for each group", fill = "") +
   scale_y_continuous(expand = c(0, 0, 0.1, 0), labels = scales::percent_format())
 print(p4)  
-ggsave(paste0("plot/Length/fa_length_gr_percentage.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length_gr_percentage.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length_gr_percentage.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length_gr_percentage.svg", device = "svg", width = 20, height = 20)
 
 
 length_pars3 <- c("length_type", "mean", "GROUPS", "sd")
@@ -187,8 +187,8 @@ p5 <- plot_all(length_groups, length_pars3, se = TRUE)  +
   set_theme(theme_params = list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8)))
 
 print(p5)  
-ggsave(paste0("plot/Length/fa_length_gr.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length_gr.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length_gr.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length_gr.svg", device = "svg", width = 20, height = 20)
 
 
 control <- check_group(group_names, "control")
@@ -215,8 +215,9 @@ if(method == "mean"){
   captions = ""
   length_pars4 <- c("length_type", method, "GROUPS")
 }
+length_info_long$length_type <- factor(length_info_long$length_type, levels = length_type_levels)
 length_info_long <- length_info_long %>% rename(GROUPS=Groups)
-write_csv(length_info_long, "data/Length/fa_length_normalized_mean.csv")
+write_csv(length_info_long, "data/AcylLength/fa_length_normalized_mean.csv")
 titles <- paste0("Fatty acids length of lipid class for each group (normalized by ", method, " )")
 p6 <- plot_all(length_info_long, length_pars4, se = TRUE)  +  
   geom_bar(stat = "identity",  position=position_dodge(preserve="single")) +
@@ -227,8 +228,8 @@ p6 <- plot_all(length_info_long, length_pars4, se = TRUE)  +
        caption = captions) +
   set_theme(theme_params  =list(axis.text.x  = element_text(angle = 30, hjust = 1, size = 8)))
 print(p6)
-ggsave(paste0("plot/Length/fa_length_normalized.", image_option), device = image_option, width = 20, height = 20)
-ggsave("plot/Length/fa_length_normalized.svg", device = "svg", width = 20, height = 20)
+ggsave(paste0("plot/AcylLength/fa_length_normalized.", image_option), device = image_option, width = 20, height = 20)
+ggsave("plot/AcylLength/fa_length_normalized.svg", device = "svg", width = 20, height = 20)
 
 
 # for individuale chains
@@ -264,7 +265,7 @@ fas_class_long <- fas_nm %>%
 fas_class_long$SAMPLES <- factor(fas_class_long$SAMPLES, levels = ordered_samples)
 fas_class_long$GROUPS <- factor(fas_class_long$GROUPS, levels = rev(group_names))
 classes <- fas_class_long$Class %>% unique() 
-write_csv(fas_class_long, "data/Length/normalized_chain.csv")
+write_csv(fas_class_long, "data/AcylLength/normalized_chain.csv")
 
 if(method == "mean"){
   for(i in classes){
@@ -284,8 +285,8 @@ if(method == "mean"){
       guides(fill = guide_legend(reverse=TRUE)) +
       coord_flip()
     print(p)
-    ggsave(paste0("plot/Length/", i, ".fc.", image_option), device = image_option, width = 20, height = 20)
-    ggsave(paste0("plot/Length/", i, ".fc.svg"), device = "svg", width = 20, height = 20)
+    ggsave(paste0("plot/AcylLength/", i, ".fc.", image_option), device = image_option, width = 20, height = 20)
+    ggsave(paste0("plot/AcylLength/", i, ".fc.svg"), device = "svg", width = 20, height = 20)
   }
 }else{
   for(i in classes){
@@ -304,8 +305,8 @@ if(method == "mean"){
       guides(fill = guide_legend(reverse=TRUE)) +
       coord_flip()
     print(p)
-    ggsave(paste0("plot/Length/", i, ".fc.", image_option), device = image_option, width = 20, height = 20)
-    ggsave(paste0("plot/Length/", i, ".fc.svg"), device = "svg", width = 20, height = 20)
+    ggsave(paste0("plot/AcylLength/", i, ".fc.", image_option), device = image_option, width = 20, height = 20)
+    ggsave(paste0("plot/AcylLength/", i, ".fc.svg"), device = "svg", width = 20, height = 20)
   }
 }
 

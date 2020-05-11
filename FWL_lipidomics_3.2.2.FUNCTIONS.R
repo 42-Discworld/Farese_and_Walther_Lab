@@ -340,6 +340,7 @@ set_color <- function(color_option, color1, color2, color3){
   color3_name <- deparse(substitute(color3))
   if(color_option %in% color1){
     color_scheme <- paste0("scale_fill_", color_option, "()")
+
   }else if(color_option %in% color2 ){
     color_scheme <-  paste0("scale_fill_manual(values = wes_palette('", color_option, "'))")
   }else if(color_option == color3_name){
@@ -519,7 +520,7 @@ filter_duplicate <- function(duplicate_molecs, data, selections){
     # transform duplicate lipid molecules
     duplicate_output <- fixed_dt[[1]]
     # store reserved duplicate lipid molecules
-    write_csv(duplicate_output, "data/reserved_duplicates.csv")
+    write_csv(duplicate_output, "data/QC/reserved_duplicates.csv")
     # get filtered lipid information within processed duplicate lipid molecules
     data <- fixed_dt[[2]]
     message("Filtered lipid molecules sans duplicates are stored under removeduplicates.csv")
@@ -1662,7 +1663,7 @@ ImputeMinProb <- function (data, q = 0.01, tune.sigma = 1)
   filtered_data <-  data[which(count_NAs > 0.5), ]
   data_sd <-  apply(filtered_data, 1, sd)
   sd_temp <-  median(data_sd, na.rm = T) * tune.sigma
-  print(sd_temp)
+ # print(sd_temp)
   for (i in 1:(n_samples)) {
     input <-  rnorm(n_observations, 
                     mean = min_samples[i], 
@@ -1671,6 +1672,52 @@ ImputeMinProb <- function (data, q = 0.01, tune.sigma = 1)
   }
   return(imputated_data)
 }
+
+
+########################################################################################
+# function name: customize_volc
+# parameters: classes, input, fold_change
+# utility: if user chooses Y, it will display chosen lipid classes on volcano plot till 
+#         user chooses N.
+########################################################################################
+customize_volc <- function(classes, input, points, fold_change){
+  lipids <- classes %>% paste0(., sep=", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
+  message("\nDo you want to display customized lipid classes on volvano plot?")
+  option <- retype_choice("Y/N")
+  if(option == "y"){
+    message("\nPlease input the lipid name from the list below for displaying.\n", lipids, 
+            "\nPlease note that the input is caps sensitive!")
+    name <- customized_class <- check_lipid(classes)
+    if(length(customized_class)>1){
+      customized_class <- paste(customized_class, collapse = "|")
+    }
+    
+    customized_points <- input %>% 
+      rownames_to_column('lipid') %>% 
+      filter(grepl(customized_class, Class) & !lipclass=="n.s") %>% 
+      column_to_rownames('lipid')
+    
+    title1 <- paste0("Volcanot plot for showing lipid class(es): ", customized_class)
+    volc3 <- PlotVolc(input, customized_points, fold_change)
+    volc3 <- volc3 +
+      geom_point(aes(col=sig, size=AveExpr)) + 
+      geom_point(data = points, colour = "black") +
+      scale_size_continuous(range = c(0.25,2.5), breaks=c(10, 20, 30), guide = FALSE)+
+      scale_color_manual(values=c("#bdbdbd", "#de2d26"), labels = c("Non-significant", "Significant")) +
+      #geom_point(aes(fc_points, fill= "black")) +
+      guides(color = guide_legend(title = "Fold Change")) +
+      xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
+      labs(title = title1)
+    print(volc3)
+    name = paste0(name, sep="_", collapse = "")
+    ggsave(filename = paste0(option[1], "vs.", option[2], ".customized.", image_option), 
+           path = 'plot/Volcano/', device = image_option, width = 20, height = 20)
+    name5 <- paste(option[1], "vs.", option[2], name, "customized.svg", sep = "")
+    ggsave(filename = name5, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
+    customize_volc(classes, input, points, fold_change)
+  }
+}
+
 
 
 ########################################################################################
@@ -1731,12 +1778,12 @@ fit$design)", sep = '"')
                                     lfc= 0, number=nrow(filtered_data)) %>% as.data.frame()
   # store the result into csv
   name1 <- paste(option[1], "vs.", option[2], ".csv", sep = "")
-  write_csv(comparison, file.path("data/", name1))
+  write_csv(comparison, file.path("data/Volcano/", name1))
   # store significant result into csv
   output2 <- topTable(fit2, coef=1, adjust.method = 'fdr',
                       p.value =0.05, lfc=log2(1), number=nrow(filtered_data)) %>% as.data.frame()
   name2 <- paste(option[1], "vs.", option[2], ".sig.csv", sep = "")
-  write_csv(x=output2, file.path("data/Volc/", name2))
+  write_csv(x=output2, file.path("data/Volcano/", name2))
   # volcano plot
   # volcano input info.
   input <- comparison  # input of comparison group info which can be changed
@@ -1767,16 +1814,17 @@ fit$design)", sep = '"')
     guides(color = guide_legend(title = "Fold Change")) +
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) 
   print(volc1)
-  ggsave(filename = paste0(option[1], "vs.", option[2], ".", image_option), path = 'plot/Volc/', 
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".", image_option), path = 'plot/Volcano/', 
          device = image_option, width = 20, height = 20)
   name3 <- paste(option[1], "vs.", option[2], ".svg", sep = "")
-  ggsave(filename = name3, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
+  ggsave(filename = name3, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
   
   # build mutated data frame
   class_names <- rownames(input) %>% str_extract_all(., "(.+)\\(") %>% str_remove_all(., "\\(")
   #Add a new column to specify lipids
   input_lipids <- input
-  input_lipids$lipclass <- class_names
+  input_lipids$Class <- class_names
+  input_lipids$lipclass <- input_lipids$Class
   input_lipids$lipclass <- ifelse(input_lipids$sig=="TRUE", 
                                   case_when( input_lipids$lipclass %in% c("PC", "PE", "PG", "PI", "PS", "LPC", "LPE",
                                                                           "LPI", "dMePE", "CL")~ "Glycerophospholipids",
@@ -1786,6 +1834,7 @@ fit$design)", sep = '"')
                                              input_lipids$lipclass %in% c("ChE","Cholestoral") ~ "Sterols",
                                              TRUE ~ "Other lipids"), 
                                   "n.s")
+  
   # making levels for the class category
   class_levels <- c("Glycerophospholipids", "Neutral lipids", "Sphingolipids", "Sterols", "Other lipids", "n.s")
   # make the class category as factors
@@ -1808,21 +1857,21 @@ fit$design)", sep = '"')
     #   geom_text_repel(data=significant_points, aes(label=rownames(significant_point)), size=3) + 
     geom_point(aes(col=lipclass, size=AveExpr))  +
     scale_size_continuous(range = c(0.25,2.5), breaks=c(10, 20, 30), guide = FALSE) +
-    scale_color_manual(values=c( "darkorange3","dodgerblue3", 'chartreuse4', 
+    scale_color_manual(values=c("darkorange3","dodgerblue3", 'chartreuse4', 
                                  '#c51b8a', '#756bb1',"#bdbdbd"), drop=FALSE) +
     guides(color = guide_legend(title = "Lipid Class")) +
     #xlab(bquote("Fold change, " ~ log[2]~"("~expression(frac({.(option[1])}, {.(option[2])}))~scriptstyle(, AUC)")")) 
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) 
   print(volc2)
   #plot_name <- readline("Please input the volcano plot name: ")
-  ggsave(filename = paste0(option[1], "vs.", option[2], ".color.", image_option), path = 'plot/Volc/', 
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".color.", image_option), path = 'plot/Volcano/', 
          device = image_option, width = 20, height = 20) #  width=15, height=15, dpi=300
   name4<- paste(option[1], "vs.", option[2], ".color.svg", sep = "")
-  ggsave(filename = name4, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
+  ggsave(filename = name4, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
   
   
 # interactive volcano
-significant_points <- significant_points %>% 
+input_lipids <- input_lipids %>% 
   rownames_to_column("LipidMolec") %>% 
   mutate(text = paste0("LipidMolecule: ", LipidMolec, "\nAdj.Pvalue: ", 
                        format(adj.P.Val, format = "e", digits = 2), "\n")) %>% 
@@ -1832,8 +1881,11 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     geom_vline(xintercept = c(-1, 1),  colour = "black", size = 1.5, linetype = "dotted") +
     geom_hline(yintercept= -log10(0.05), linetype="dotted", colour="black", size=1.5) +
     geom_point(alpha = 0.4, aes(size = AveExpr)) +
-    suppressWarnings(geom_point(data = significant_points, alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
+    suppressWarnings(geom_point(data = input_lipids, alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
                                                             colour=lipclass, text = text, size = AveExpr))) +
+    #scale_color_manual(values = c(pal_d3("category10")(5), "#bdbdbd"), drop = FALSE) +
+    scale_color_manual(values=c("darkorange3","dodgerblue3", 'chartreuse4', 
+                              '#c51b8a', '#756bb1',"#bdbdbd"), drop=FALSE) +
     theme_bw() +
     set_theme() +
     theme(
@@ -1856,48 +1908,76 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     )
   
   print(p)
-  dir_path <- paste0(getwd(),"/plot/Volc") 
+  dir_path <- paste0(getwd(),"/plot/Volcano") 
   name <- paste0(option[1], "_vs_", option[2], "_volc.html")
   saveWidget(as_widget(p), file.path(dir_path, name))
   
+# interactive plots for individule lipid class display
+  #input_lipids <- input_lipids %>% arrange(lipclass, Class)
+  # colors <- input_lipids %>% mutate(color =  case_when( input_lipids$Class %in% c("PC", "PE", "PG", "PI", "PS", "LPC", "LPE",
+  #                                                                            "LPI", "dMePE", "CL") ~ "darkorange3",
+  #                                                  input_lipids$Class ==  "Neutral lipids" ~ "dodgerblue3",
+  #                                                  input_lipids$lipclass == "Sphingolipids" ~ "chartreuse4",
+  #                                                  input_lipids$lipclass == "Sterols" ~ "#c51b8a",
+  #                                                  input_lipids$lipclass == "Other lipids" ~ '#756bb1',  
+  #                                                  input_lipids$lipclass =="n.s" ~ "#bdbdbd")) #%>% 
+ 
+  
+  volc0 <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
+    geom_vline(xintercept = c(-1, 1),  colour = "black", size = 1.5, linetype = "dotted") +
+    geom_hline(yintercept= -log10(0.05), linetype="dotted", colour="black", size=1.5) +
+    suppressWarnings(geom_point(alpha = 0.85, aes(logFC, -log10(adj.P.Val), 
+                                                                       text = text, size = AveExpr, color = Class))) +
+    #scale_color_manual(values = c(pal_d3("category10")(5), "#bdbdbd"), drop = FALSE) +
+   # scale_color_manual(values=c("darkorange3","dodgerblue3", 'chartreuse4',
+    #                            '#c51b8a', '#756bb1',"#bdbdbd"), drop=FALSE) +
+    # scale_color_manual(values = c("darkorange3", "darkorange3" ,"darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "dodgerblue3", "dodgerblue3", "dodgerblue3",
+    #                               "darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "dodgerblue3", "dodgerblue3", "dodgerblue3",
+    #                               "darkorange3" ,"darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "dodgerblue3", "dodgerblue3", "dodgerblue3",
+    #                               "darkorange3" ,"darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "darkorange3", "dodgerblue3", "dodgerblue3", "dodgerblue3",
+    #                               "#bdbdbd"   ,  "#bdbdbd"    , "#bdbdbd"   ,  "#bdbdbd"    , "#bdbdbd"   ,  "#bdbdbd"    , "#bdbdbd"   ,  "#bdbdbd"    , "#bdbdbd"   ,  "#bdbdbd"  )) +
+    theme_bw() +
+    set_theme() +
+    theme(
+      axis.line = element_line(colour = "black", size = 2),
+      legend.position = "right",
+      axis.ticks.length = unit(1.8, "mm"),
+      axis.ticks = element_line(size = 1.5),
+      axis.text = element_text(size = 18, face = "bold", colour = "black"),
+      axis.title = element_text(size = 20),
+      legend.text = element_text(size = 16),
+      legend.title = element_text(size = 18)
+    ) +
+    scale_y_continuous(breaks = c(0, -log10(0.05), 2, 4, 6, 8, 10),
+                       labels = c(0, "-log10(q value)", 2, 4, 6, 8, 10),
+                       expand = c(0, 0, 0.2, 0))
+  p0 <- volc0 %>%
+    ggplotly(tooltip = "text") %>%
+    layout(
+      dragmode = "select"
+    )
+
+  print(p0)
+   dir_path <- paste0(getwd(),"/plot/Volcano")
+   name <- paste0(option[1], "_vs_", option[2], "_volc2.html")
+   saveWidget(as_widget(p0), file.path(dir_path, name))
 
   
-  lipid_class <- rownames(input_lipids) %>% 
-    str_remove_all(., "\\(.*\\)") %>%
-    unique()
-  lipids <- lipid_class %>% 
-    paste0(., sep=", ", collapse = "") %>% 
-    substr(., 1, nchar(.)-2) 
   
-  message("\nPlease input the lipid name from the list below for displaying.\n", lipids, 
-          "\nPlease note that the input is caps sensitive!")
-    customized_class <- check_lipid(lipid_class)
-  if(length(customized_class)>1){
-    customized_class <- paste(customized_class, collapse = "\\(|")
-  }
+  # lipid_class <- rownames(input_lipids) %>% 
+  #   str_remove_all(., "\\(.*\\)") %>%
+  #   unique()
+  # lipids <- lipid_class %>% 
+  #   paste0(., sep=", ", collapse = "") %>% 
+  #   substr(., 1, nchar(.)-2) 
+  lipid_class <- unique(class_names) 
+  lipids <- lipid_class %>% paste0(., sep=", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
+  # only display customized lipid class
+  customize_volc(lipid_class, input_lipids, fc_points, fold_change)
   
-  customized_points <- input_lipids %>% 
-    rownames_to_column('lipid') %>% 
-    filter(grepl(customized_class, lipid) & !lipclass=="n.s") %>% 
-    column_to_rownames('lipid')
   
-  title1 <- paste0("Volcanot plot for showing lipid class(es): ", customized_class)
-  volc3 <- PlotVolc(input_lipids, customized_points, fold_change)
-  volc3 <- volc3 +
-    geom_point(aes(col=sig, size=AveExpr)) + 
-    geom_point(data = fc_points, colour = "black") +
-    scale_size_continuous(range = c(0.25,2.5), breaks=c(10, 20, 30), guide = FALSE)+
-    scale_color_manual(values=c("#bdbdbd", "#de2d26"), labels = c("Non-significant", "Significant")) +
-    #geom_point(aes(fc_points, fill= "black")) +
-    guides(color = guide_legend(title = "Fold Change")) +
-    xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
-    labs(title = title1)
-  print(volc3)
-  ggsave(filename = paste0(option[1], "vs.", option[2], ".customized.", image_option), 
-         path = 'plot/Volc/', device = image_option, width = 20, height = 20)
-  name5 <- paste(option[1], "vs.", option[2], ".customized.svg", sep = "")
-  ggsave(filename = name5, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
   
+ 
   ether <- input_lipids 
   ether <- ether %>% 
     mutate(LipidMolec = rownames(ether), 
@@ -1936,10 +2016,10 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
     labs(title = title2)
   print(volc4)
-  ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volc/', 
+  ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volcano/', 
          device = image_option, width = 20, height = 20)
   name6 <- paste(option[1], "vs.", option[2], ".ether.svg", sep = "")
-  ggsave(filename = name6, path = 'plot/Volc/', device = "svg", width = 20, height = 20)
+  ggsave(filename = name6, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
   
 }
 
@@ -2317,7 +2397,7 @@ impute_not <- function(condition, data, sample_list){
     imputated_lipids$LipidMolec <- log2_lipids$LipidMolec
     imputated_lipids$Class <- log2_lipids$Class
     imputated_lipids <- imputated_lipids %>% select(LipidMolec, Class, all_of(sample_list))
-    write_csv(imputated_lipids, "data/Volc/imputeMolec.csv")
+    write_csv(imputated_lipids, "data/Volcano/imputeMolec.csv")
     message("\nLog 2 transformed data are stored under log.molec.csv")
     message("Imputed data are stored under imputeMolec.csv")
     # impute same value in raw data
@@ -2326,12 +2406,12 @@ impute_not <- function(condition, data, sample_list){
     imputated_lipids <- imputated_lipids %>% arrange(LipidMolec)
     log2_filtered_lipids[colnames(log2_filtered_lipids) %in% c( "LipidMolec", "Class", sample_raw_list)] <- imputated_lipids
     # store log2 transformed raw data into log2_filtered_data.csv
-    write_csv(log2_filtered_lipids, "data/Volc/log2_filtered_data.csv")
+    write_csv(log2_filtered_lipids, "data/Volcano/log2_filtered_data.csv")
     return(list(condition, imputated_lipids))
   }else if(condition == "n"){
     # return data with selected columns
     data2 <- data %>% select(Class, LipidMolec, all_of(sample_list))
-    write_csv(data2, "data/Volc/non_impute_molecs.csv")
+    write_csv(data2, "data/Volcano/non_impute_molecs.csv")
     return(list(condition, data2))
   } else{
     condition <- readline("Typed wrong. Please Type Y/N for impute or not: ") %>% str_to_lower()

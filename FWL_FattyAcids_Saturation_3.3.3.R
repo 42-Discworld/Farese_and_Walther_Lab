@@ -24,7 +24,7 @@ empty_group <- data %>%
   select(-contains("MainArea"), -contains("se")) %>% 
   group_by(Class) %>% 
   filter_all(any_vars(.<=0))
-write_csv(empty_group, "data/empty_groups.csv")
+write_csv(empty_group, "data/Saturation/empty_groups.csv")
 
 
 # normalized the data for visualization

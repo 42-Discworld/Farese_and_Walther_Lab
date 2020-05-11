@@ -135,7 +135,7 @@ ggsave(filename = name, path="plot/QC/", device = image_option, width = 20, heig
 # lipid class summary
 ##########################################################################################
 message("\nThe info below and summary plot will show the summary information of classes after filtering the data")
-filtered_lipidomics2 %>% group_by(Class) %>% summarise(lipid_class_num = n()) %>% select(Class, lipid_class_num) %>% arrange(lipid_class_num)  %>% formattable(.)
+filtered_lipidomics2 %>% group_by(Class) %>% summarise(lipid_class_num = n()) %>% select(Class, lipid_class_num) %>% arrange(lipid_class_num)  
 
 # get lipid class proportion information
 prop_data <- filtered_lipidomics2
@@ -143,7 +143,9 @@ class(prop_data$Class) <- factor(prop_data$Class)
 prop_data <- prop_data %>% 
   group_by(Class) %>% 
   summarise(count = n()) %>% 
-  mutate(prop = count/sum(count))
+  mutate(prop = count/sum(count)) 
+
+
 
 # plot lipid class proportion information
 p2 <- plot_all(prop_data, c("Class", "prop")) +
@@ -161,11 +163,12 @@ name <- paste0("prop_summary.", image_option)
 ggsave(filename = name, path = 'plot/QC/', device = image_option, width = 20, height = 20)
 
 # save lipid class summary information into file proportion_classes.csv in data directory
-prop_data %>%
+prop_data <- prop_data %>%
   mutate(prop = percent(prop*100/100)) %>%
-  rename(number_of_lipid_molec = count, proportion = prop)%>% 
-  write_csv(., "data/QC/proportion_classes.csv")
+  rename(number_of_lipid_molec = count, proportion = prop) 
+write_csv(prop_data, "data/QC/proportion_classes.csv")
 
+prop_data %>% formattable(.)
 
 ##########################################################################################
 # mark odd chains

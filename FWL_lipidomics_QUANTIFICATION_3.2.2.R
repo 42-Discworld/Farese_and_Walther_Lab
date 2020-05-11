@@ -148,7 +148,7 @@ class_long <- class_long %>%
   ungroup()
   
 class_long$GROUPS <- factor(class_long$GROUPS, levels = group_names) 
-write_csv(class_long, "data/normalized_class_median_long.csv")
+write_csv(class_long, "data/Quantification/normalized_class_median_long.csv")
 # plot relative fold change of lipid class (normalized by median), dotplot
 paras2 <- c("GROUPS", "VALs", "GROUPS")
 pd <- plot_all(class_long, paras2) +

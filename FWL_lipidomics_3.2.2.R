@@ -22,8 +22,8 @@ source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
 
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
-dirs <- c("plot", "data", "plot/Quantification/classes/fc", "plot/Quantification/classes/svgs/fc", "plot/QC", "plot/Saturation", "plot/Ether", "plot/Length",
-          "plot/Volc", "data/Volc","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/Length")
+dirs <- c("plot", "data", "plot/Quantification/classes/fc", "plot/Quantification/classes/svgs/fc", "plot/QC", "plot/Saturation", "plot/Ether", "plot/AcylLength",
+          "plot/Volcano", "data/Volcano","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/AcylLength")
 mkdirs(dirs)
 
 message("Are you using PC or MAC?")
@@ -67,6 +67,9 @@ samples <- Input(filtered_lipidomics2)
 sample_info <- samples[[1]]
 
 
+
+
+
 ##########################################################################################                                   
 # PCA and correlation visualization
 ##########################################################################################
@@ -74,9 +77,14 @@ sample_info <- samples[[1]]
 label <- "initial"
 info_list <- PCA_pairs_Plot(sample_info, filtered_lipidomics2, label, image_option)
 
+
 # making group repeats according to its position for making groups of later PCA
-sample_raw_list <- info_list[[1]]
-group_repeats <- info_list[[2]]
+# sample_raw_list <- info_list[[1]]
+# group_repeats <- info_list[[2]]
+
+information <- retrieve_info(sample_info)
+group_repeats <- information[[1]]
+sample_raw_list <- information[[2]]
 # make a data frame contains sample information and group information
 group_info <- data.frame(samples=sample_raw_list, 
                          groups=group_repeats, 
@@ -101,27 +109,40 @@ colors1 <- c("npg", "aaas", "nejm", "jama", "jco", "ucscgb", "d3 ",
              "locuszoom", "igv", "uchicago", "startrek", "tron", 
              "futurama", "rickandmorty", "simpsons", "gsea", "lancet") 
 colors1_no <- c(10, 10, 8, 7, 10, 15, 10, 7, 15, 15, 7, 7, 12, 12, 15, 12, 9) 
-colors2 <-  c("BottleRocket1", "BottleRocket2", "Rushmore1", "Royal1", "Royal2", "Zissou",
+colors2 <-  c("BottleRocket1", "BottleRocket2", "Rushmore1", "Royal1", "Royal2", "Zissou1",
               "Darjeeling1", "Darjeeling2", "Chevalier1", "FantasticFox1", "Moonrise1", 
               "Moonrise2", "Moonrise3", "Cavalcanti1", "GrandBudapest1", "GrandBudapest2",
               "IsleofDogs1", "IsleofDogs2") 
 colors2_no <- c(7, 5, 5, 4, 5, 5, 5, 5, 4, 5, 4, 4, 5, 5, 4, 4, 6, 5)
-dt1 <- data.table(t(data.frame(colors1, colors1_no)), row.names = c("ggsci_name", "color_number"))
-dt2 <- data.table(t(data.frame(colors2, colors2_no)), row.names = c("wesanderson", "color_number"))
-dt1 <- dt1 %>% select(length(colors1)+1, 1:length(colors1))
-dt2 <- dt2 %>% select(length(colors2)+1, 1:length(colors2))
-colnames(dt1) <- colnames(dt2) <- NULL
+# dt1 <- data.table(t(data.frame(colors1, colors1_no)), row.names = c("ggsci_name", "color_number"))
+# dt2 <- data.table(t(data.frame(colors2, colors2_no)), row.names = c("wesanderson", "color_number"))
+# dt1 <- dt1 %>% select(length(colors1)+1, 1:length(colors1))
+# dt2 <- dt2 %>% select(length(colors2)+1, 1:length(colors2))
+# colnames(dt1) <- colnames(dt2) <- NULL
 colors3 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 message("\nPlease pick a color from ggsci theme link: 
         \nhttps://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html
         \nOR
         \nhttps://github.com/karthik/wesanderson\n\n")
+# message("\nPlease pick a color for you plots. 
+# \nNotice that the color numbers can't exceed your experiment groups!!!!!
+#         \nJust pick the color name from the two tables below.
+#         \n OR you could pick 'colors3' theme which has 8 colors. \n\n")
+# print(dt1, row.names = TRUE, col.names = "none")
+# print(dt2, row.names = TRUE, col.names = "none", topn = 4)
+# 
+
 message("\nPlease pick a color for you plots. 
 \nNotice that the color numbers can't exceed your experiment groups!!!!!
-        \nJust pick the color name from the two tables below.
-        \n OR you could pick 'colors3' theme which has 8 colors. \n\n")
-print(dt1, row.names = TRUE, col.names = "none")
-print(dt2, row.names = TRUE, col.names = "none", topn = 4)
+        \nJust pick the color name from the table in the Viewer panel\n\n")
+x1 <- data.frame("color theme" = colors1, "color numbers" = colors1_no)
+x2 <- data.frame("color theme" = colors2, "color numbers" = colors2_no)
+x3 <- data.frame("color theme" = "colors3", "color numbers" = 8)
+xx <- rbind(x1, x2, x3)
+yy <- cbind(xx[1:18, ], xx[19:36,])
+colnames(yy) <- c("color_theme[1]", "color_number[1]", "color_theme[2]", "color_number[2]")
+yy %>% formattable(.)
+
 
 
 color_option <- readline("Please type the color theme name, e.g. npg: ")
@@ -185,7 +206,7 @@ if(pca_check == "y"){
                            groups=group_repeats, 
                            stringsAsFactors = FALSE) %>% 
     group_by(groups) 
-  write_csv(group_info, "data/group_information.csv")
+  write_csv(group_info, "data/QC/group_information.csv")
   group_names <- unique(group_repeats)
   ngroups <- length(group_names)
   # background subtraction 
@@ -200,7 +221,7 @@ deleted <- deleted_samples %>% str_remove_all(., "MainArea\\[") %>% str_remove_a
 if(length(deleted)>0){
   message("Samples ", deleted, " will be removed from analysis")
 }
-write_csv(filtered_lipidomics, "data/filtered_lipidomics.csv")
+write_csv(filtered_lipidomics, "data/QC/filtered_lipidomics.csv")
 
 
 
@@ -252,7 +273,7 @@ plot_all(log2_lipids, sample_raw_list[i]) +
 ##########################################################################################
 # log transformation of subtracted/filtered data
 ##########################################################################################
-write.csv(log2_lipids, "data/log.molec.csv")
+write.csv(log2_lipids, "data/Volcano/log.molec.csv")
 
 
 ##########################################################################################
