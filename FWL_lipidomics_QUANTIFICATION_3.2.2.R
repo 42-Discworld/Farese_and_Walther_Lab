@@ -288,7 +288,7 @@ pv <- ggplot(molecules, aes(GROUPS, VALs, label=Molecule)) +
   # stat_summary(fun.y = mean, fun.ymin = mean, fun.ymax = mean,
   #              geom = "crossbar", width = 0.3, alpha = 0.4, position = "dodge") +
   #stat_summary(fun.y = mean,  geom = "line",  alpha = 0.4, position = "dodge") +
-  stat_summary(fun.y=eval(expr(method)), geom="point", na.rm = TRUE,
+  stat_summary(fun=eval(expr(method)), geom="point", na.rm = TRUE,
                size=5, color = "red", shape = 95, alpha = 0.5) +
   facet_wrap(~Class, scales = "free") +
   theme_bw() +
@@ -332,6 +332,10 @@ if(!choice %in% lipid){
     str_split(., "\\s+") %>% 
     unlist()
 }
+
+
+molecules <- molecules %>% filter(!is.na(VALs))
+
 
 for(i in choice){
   dt_molec <- molecules %>% filter(Class == i)

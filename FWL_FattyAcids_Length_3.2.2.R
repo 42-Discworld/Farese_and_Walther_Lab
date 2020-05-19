@@ -248,10 +248,16 @@ exclude_fas <- fas_all %>%
   select(Class, FA) %>% 
   unite(fas, c(Class, FA), sep="(") %>%
   mutate(fas = paste0(fas, ")")) %>% 
-  unlist() %>% 
+  unlist() 
+
+excluded <- exclude_fas %>% 
   paste0(., sep=", ", collapse = "") %>% 
   substr(., 1, nchar(.)-2) 
-message("Fatty Acids composition chain(s) ", exclude_fas, " are deleted for composition analysis.\n\n")
+
+if(length(exclude_fas) != 0){
+  message("Fatty Acids composition chain(s) ", excluded, " are deleted for composition analysis.\n\n")
+}
+
 
 fas_class_long <- fas_nm %>% 
   ungroup() %>% 

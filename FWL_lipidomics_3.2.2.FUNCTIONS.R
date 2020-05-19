@@ -331,28 +331,26 @@ add_scales <- function(..., scale.params = list()){
 
 ##########################################################################################
 # function name: set_color
-# parameters: color_option, color1, color2, color3
+# parameters: color1, color2, color3
 # utility: set graph color by user choice. The ggsci offer
 #           16 color themes, the wesanderson offer 18 color themes. And last color last 
 #           color theme has 8 colors.
 ##########################################################################################
-set_color <- function(color_option, color1, color2, color3){
+set_color <- function(color1, color2, color3){
+  color_option <- readline("Please type the color theme name, e.g. npg: ")
   color3_name <- deparse(substitute(color3))
   if(color_option %in% color1){
     color_scheme <- paste0("scale_fill_", color_option, "()")
-
+    
   }else if(color_option %in% color2 ){
     color_scheme <-  paste0("scale_fill_manual(values = wes_palette('", color_option, "'))")
   }else if(color_option == color3_name){
     color_scheme <-  paste0("scale_fill_manual(values = ", color_option, ")")
   }else{
     message("Type wrong!")
-    color_option <- readline("Please retype the color theme name, e.g. npg: ")
-    return(set_color(color_option, color1, color2, color3))
+    return(set_color(color1, color2, color3))
   }  
 }
-
-
 
 
 ##########################################################################################
@@ -1682,7 +1680,7 @@ ImputeMinProb <- function (data, q = 0.01, tune.sigma = 1)
 ########################################################################################
 customize_volc <- function(classes, input, points, fold_change){
   lipids <- classes %>% paste0(., sep=", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
-  message("\nDo you want to display customized lipid classes on volvano plot?")
+  message("\n5. Do you want to display customized lipid classes on volvano plot?")
   option <- retype_choice("Y/N")
   if(option == "y"){
     message("\nPlease input the lipid name from the list below for displaying.\n", lipids, 
@@ -1803,6 +1801,7 @@ fit$design)", sep = '"')
     filter(abs(logFC) > 1 & adj.P.Val>= 0.05 ) %>% 
     column_to_rownames('lipid')
   
+  message("1. Display significant and non-significant points on volcano.")
   # making volcano plot
   volc1 <- PlotVolc(input, points, fold_change) 
   volc1 <- volc1 + 
@@ -1850,7 +1849,7 @@ fit$design)", sep = '"')
     filter(!lipclass=="n.s") %>% 
     column_to_rownames('lipid')
   
-  
+  message("2: Display significant points under lipid classification.")
   # plot the color version 
   volc2 <- PlotVolc(input_lipids, significant_points, fold_change)
   volc2 <- volc2 + 
@@ -1906,7 +1905,7 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     layout(
       dragmode = "select"
     )
-  
+  message("3: Display interactive plots for all points under lipid classification.")
   print(p)
   dir_path <- paste0(getwd(),"/plot/Volcano") 
   name <- paste0(option[1], "_vs_", option[2], "_volc.html")
@@ -1957,6 +1956,7 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
       dragmode = "select"
     )
 
+  message("4: Display points under lipid classes.")
   print(p0)
    dir_path <- paste0(getwd(),"/plot/Volcano")
    name <- paste0(option[1], "_vs_", option[2], "_volc2.html")
@@ -1976,8 +1976,6 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
   customize_volc(lipid_class, input_lipids, fc_points, fold_change)
   
   
-  
- 
   ether <- input_lipids 
   ether <- ether %>% 
     mutate(LipidMolec = rownames(ether), 
@@ -1992,34 +1990,39 @@ volc <- ggplot(input_lipids, aes(logFC, -log10(adj.P.Val))) +
     rownames_to_column('lipid') %>%
     filter(sig == TRUE & ether == "YES" ) %>%
     column_to_rownames('lipid')
-  ether_points <- ether_points %>% 
-    # filter(Class %in% c( "PE", "PC")) %>% 
-    mutate(
-      text = ifelse(sig== TRUE & ether == "YES", paste0("Ether Lipid: ", LipidMolec , "\nAdj.Pvalue: ", formatC(adj.P.Val, format = "e", digits = 2), "\n"), NA))
-  #text = ifelse(adj.P.Val < 0.05 & ether == "YES", paste0("Ether Lipid: ", LipidMolec , "\nAdj.Pvalue: ", adj.P.Val, "\n"), NA))
-  rownames(ether_points) <- ether_points$LipidMolec
-  # excluded_ethers <- ether_class[!ether_class %in% c("PE", "PC")]
-  #other_class <- ether %>% filter(!Class %in% c("PE", "PC" )) %>% select(Class) %>% unlist() %>% unique()
-  #input$Class <- factor(ether$Class, levels = c("DG", "LPC", "PC", "PE", "PI", "PS", "TG", other_class))
-  #ether$Class <- factor(ether$Class, levels = c( "PE", "PC", other_class))
-  #ether_points$Class <- factor(ether$Class, levels = c("PE", "PC"))
-  title2 <- paste0("Volcano plot for showing significant point from Ether lipid")
-  volc4 <- PlotVolc(ether, ether_points, fold_change)
-  volc4 <- volc4 +
-    #geom_text_repel(data=ether_points, aes(label=rownames(ether_points)), size=3) + 
-    geom_point(aes(col=lipclass, size=AveExpr))  +
-    scale_size_continuous(range = c(0.25,2.5), breaks=c(10, 20, 30), guide = FALSE) +
-    scale_color_manual(values=c( "darkorange3","dodgerblue3", 'chartreuse4', 
-                                 '#c51b8a', '#756bb1',"#bdbdbd"), drop=FALSE) +
-    guides(color = guide_legend(title = "Lipid Class")) +
-    #xlab(bquote("Fold change, " ~ log[2]~"("~expression(frac({.(option[1])}, {.(option[2])}))~scriptstyle(, AUC)")")) 
-    xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
-    labs(title = title2)
-  print(volc4)
-  ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volcano/', 
-         device = image_option, width = 20, height = 20)
-  name6 <- paste(option[1], "vs.", option[2], ".ether.svg", sep = "")
-  ggsave(filename = name6, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
+  
+  if(nrow(ether_points) != 0){
+    message("6. Display significant ether lipid points.")
+    ether_points <- ether_points %>% 
+      # filter(Class %in% c( "PE", "PC")) %>% 
+      mutate(
+        text = ifelse(sig== TRUE & ether == "YES", paste0("Ether Lipid: ", LipidMolec , "\nAdj.Pvalue: ", formatC(adj.P.Val, format = "e", digits = 2), "\n"), NA))
+    #text = ifelse(adj.P.Val < 0.05 & ether == "YES", paste0("Ether Lipid: ", LipidMolec , "\nAdj.Pvalue: ", adj.P.Val, "\n"), NA))
+    rownames(ether_points) <- ether_points$LipidMolec
+    # excluded_ethers <- ether_class[!ether_class %in% c("PE", "PC")]
+    #other_class <- ether %>% filter(!Class %in% c("PE", "PC" )) %>% select(Class) %>% unlist() %>% unique()
+    #input$Class <- factor(ether$Class, levels = c("DG", "LPC", "PC", "PE", "PI", "PS", "TG", other_class))
+    #ether$Class <- factor(ether$Class, levels = c( "PE", "PC", other_class))
+    #ether_points$Class <- factor(ether$Class, levels = c("PE", "PC"))
+    title2 <- paste0("Volcano plot for showing significant point from Ether lipid")
+    volc4 <- PlotVolc(ether, ether_points, fold_change)
+    volc4 <- volc4 +
+      #geom_text_repel(data=ether_points, aes(label=rownames(ether_points)), size=3) + 
+      geom_point(aes(col=lipclass, size=AveExpr))  +
+      scale_size_continuous(range = c(0.25,2.5), breaks=c(10, 20, 30), guide = FALSE) +
+      scale_color_manual(values=c( "darkorange3","dodgerblue3", 'chartreuse4', 
+                                   '#c51b8a', '#756bb1',"#bdbdbd"), drop=FALSE) +
+      guides(color = guide_legend(title = "Lipid Class")) +
+      #xlab(bquote("Fold change, " ~ log[2]~"("~expression(frac({.(option[1])}, {.(option[2])}))~scriptstyle(, AUC)")")) 
+      xlab(bquote("Fold change, " ~ log[2]~"("~textstyle(frac({.(option[1])}, {.(option[2])}))~")")) +
+      labs(title = title2)
+    print(volc4)
+    ggsave(filename = paste0(option[1], "vs.", option[2], ".ether.", image_option), path = 'plot/Volcano/', 
+           device = image_option, width = 20, height = 20)
+    name6 <- paste(option[1], "vs.", option[2], ".ether.svg", sep = "")
+    ggsave(filename = name6, path = 'plot/Volcano/', device = "svg", width = 20, height = 20)
+    
+  }
   
 }
 

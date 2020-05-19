@@ -144,10 +144,8 @@ colnames(yy) <- c("color_theme[1]", "color_number[1]", "color_theme[2]", "color_
 yy %>% formattable(.)
 
 
-
-color_option <- readline("Please type the color theme name, e.g. npg: ")
-
-color_choice <- set_color(color_option, colors1, colors2, colors3)
+color_choice <- set_color(colors1, colors2, colors3)
+message("Please click plot panel for plot display.")
 
 # visualize AUC of each sample in different lipid classes.
 all_samples <- filtered_lipidomics %>%
@@ -168,30 +166,34 @@ ordered_samples<- unique(all_samples$SAMPLES) %>%
   as.numeric() %>% 
   sort() %>% 
   paste0("s", .)
-all_samples$SAMPLES <- factor(all_samples$SAMPLES, levels = ordered_samples)
+all_samples$SAMPLES <- factor(all_samples$SAMPLES, levels = rev(ordered_samples))
 
 params <- c("SAMPLES", "value", "type")
 p1 <- plot_all(data = all_samples, params) +
   geom_bar(stat = "identity") +
   facet_wrap(~Class, scales = "free") +
-  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
-        axis.line = element_line(size = 0.2)) +
-  scale_y_continuous(labels = scientific_format(), expand = c(0.01, 0, 0.2, 0)) +
+  theme(axis.text = element_text(angle = 30, size = 6, hjust = 1),
+        axis.line = element_line(size = 0.2),
+        axis.ticks.length = unit(0.6, "mm"),
+        axis.ticks = element_line(size = 1)
+        ) +
+  scale_y_continuous(labels = scientific_format()) +
+  coord_flip() + 
   labs(x = "experiment samples", y = "AUC", title = "aggregated AUC for each sample", fill = "") 
 print(p1)
 ggsave(paste0("plot/QC/raw_all_samples.", image_option), device = image_option, width=20, height = 20)
 
-# filter negative value
-filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
-p2 <- plot_all(data = filtered_samples, params) +
-  geom_bar(stat = "identity", position = "fill") +
-  facet_wrap(~Class, scales = "free") +
-  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
-        axis.line = element_line(size = 0.2)) +
-  scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
-  labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "") 
-print(p2)
-ggsave(paste0("plot/QC/raw_all_samples_percentage.", image_option), device = image_option, width = 20, height = 20)
+# # filter negative value
+# filtered_samples <- all_samples %>% mutate(value=ifelse(value<=0, 0, value))
+# p2 <- plot_all(data = filtered_samples, params) +
+#   geom_bar(stat = "identity", position = "fill") +
+#   facet_wrap(~Class, scales = "free") +
+#   theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1),
+#         axis.line = element_line(size = 0.2)) +
+#   scale_y_continuous( expand = c(0, 0, 0.1, 0), labels = scales::percent_format()) +
+#   labs(x = "experiment samples", y = "AUC", title = "AUC for each sample", fill = "") 
+# print(p2)
+# ggsave(paste0("plot/QC/raw_all_samples_percentage.", image_option), device = image_option, width = 20, height = 20)
 
 # check if deleting samples needed and plot new PCA
 message("\nPlots can visualized under 'plot' directory or r studio plots panel.\nDo you want to edit sample information for subsequent analyses?")
@@ -250,7 +252,6 @@ source("FWL_FattyAcids_Length_3.2.2.R", echo = FALSE)
 # ether lipid analysis
 ##########################################################################################
 message("\nThe filtered data will be used for ether lipid analysis.\n")
-message("Please note that you need to run Saturation Analysis before going to Ether lipid Analysis!!!\n\n")
 source("FWL_EtherLipids_3.2.2.R", echo = FALSE)
 
 
