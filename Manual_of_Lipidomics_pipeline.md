@@ -690,7 +690,7 @@ value**
   - Code display:
   
 ```
-How many fold change analysis do you want to do?
+How many times you want to perform fold change analysis?
 Please input the number: 1
 Please type the name of control group: WT
 Please type the name of contrast group: OE KO
