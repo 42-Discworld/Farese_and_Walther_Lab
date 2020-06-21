@@ -47,14 +47,13 @@ delete_option <- retype_choice("Y/N")
 #colnames(lipidomics) <- colnames(lipidomics) %>% ifelse(str_detect(., "Grade"), str_replace_all(., "Grade", "MainGrade"), .)
 
 
-
 lipid_check <- delete_samples(delete_option, lipidomics)
 # counter of Grades A and B, filter P value less than 0.001 for LipidSearch
 lipid_count <- lipid_check[[1]]
 # remove samples
 lipid_remove <- lipid_check[[2]]
 # add this count into original strucutes
-lipid_select <- lipid_remove %>% bind_cols(lipid_count)  
+lipid_select <- lipid_remove %>% bind_cols(lipid_count) %>% as.data.frame()
 
 ##########################################################################################
 # set filter parameters
@@ -76,7 +75,7 @@ filtered_lipidomics1 <- lipid_select %>%
   #filter(Rej. == 0 & sum(A, B) >= k ) %>% 
   as.data.frame(.)
 # the filtered raw data is stored in data/filtered.raw.data.csv
-write.csv(filtered_lipidomics1, "data/QC/filtered.raw.data.csv")
+write_csv(filtered_lipidomics1, "data/QC/filtered.raw.data.csv")
 
 
 ##########################################################################################
@@ -104,8 +103,8 @@ ggsave(filename = name, path = 'plot/QC', device = image_option,
 duplicate_molecs <- detect_duplicates(filtered_lipidomics1)
 # if move on, fix method for duplicated molecules
 paras <- c("Class", "LipidMolec", "BaseRt", "MainIon")
-filtered_lipidomics2  <- filter_duplicate(duplicate_molecs, filtered_lipidomics1, paras)
-
+filtered_list  <- filter_duplicate(filtered_lipidomics1, duplicate_molecs, paras)
+filtered_lipidomics2 <- filtered_list[[1]]
 
 ##########################################################################################
 # check background information

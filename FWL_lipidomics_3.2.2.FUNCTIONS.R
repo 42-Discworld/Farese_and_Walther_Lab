@@ -496,7 +496,7 @@ detect_duplicates <- function(lipid_data){
 # parameters: duplicate_molecs, data, selections
 # utility: process the duplicated molecules of different retention time
 #########################################################################################
-filter_duplicate <- function(duplicate_molecs, data, selections){
+filter_duplicate <- function(data, duplicate_molecs, selections){
   Class <- syms(selections)[[1]]
   LipidMolec <- syms(selections)[[2]]
   BaseRt <- syms(selections)[[3]]
@@ -523,7 +523,7 @@ filter_duplicate <- function(duplicate_molecs, data, selections){
     data <- fixed_dt[[2]]
     message("Filtered lipid molecules sans duplicates are stored under removeduplicates.csv")
     write_csv(data, "data/QC/rm_duplicates.csv")
-    return(data)
+    return(list(data, fix_method))
   } else{
     message("There is no duplicate molecules in your data")
   }
@@ -2122,7 +2122,7 @@ build_igraph <- function(data, group){
   
   node$shadow <- TRUE # Nodes will drop shadow
   node$size = node$value # set fold change of group mean as node size
-  node$color.background <- brewer.pal(nrow(data), "Blues")[node$color_saturation] # set node color
+ # node$color.background <- [node$color_saturation] # set node color
   node$color.border <- "black" 
   graph <- visNetwork(node, link, main = addquotes(!!group, " pathway"), layout = "layout_nicely") %>% 
     visConfigure(enabled = TRUE) %>%
@@ -2167,7 +2167,7 @@ build_igraph <- function(data, group){
 #   # write the count of pattern into count_lipid.csv file. 
 #   message("\nClassification of SFA, MUFA and PUFA are stored under count_lipid.csv and aggregated.csv")
 #   file_name1 <- paste("data/Saturation/count_lipid_", data_name, ".csv", sep = "")
-#   write.csv(count_lipid, file_name1)
+#   write_csv(count_lipid, file_name1)
 #   
 #   # delete lipid which can't do saturation analysis
 #   dis_lipid <- count_lipid %>% filter(FA_types=="None") %>% select(LipidMolec) %>% unlist()
@@ -2213,7 +2213,7 @@ build_igraph <- function(data, group){
 #   
 #   # write the aggregation information into aggregated.csv file
 #   file_name2 <- paste("data/Saturation/aggregated_", data_name, ".csv", sep = "")
-#   aggregate_lipids %>% arrange(Class, FA_types) %>% write.csv(., file_name2)
+#   aggregate_lipids %>% arrange(Class, FA_types) %>% write_csv(., file_name2)
 #   
 #   # select three variables Class, n, FA_types for analysis
 #   group_lipids <- aggregate_lipids %>% select(Class, n, FA_types)
@@ -2247,7 +2247,7 @@ build_igraph <- function(data, group){
 #   file_name6 <- paste("data/Saturation/mean_median_", data_name, ".csv", sep = "")
 #   write_csv(dt, file_name4)
 #   write_csv(dd, file_name5)
-#   write.csv(data, file_name6)
+#   write_csv(data, file_name6)
 #   return(data)
 # }
 # 
@@ -2284,7 +2284,7 @@ count_saturation <- function(data_fa, group_info){
   # write the count of pattern into count_lipid.csv file. 
   message("\nClassification of SFA, MUFA and PUFA are stored under count_lipid.csv and aggregated.csv")
   file_name1 <- paste("data/Saturation/count_lipid_", data_name, ".csv", sep = "")
-  write.csv(count_lipid, file_name1)
+  write_csv(count_lipid, file_name1)
   
   return(count_lipid)
 }
@@ -2335,7 +2335,7 @@ cal_sample_saturation <- function(count_lipid, data_fa){
   
   # write the aggregation information into aggregated.csv file
   file_name2 <- paste("data/Saturation/aggregated_", data_name, ".csv", sep = "")
-  aggregate_lipids %>% arrange(Class, FA_types) %>% write.csv(., file_name2)
+  aggregate_lipids %>% arrange(Class, FA_types) %>% write_csv(., file_name2)
   
   # select three variables Class, n, FA_types for analysis
   group_lipids <- aggregate_lipids %>% select(Class, n, FA_types)
@@ -2369,7 +2369,7 @@ cal_sample_saturation <- function(count_lipid, data_fa){
   file_name6 <- paste("data/Saturation/mean_median_", data_name, ".csv", sep = "")
   write_csv(dt, file_name4)
   write_csv(dd, file_name5)
-  write.csv(data, file_name6)
+  write_csv(data, file_name6)
   return(data)
 }
 
@@ -2493,4 +2493,38 @@ filter_invalid <- function(data, group_info, invalid_data){
   return(data)
   }
 }
+
+
+
+########################################################################################
+# function name: set_color_code
+# parameters: data, params, code
+# utility: set numeric sequence for column params in data. Those numbers could be used for
+#          setting color sequence number.
+########################################################################################
+set_color_code <- function(data, params, code){
+  data <- data %>% arrange(eval(!!sym(params)))
+  numeric_code <- unique(eval(expr(`$`(data, !!params)))) 
+  numeric_code <- numeric_code[!is.na(numeric_code)]
+  color_code <- c()
+  for(i in eval(expr(`$`(data, !!params)))){
+    if(is.na(i)){
+      color_code<- c(color_code, NA)
+    }else{
+      for( j in seq_along(numeric_code)){
+        if(i == numeric_code[j]){
+          color_code <- c(color_code, j)
+        }
+      }
+    }
+  }
+  data <- data %>% mutate(!!code := color_code)
+  # if(sum(is.na(eval(expr(`$`(data, !!code))))) >= 1){
+  #   data <- data %>% 
+  #     mutate_at(vars(!!code), list(~ifelse(is.na(.), 1, .+1))) 
+  # }
+  return(data)
+}
+
+
 

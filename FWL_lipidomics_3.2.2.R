@@ -23,7 +23,7 @@ source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
 # Check directory existence, if not then make one
 # all the plots will stored in plot directory and data in the data directory
 dirs <- c("plot", "data", "plot/Quantification/classes/fc", "plot/Quantification/classes/svgs/fc", "plot/QC", "plot/Saturation", "plot/Ether", "plot/AcylLength",
-          "plot/Volcano", "data/Volcano","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/AcylLength")
+          "plot/Volcano", "plot/Pathway", "data/Volcano","data/QC", "data/Quantification", "data/Saturation", "data/Ether", "data/AcylLength", "data/Pathway")
 mkdirs(dirs)
 
 message("Are you using PC or MAC?")

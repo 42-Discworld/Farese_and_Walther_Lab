@@ -54,25 +54,18 @@ message("Reminder: You have ", sample_pos, " samples that were run in positive m
 # reconstruct the data columns and store it into the file
 ####################################################################################
 # selecting the columns we want for analysis
-cols_data <- data %>%
-  select(contains("ARatio"), contains("APValue"), contains("MainIon"),
+# selecting the columns we want for analysis
+selected_cols <- data %>%
+  select(contains("ARatio"), contains("APValue"), 
          contains("MainGrade"), contains("MainArea"),
          -contains("NMA"), -contains("Score")
-  )
-#unorder_name <- paste("unordered.", file_name, sep="")
-#name1 <- paste(dir, "/", unorder_name, sep = "", collapse = "")
-#### unordered data            
-uncleaned.data <- data %>% select(1:9) %>% bind_cols(cols_data) #%>% write_csv(., name1)
-
-#### ordered ones 
-order.sample.names <- uncleaned.data %>% 
-  select(matches("\\[(c|s.*)\\]")) %>%    
+  ) %>% 
   colnames() %>% 
   str_sort(., numeric=TRUE) 
 
-unorder_data <- uncleaned.data[- which(names(uncleaned.data) %in% order.sample.names)]
 name2 <- paste(dir, "/", file_name, sep = "", collapse = "")
-ordered_data <- uncleaned.data[, order.sample.names] %>% 
-  bind_cols(unorder_data, .) %>%
-  arrange(Class, LipidMolec) %>% 
+
+ordered_data <- data %>% 
+  select(all_of(selected_cols)) %>% 
+  bind_cols(data[, 1:10], .) %>%
   write_csv(., name2)
