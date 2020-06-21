@@ -703,7 +703,7 @@ Please type the name of contrast group: OE KO
 
 figure 11: Lipid class summary|figure 12: Individual lipid class
 :-------------------------:|:-------------------------:
-![](display/total.class.png)  |  ![](display/DG.png)
+![](display/total.class.pdf)  |  ![](display/DG.pdf)
 
 figure 13: relative fold change dot plot|figure 14: relative fold change box plot
 :-------------------------:|:-------------------------:
