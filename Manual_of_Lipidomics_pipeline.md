@@ -131,7 +131,10 @@ Please type PNG/PDF:
 ```
 
   - Useful short cuts: `cmd (ctr) + Enter` (run selected command), `cmd
-    (ctr) + shift + c` (comment/uncomment).
+    (ctr) + shift + c` (comment/uncomment).  
+- Alternative: if users want to use excel data for analysis, users need to preprocess the data besides running `xlsx_to_csv.3.R` instead of `txt_to_csv.3.R`.  
+  - open raw data in excel, choose "Show Formulas" for whole column of "MainIon".
+  - edit the column "MainIon" by replace all the "=" sign to empty.
 
 #### Preprocess and Quality Check:
 
@@ -690,7 +693,7 @@ value**
   - Code display:
   
 ```
-How many fold change analysis do you want to do?
+How many times you want to perform fold change analysis?
 Please input the number: 1
 Please type the name of control group: WT
 Please type the name of contrast group: OE KO
