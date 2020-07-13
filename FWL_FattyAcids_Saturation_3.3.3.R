@@ -1,17 +1,17 @@
 ####################################################################################
-# Script: FWL_FattyAcids_Saturation_3.3.3.R
+# Script: FWL_FattyAcids_Saturation_1.2.R
 # Author: Wenting Lyu
-# Notes: This script assist executing for main script FWL_lipidomics_3.2.2.R which
+# Notes: This script assist executing for main script FWL_lipidomics_1.2.R which
 #         helps generating the graph and data for the workflow of lipidomics.
 #         it also calculate the SFA, MUFA, PUFA and the aggregated main area 
 #         for each sample.
 #         First, Make sure that your R and Rstudio are newly enough for installing the 
 #         packages needed in the script. Otherwise the script will pop out warnings 
 #         for packages and won't run.
-#         Second, typing command in the console-----> source("FWL_lipidomics_3.2.2R")
+#         Second, typing command in the console-----> source("FWL_lipidomics_1.2R")
 #         or press the source button.
 #         Third, users can independently implement this analysis by running 
-#         "fattyAcidsSaturation_analysis.3.2.3.R" in directory fattyAcids_saturation_analysis.
+#         "fattyAcidsSaturation_analysis_1.2.R" in directory fattyAcids_saturation_analysis.
 #         This script is derived from Laura's project
 #####################################################################################
 data1 <- count_saturation(filtered_lipidomics, group_info)
