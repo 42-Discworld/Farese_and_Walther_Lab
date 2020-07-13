@@ -20,6 +20,11 @@ For XQaurtz:
 For gfortran:
 `brew install gcc`
 
+### Version
+The version number will be displayed in the main script name, e.g. FWL_lipidomics_version.r. And the compatible scripts would have same version number. For scripts are still under testing, it will have symbol "test" in its name.
+
+
+
 ### Caveats
 For Mac users, please make sure XQaurtz and gfortran are installed for prevent crashing.
 
