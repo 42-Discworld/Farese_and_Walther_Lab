@@ -30,5 +30,8 @@ Step 7: Check all the output under data/Pathway/output.
   
   * Gephi would need to plot two group pathway individually, load gephi_node_ctr.csv or and gephi_node_contrast with gephi_link.csv.
   
-  * Cytoscape would need to import all node and edge information first via ct_table.csv including experiment groups information. Then load the edge table ct_link.csv. 
-  For node size attributes, user need to load ct_node.csv. User need to add filter for filtering expriment group for analysis.
+  * Cytoscape_3.8.0 will need to load edges table (ct_link.csv) and node tables (ct_node.csv)
+  
+  
+  
+ Cytoscape version 
