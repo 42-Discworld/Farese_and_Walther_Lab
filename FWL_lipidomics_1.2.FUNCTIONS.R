@@ -1,9 +1,9 @@
 ####################################################################################
-# Script: FWL_lipidomics_3.2.2.FUNCTIONS.R
+# Script: FWL_lipidomics_1.2.FUNCTIONS.R
 # Author: Wenting, Niklas, Kenny
-# Notes:  This script assist executing for main script FWL_lipidomics_3.2.2.R which
+# Notes:  This script assist executing for main script FWL_lipidomics_1.2.R which
 #         helps generating the graph and data for the workflow of lipidomics.
-#         To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R")
+#         To start, typing command in the console-----> source("FWL_lipidomics_1.2.R")
 #         or press the source button.
 #         This pipeline is based on Niklas's and Kenny's previous work. Their original 
 #         source scripts are in the quality_control and statistics_quantification directories
