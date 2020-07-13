@@ -1,15 +1,15 @@
-# Script: FWL_lipidomics_3.2.2.R
+# Script: FWL_lipidomics_1.2.R
 # Author: Wenting, Niklas, Kenny
-# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
+# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_1.2.R") 
 #         or press the source butthon. 
 #         Please make sure Mac users installed XQuartz and gfortrans.
-#         R version 3.6.2 , Rstudio 1.2.1335 for current work.
+#         R version 4.0.0 , Rstudio Version 1.2.1335 for current work.
 #         It is based on Niklas and Kenny's previous work (Their work files can be found in folders 
 #         quality_control and statistics_quantification). Acknowledge to Weng's technical 
 #         guidance, Laura's fatty acid saturation analysis project, Sebstian's shadow experiment.
 #         This is the main script for running lipid data analysis.
 #         
-# Usage:  source("FWL_lipidomics_3.2.2.R") 
+# Usage:  source("FWL_lipidomics_1.2.R") 
 #      
 # Versions:  LipidSearch 4.1.        
 #####################################################################################
