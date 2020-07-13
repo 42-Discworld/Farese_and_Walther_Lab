@@ -1,6 +1,6 @@
-# Script: FWL_lipidomics_QC_3.2.2.R
+# Script: FWL_lipidomics_QC_1.2.R
 # Author: Wenting, Niklas
-# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
+# Notes:  To start, typing command in the console-----> source("FWL_lipidomics_1.2.R") 
 #         or press the source butthon. 
 #         Please make sure Mac users installed XQuartz and gfortran.
 #         This script is designed as a reference for lipidomics experiment. 
