@@ -1,8 +1,8 @@
-# Script: FWL_lipidomics_QUANTIFICATION_3.2.2.R
+# Script: FWL_lipidomics_QUANTIFICATION_1.2.R
 # Author: Wenting
 # Notes:  This script will analyze and visualize the lipid class and lipid molecules abudndance
 #         and relative fold changes for experiment groups.
-#         To start, typing command in the console-----> source("FWL_lipidomics_3.2.2.R") 
+#         To start, typing command in the console-----> source("FWL_lipidomics_1.2.R") 
 #         or press the source butthon. 
 #         Please make sure Mac users installed XQuartz and gfortran.
 #         This script is designed as a reference for lipidomics experiment. 
