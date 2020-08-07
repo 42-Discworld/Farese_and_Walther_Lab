@@ -2450,46 +2450,87 @@ filter_invalid <- function(data, group_info, invalid_data){
     # write negative and 0 percentage inforamtion
     write_csv(neg_percent, "data/QC/neg.percent.csv")
     # write potential invalid lipid molecules information
-    write_csv(neg_info, "data/QC/checkInvalid.csv")
+    write_csv(neg_info, "data/QC/check_Invalid.csv")
     # write copy of potential lipid molecules information
     write_csv(neg_info, "data/QC/invalid.csv")     ## copy data for invalid lipids information
+    # write copy for potential invalid lipid molecules
+    write_csv(neg_info, "data/QC/cp_invalid.csv")
     message("Please view file imputeNA.csv for all the data contains negative values after background subtraction.")
     # write data which transform negative into NA
     write_csv(negs_all, "data/QC/imputeNA.csv")
     message("\nType 1 if you would like the pipleline to proceed with this function \nType 2 if you prefer to exlcude certain lipid molecules for fold change analysis ")
     option <- retype_choice("1/2")
+    message("Please note that the raw data which did background subtraction will be under subtracted_lipid.csv.")
+    message("Pipeline will offer 3 methods for processing lipid molecules that contain zero values or negative values (background subtracted).")
+    message("These values are subsequently replaced as non-valid values (NA).\nFold change analyses is performed using only samples containning valid values.\nPlease view file imputeNA.csv for all the data contains negative values after background subtraction.")
+    message("The pipeline will first transform all the negative value into NA.\n If negative percentage is over 50% in a group, all the values in the group for the molecule will be transformed into NA.")
+    message("Method 1 will automatically deleted a molecule which negative percentage is over 50% for all experiment groups.")
     filtered_negs <- negs_all %>% filter_at(vars(all_of(sample_list)), any_vars(!is.na(.)))
-    if(option == "2"){
-      # this step need manually editting the invalid lipid molecules on your computer for advanced users
-      message("Select 'checkInvalid.csv' to manually exclude specific lipid molecules and click SAVE.")
+    if(option == "1"){
+      deleted_neg_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(is.na(.))) 
+      deleted_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(.==0)) %>% bind_rows(., deleted_neg_molec)
+           if(nrow(deleted_molec) != 0){
+             deleted <- deleted_molec$LipidMolec %>% unlist() %>% sort() %>% paste0(., ", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
+             message("\n
+       Since the lipid molecule ", deleted, " is invalid (all negative or all 0 values) after background subtraction. 
+       \nIt will be deleted in the filtered data.")
+             # delete corresponding lipid molecules in total data
+             data <- anti_join(data, deleted_molec, by = "LipidMolec") #%>% select(LipidMolec, contains("MainArea"))
+           }
+    }else if (option == "2"){
+      message("Select 'checkInvalid.csv' to manually exclude speicifc lipid molecules and click SAVE.")
       # here stops 10 seconds
       Sys.sleep(10)
       # deleting the lipid molecules you select in the checkInvalid.csv
-      #message("Now we need to open the changed file checkInvalid.csv after you deleting the invalid lipid molecules.")
+      message("Please open the file QC/invalid.csv after deleting invalid lipid molecules.")
       continues <- readline("If you finished preprocess the data, please continue and press Y: ")
-      # advanced users
-      manual_data <- read_csv("data/QC/checkInvalid.csv", col_types = cols())
-      ref_data <- read_csv("data/QC/invalid.csv", col_types = cols())
-      # deleting the invalid lipid molecules in raw data based on your standards and saved it in pre_filtered.lipidomics.csv
+      manual_data <- read_csv("data/QC/invalid.csv", col_types = cols())
+      ref_data <- read_csv("data/QC/cp_invalid.csv", col_types = cols())
+      # deleting the invalid lipid molecules in raw data based on your standards and saved it in manual_filtered.lipidomics.csv
       data <- fix_invalid_by_choice(data, manual_data, ref_data)
       write_csv(data, "data/QC/manual_filtered.lipidomics.csv")
     }else{
-      message("The pipeline will first transform all the negative value into NA.")
-      message("If negative percentage is over 50% in a group, all the values in the group for the molecule will be transformed into NA.")
-      message("If a molecule which negative percentage is over 50% for all groups, it will then be deleted.")
-      # delete the molecule which negative values of replicates for all group are over 50% (all NA.)
-      deleted_neg_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(is.na(.))) 
-      deleted_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(.==0)) %>% bind_rows(., deleted_neg_molec)
-      if(nrow(deleted_molec) != 0){
-        deleted <- deleted_molec$LipidMolec %>% unlist() %>% sort() %>% paste0(., ", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
-        message("\n
-  Since the lipid molecule ", deleted, " is invalid (all negative or all 0 values) after background subtraction. 
-  \nIt will be deleted in the filtered data.")
-        # delete corresponding lipid molecules in total data
-        data <- anti_join(data, deleted_molec, by = "LipidMolec") #%>% select(LipidMolec, contains("MainArea"))
-      }
-      write_csv(data, "data/QC/auto_filtered.lipidomics.csv")
+      message("Please open the file QC/check_Invalid.csv to manually delete invalid lipid moleucles.")
+      continues <- readline("If you finished preprocess the data, please continue and press Y: ")
+      manual_data <- read_csv("data/QC/check_Invalid.csv", col_types = cols())
+      ref_data <- read_csv("data/QC/cp_invalid.csv", col_types = cols())
+      # deleting the invalid lipid molecules in raw data based on your standards and saved it in manual_filtered.lipidomics.csv
+      data <- fix_invalid_by_choice(filtered_negs, manual_data, ref_data)
     }
+    
+  #   if(option == "3"){
+  #     # this step need manually editting the invalid lipid molecules on your computer for advanced users
+  #     message("Select 'checkInvalid.csv' to manually exclude specific lipid molecules and click SAVE.")
+  #     # here stops 10 seconds
+  #     Sys.sleep(10)
+  #     # deleting the lipid molecules you select in the checkInvalid.csv
+  #     #message("Now we need to open the changed file checkInvalid.csv after you deleting the invalid lipid molecules.")
+  #     continues <- readline("If you finished preprocess the data, please continue and press Y: ")
+  #     # advanced users
+  #     manual_data <- read_csv("data/QC/checkInvalid.csv", col_types = cols())
+  #     ref_data <- read_csv("data/QC/invalid.csv", col_types = cols())
+  #     # deleting the invalid lipid molecules in raw data based on your standards and saved it in pre_filtered.lipidomics.csv
+  #     data <- fix_invalid_by_choice(data, manual_data, ref_data)
+  #     write_csv(data, "data/QC/manual_filtered.lipidomics.csv")
+  #   }else if(option == "1") {
+  #     message("The pipeline will first transform all the negative value into NA.")
+  #     message("If negative percentage is over 50% in a group, all the values in the group for the molecule will be transformed into NA.")
+  #     message("If a molecule which negative percentage is over 50% for all groups, it will then be deleted.")
+  #     # delete the molecule which negative values of replicates for all group are over 50% (all NA.)
+  #     deleted_neg_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(is.na(.))) 
+  #     deleted_molec <- negs_all %>% filter_at(vars(all_of(sample_list)), all_vars(.==0)) %>% bind_rows(., deleted_neg_molec)
+  #     if(nrow(deleted_molec) != 0){
+  #       deleted <- deleted_molec$LipidMolec %>% unlist() %>% sort() %>% paste0(., ", ", collapse = "") %>% substr(., 1, nchar(.)-2) 
+  #       message("\n
+  # Since the lipid molecule ", deleted, " is invalid (all negative or all 0 values) after background subtraction. 
+  # \nIt will be deleted in the filtered data.")
+  #       # delete corresponding lipid molecules in total data
+  #       data <- anti_join(data, deleted_molec, by = "LipidMolec") #%>% select(LipidMolec, contains("MainArea"))
+  #     }
+  #     write_csv(data, "data/QC/auto_filtered.lipidomics.csv")
+  #   }else{
+  #     message()
+  #   }
   return(data)
   }
 }

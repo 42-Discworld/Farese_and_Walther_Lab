@@ -16,7 +16,7 @@
 rm(list=ls())  ##### empty the environment first. If you need to keep former variables in workspace, just comment this part
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 # source function from FWL_lipidomics.**.functions.R script
-source("FWL_lipidomics_3.2.2.FUNCTIONS.R", echo = TRUE)
+source("FWL_lipidomics_1.2.FUNCTIONS.R", echo = TRUE)
 
 # options(warn=-1)
 
@@ -54,7 +54,7 @@ lipidomics <- read_csv(target_file, col_types = cols())
 ##########################################################################################
 # QC part I
 ##########################################################################################
-source("FWL_lipidomics_QC_3.2.2.R", echo = FALSE)
+source("FWL_lipidomics_QC_1.2.R", echo = FALSE)
 
 
 ##########################################################################################
@@ -230,7 +230,7 @@ write_csv(filtered_lipidomics, "data/QC/filtered_lipidomics.csv")
 ###########################################################################################
 # Quantification of lipid class and individual lipid molecules
 ###########################################################################################
-source("FWL_lipidomics_QUANTIFICATION_3.2.2.R", echo = FALSE)
+source("FWL_lipidomics_QUANTIFICATION_1.2.R", echo = FALSE)
 
 
 ##########################################################################################
@@ -238,21 +238,21 @@ source("FWL_lipidomics_QUANTIFICATION_3.2.2.R", echo = FALSE)
 ##########################################################################################
 # calculate the saturation for different lipid class
 message("The filtered data will be used for saturation analysis.\n")
-source("FWL_FattyAcids_Saturation_3.3.3.R", echo = FALSE)
+source("FWL_FattyAcids_Saturation_1.2.R", echo = FALSE)
 message("The SFA, MUFA, PUFA information will be stored in the count_lipid.csv and aggregated.csv\n")
 
 
 ##########################################################################################
 # fatty acids length analysis
 ##########################################################################################
-source("FWL_FattyAcids_Length_3.2.2.R", echo = FALSE)
+source("FWL_FattyAcids_Length_1.2.R", echo = FALSE)
 
 
 ##########################################################################################
 # ether lipid analysis
 ##########################################################################################
 message("\nThe filtered data will be used for ether lipid analysis.\n")
-source("FWL_EtherLipids_3.2.2.R", echo = FALSE)
+source("FWL_EtherLipids_1.2.R", echo = FALSE)
 
 
 ##########################################################################################
