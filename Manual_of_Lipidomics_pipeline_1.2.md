@@ -760,7 +760,7 @@ figure 20: group mean value | figure 21: relative fold change analysis for each 
     abundance, percentage of Short-chain fatty acids (SCFA),
     Medium-chain fatty acids (MCFA), Long-chain fatty acids (LCFA) and
     Very long chain fatty acids (VLCFA) in each sample and group. All
-    data and plots will be nder subfolder Length of folder data and
+    data and plots will be under subfolder Length of folder data and
     plot.  
     Many plots will have the suffix are fc.XXX in their file name. These
     plots will display a fold change plot that may be customized by the
@@ -841,7 +841,7 @@ figure 37: PUFA percentage in ether lipid for each sample| figure 38: Relative P
     second plot will classify significant lipid molecules into
     Glycerophospholipids, Neutral lipids, Sphingolipids, Sterols and
     other lipids. The third is interactive volcano plot which won't be displayed in the manual book. The forth plot is customized by the user, and it will
-    onldy display the lipid class user input from the lipid class list.
+    only display the lipid class user input from the lipid class list.
     The last plot will only mark significant ether lipids if they
     exist. Data and plots will under subfolder Volc of data and plot.  
   - Utility: User will need to input times of contrast, group names for
